@@ -1130,6 +1130,7 @@ YouPorn
 YourPorn
 YourUpload
 youtube: YouTube.com
+youtu.be
 youtube:channel: YouTube.com channels
 youtube:favorites: YouTube.com favourite videos, ":ytfav" for short (requires authentication)
 youtube:history: Youtube watch history, ":ythistory" for short (requires authentication)
