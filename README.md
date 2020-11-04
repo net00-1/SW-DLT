@@ -8,7 +8,7 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 - Download playlists (video or audio choices available)
 - Download images/clips/GIFs (from single items to massive albums)
 
-**Main post with full description and download link in [RoutineHub](https://routinehub.co/shortcut/7284), documentation also available in Docs directory.**
+**Main post with full description and download link in [RoutineHub](https://routinehub.co/shortcut/7284), FULL documentation also available in the shortcut.**
 
 This repository is used to store python scripts needed to bridge some of the download processes between the SW-DLT shortcut and a-Shell. Python scripts will be updated with more features as updates for SW-DLT are released.
 
