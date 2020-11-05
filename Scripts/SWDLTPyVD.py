@@ -2,8 +2,6 @@ import youtube_dl
 import subprocess
 import re
 
-#SW-DLT Video Download Script
-
 #Get format for the video matching or closest to user requirements
 
 userOpts = {"format":"downOpts","outtmpl":"SWDLTTempDL.%(ext)s","fixup":"never"}
@@ -33,3 +31,8 @@ if "+" not in outF:
 		subprocess.run("ffmpeg -i SWDLTTempDL." + outExt + " -c copy SWDLTFixedDL." + outExt)
 		subprocess.run("rm -f SWDLTTempDL." + outExt)
 		subprocess.run("mv SWDLTFixedDL." + outExt + " SWDLTTempDL." + outExt)
+
+#Return to SWDLT with a specific function code
+
+subprocess.run("open shortcuts://run-shortcut?name=SW-DLT&input=text&text=%7B%22fName%22:%22svaOutF%22,%22fType%22:%22Video%22%7D")
+subprocess.run("exit")
