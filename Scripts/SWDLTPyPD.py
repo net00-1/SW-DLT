@@ -2,8 +2,6 @@ import youtube_dl
 import subprocess
 import shutil
 
-#SW-DLT Playlist Download Script
-
 #Get formats for downloading playlist audio or video
 
 userOpts = {"format":"pFormat","outtmpl":"SWDLTMultipleDL/%(title)s.%(ext)s","fixup":"never"}
@@ -19,3 +17,8 @@ with youtube_dl.YoutubeDL(userOpts) as vidObj:
 shutil.make_archive("SWDLTMultipleDL","zip","SWDLTMultipleDL")
 
 subprocess.run("rm -r -f SWDLTMultipleDL")
+
+#Return to SWDLT with a specific function code
+
+subprocess.run("fStart")
+subprocess.run("exit")
