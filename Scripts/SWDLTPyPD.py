@@ -4,7 +4,7 @@ import shutil
 
 #Get formats for downloading playlist audio or video
 
-userOpts = {"format":"pFormat","outtmpl":"SWDLTMultipleDL/%(title)s.%(ext)s","fixup":"never"}
+userOpts = {"format":"pFormat","outtmpl":"SWDLTMultipleDL/%(title)s.%(ext)s","fixup":"ffmPolicy"}
 mediaURL = 'mediaURL'
 
 #Download either audio or video playlist
