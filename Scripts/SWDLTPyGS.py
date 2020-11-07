@@ -1,5 +1,7 @@
 import subprocess
 
+#SW-DLT Gallery download script
+
 print("Gathering URLs... Process will take longer for bigger albums.")
 
 mediaURL = 'mediaURL'

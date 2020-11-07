@@ -1,5 +1,7 @@
-import youtube_dl
+import forkData (pyModule)
 import subprocess
+
+#SW-DLT Video Download Script
 
 #Get format for the video matching or closest to user requirements
 
@@ -8,7 +10,7 @@ mediaURL = 'mediaURL'
 
 #Download video matching or closest to user requirements
 
-with youtube_dl.YoutubeDL(userOpts) as vidObj:
+with forkData (pyModule).YoutubeDL(userOpts) as vidObj:
 	vidObj.download([mediaURL])
 
 #Return to SWDLT with a specific function code

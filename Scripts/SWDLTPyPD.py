@@ -1,6 +1,8 @@
-import youtube_dl
+import forkData (pyModule)
 import subprocess
 import shutil
+
+#SW-DLT Playlist Download Script
 
 #Get formats for downloading playlist audio or video
 
@@ -9,7 +11,7 @@ mediaURL = 'mediaURL'
 
 #Download either audio or video playlist
 
-with youtube_dl.YoutubeDL(userOpts) as vidObj:
+with forkData (pyModule).YoutubeDL(userOpts) as vidObj:
 	vidObj.download([mediaURL])
 
 #Zip playlist items into container, remove leftover directory

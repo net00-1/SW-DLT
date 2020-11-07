@@ -5,22 +5,48 @@ import re
 
 #SW-DLT Self-Troubleshooter
 
+curTool = "forkData (utilName)"
+
 print("Troubleshooting SW-DLT Installation.\n")
 subprocess.run("cd")
 
-#Checking for YouTube-dl, installing if not present, updating to latest available.
+#Checking for YouTube-dl/dlc, installing if not present, updating to latest available.
 
 time.sleep(1)
 
-if "WARNING: Package(s) not found: youtube-dl" in subprocess.getoutput("pip show youtube-dl"):
-	print("YouTube-dl is missing, installing...\n")
-	subprocess.run("pip -q install --upgrade youtube-dl")
-	print("YouTube-dl has been installed.\n")
+if "WARNING: Package(s) not found: forkData (utilName)" in subprocess.getoutput("pip show forkData (utilName)"):
+	print("forkData (disName) is missing, installing...\n")
+	subprocess.run("pip -q install --upgrade forkData (utilName)")
+	print("forkData (disName) has been installed.\n")
 	
 else:
-	print("YouTube-dl present, updating...\n")
-	subprocess.run("pip -q install --upgrade youtube-dl")
+	print("forkData (disName) present, updating...\n")
+	subprocess.run("pip -q install --upgrade forkData (utilName)")
 	print("Any available updates installed.\n")
+
+#Detecting extra YouTube-dl/dlc and prompting for uninstall
+
+time.sleep(1)
+
+if curTool == "youtube-dlc":
+	
+	if "WARNING: Package(s) not found: youtube-dl" not in subprocess.getoutput("pip show youtube-dl"):
+		
+		delChoice = input("Warning: You are using YouTube-dlc. YouTube-dl is also installed. Would you like to remove it? (y/n)\n")
+		
+		if delChoice =="y":
+			subprocess.run("pip uninstall -y youtube-dl")
+			print("YouTube-dl removed.\n")
+			
+else:
+	
+	if "WARNING: Package(s) not found: youtube-dlc" not in subprocess.getoutput("pip show youtube-dlc"):
+		
+		delChoice = input("Warning: You are using YouTube-dl. YouTube-dlc is also installed. Would you like to remove it? (y/n)\n")
+		
+		if delChoice =="y":
+			subprocess.run("pip uninstall -y youtube-dlc")
+			print("YouTube-dlc removed.\n")
 	
 #Checking for Gallery-dl, installing if not present, updating to latest available.
 
@@ -86,3 +112,7 @@ time.sleep(1)
 holdprocess = input("SW-DLT Troubleshooting process complete, enter any key to return to Shortcuts:\n")
 
 subprocess.run("open shortcuts://")
+
+subprocess.run("cd $SHORTCUTS")
+subprocess.run("rm -f SWDLT*.*")
+subprocess.run("rm -f -r SWDLTMultipleDL")
