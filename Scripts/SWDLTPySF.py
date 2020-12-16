@@ -62,19 +62,20 @@ else:
 	subprocess.run("pip -q install --upgrade gallery-dl")
 	print("Any available updates installed.\n")
 
-#FFmpeg & Bin Folder Check, creating any missing component.
+#FFmpeg, FFprobe & Bin Folder Check, creating any missing component.
 
 time.sleep(1)
 
 if os.path.exists("./bin") == False:
 	
-	print("Bin folder & FFmpeg missing, installing...\n")
+	print("Bin folder, FFmpeg & FFprobe missing, installing...\n")
 	
 	subprocess.run("mkdir bin")
 	subprocess.run("cd bin")
 	subprocess.run("curl -L https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffmpeg.wasm -o ffmpeg.wasm")
+	subprocess.run("curl -L https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffprobe.wasm -o ffprobe.wasm")
 	
-	print("Bin folder & FFmpeg installed.\n")
+	print("Bin folder, FFmpeg & FFprobe installed.\n")
 	
 else:
 	
@@ -87,8 +88,15 @@ else:
 		
 		print("FFmpeg installed.\n")
 		
-	else:
-		print("Bin folder and FFmpeg present.\n")
+	elif os.path.exists("./ffprobe.wasm") == False:
+		print("FFprobe missing, installing...\n")
+		
+		subprocess.run("curl -L https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffprobe.wasm -o ffprobe.wasm")
+		
+		print("FFprobe installed.\n")
+
+	else:	
+		print("Bin folder, FFmpeg & FFprobe present.\n")
 
 #Shortcuts home bookmark check, creating if not present
 
@@ -96,15 +104,16 @@ time.sleep(1)
 
 bookMStatus = subprocess.getoutput("showmarks sHome")
 
-if "not found" in bookMStatus:
-	print("sHome bookmark missing, creating...\n")
+if "AppGroup" not in bookMStatus:
+	print("sHome bookmark missing/incorrect, creating...\n")
 	subprocess.run("cd $SHORTCUTS")
+	subprocess.run("deletemark sHome")
 	subprocess.run("bookmark sHome")
 	time.sleep(1)
 	print("sHome bookmark created.\n")
 	
 else:
-	print("sHome bookmark present.\n")
+	print("sHome bookmark present & correct.\n")
 
 subprocess.run("cd")
 time.sleep(1)
