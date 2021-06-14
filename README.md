@@ -11,6 +11,12 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 **Main post with full description and download link: [RoutineHub](https://routinehub.co/shortcut/7284)**
 
+## Planned features
+
+- Implement password & username prompt to be able to download private content with Gallery-dl
+- Add automatic updating of dependencies
+- Migrate shortcut to Jelly
+
 ## Disclaimers
 - Use this shortcut for downloading media you own easily
 - All software used (Youtube-dl, Gallery-dl, SW-DLT, a-Shell) is open source and free
