@@ -7,11 +7,10 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 - Downaload audio (audio only or extracted from video)
 - Download playlists (video or audio choices available)
 - Download images/clips/GIFs (from single items to massive albums)
+- Support for both a-Shell and a-Shell Mini apps
 
-**Main post with full description and download link in [RoutineHub](https://routinehub.co/shortcut/7284), FULL documentation also available in the shortcut.**
-
-This repository is used to store python scripts needed to bridge some of the download processes between the SW-DLT shortcut and a-Shell. Python scripts will be updated with more features as updates for SW-DLT are released.
+**Main post with full description and download link: [RoutineHub](https://routinehub.co/shortcut/7284)**
 
 ## Disclaimers
 - Use this shortcut for downloading media you own easily
-- All software used is open source and free
+- All software used (Youtube-dl, Gallery-dl, SW-DLT, a-Shell) is open source and free
