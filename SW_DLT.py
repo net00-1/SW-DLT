@@ -1,5 +1,6 @@
 # SW-DLT script, do not copy without permission!
 
+import urllib.parse
 import subprocess
 import mimetypes
 import datetime
@@ -79,7 +80,7 @@ class SWDLT:
     def video_download(self):
         video_res = sys.argv[3]
 
-        if video_res == "default":
+        if video_res == "-d":
             format_opts = {
                 "format": "best[ext=mp4]/best/bestvideo[ext=mp4]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]",
                 "playlist_items": "1-1", "outtmpl": "{}.%(ext)s".format(self.out_name)
@@ -106,16 +107,18 @@ class SWDLT:
 
     def single_ytdl(self, format_opts):
         with youtube_dl.YoutubeDL(format_opts) as vidObj:
+            meta_data = vidObj.extract_info(self.media_url, download=False)
+            vid_title = meta_data.get("title", None)
             vidObj.download([self.media_url])
         re_pattern = re.compile(self.out_name + "\.[\w]{2,4}")
-        file_name = re_pattern.match(subprocess.getoutput("ls")).group(0)
-        subprocess.run("open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{}".format(file_name))
+        file_name = re_pattern.search(subprocess.getoutput("ls").replace("\n", " ")).group(0)
+        subprocess.run("open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{1}".format(file_name, urllib.parse.quote(vid_title)))
         return
 
     def gallery_download(self):
         gallery_range = sys.argv[3]
         gallery_urls = None
-        if gallery_range == "all":
+        if gallery_range == "-all":
             gallery_urls = subprocess.getoutput("gallery-dl -G {}".format(self.media_url)).splitlines()
         else:
             gallery_urls = subprocess.getoutput(
@@ -145,32 +148,34 @@ class SWDLT:
             subprocess.run("mv {0} $SHORTCUTS/{1}".format("MEDIA_" + str(media_count) + ext, self.out_name + ext))
             subprocess.run("rm -r -f {}".format(self.out_name))
             subprocess.run(
-                "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{}".format(self.out_name + ext))
+                "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{0}".format(self.out_name + ext))
         else:
             subprocess.run("jump shortcuts")
             shutil.make_archive(self.out_name, "zip", self.out_name)
             subprocess.run("rm -r -f {}".format(self.out_name))
             subprocess.run(
-                "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{}".format(self.out_name + ".zip"))
+                "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{0}".format(self.out_name + ".zip"))
 
     def playlist_download(self):
         playlist_type = sys.argv[3]
         format_opts = None
 
-        if playlist_type == "video":
-            format_opts = {"format": "best[ext=mp4]/best", "outtmpl": "{}/%(id)s.%(ext)s".format(self.out_name)}
+        if playlist_type == "-v":
+            format_opts = {"format": "best[ext=mp4]/best", "outtmpl": "{}/%(title)s.%(ext)s".format(self.out_name)}
         else:
             format_opts = {"format": "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
                            "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
-                           "outtmpl": "{}/%(id)s.%(ext)s".format(self.out_name)}
+                           "outtmpl": "{}/%(title)s.%(ext)s".format(self.out_name)}
 
         try:
-            with youtube_dl.YoutubeDL(format_opts) as vidObj:
-                vidObj.download([self.media_url])
+            with youtube_dl.YoutubeDL(format_opts) as plObj:
+                meta_data = plObj.extract_info(self.media_url, download=False)
+                pl_title = meta_data.get("title", None)
+                plObj.download([self.media_url])
             shutil.make_archive(self.out_name, "zip", self.out_name)
             subprocess.run("rm -r -f {}".format(self.out_name))
             subprocess.run(
-                "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{}".format(self.out_name + ".zip"))
+                "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{1}".format(self.out_name + ".zip", urllib.parse.quote(pl_title)))
 
         except:
             raise Exception(self.DERROR_EXC)
@@ -201,19 +206,19 @@ def main():
         subprocess.run("clear")
 
         # Download functions
-        if download_type == "video":
+        if download_type == "-v":
             print(string_msgs["video_prompt"])
             sw_dlt_inst.video_download()
-        elif download_type == "audio":
+        elif download_type == "-a":
             print(string_msgs["audio_prompt"])
             sw_dlt_inst.audio_download()
-        elif download_type == "playlist":
+        elif download_type == "-p":
             print(string_msgs["playlist_prompt"])
             sw_dlt_inst.playlist_download()
-        elif download_type == "gallery":
+        elif download_type == "-g":
             print(string_msgs["gallery_prompt"])
             sw_dlt_inst.gallery_download()
-        elif download_type == "erase":
+        elif download_type == "-e":
             print(string_msgs["erase_prompt"])
             sw_dlt_inst.erase_dependencies()
 
