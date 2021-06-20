@@ -162,8 +162,9 @@ class SWDLT:
         else:
             gallery_urls = subprocess.getoutput(
                 "gallery-dl -G {0} --range '{1}' {2}".format(self.media_url, gallery_range, gallery_auth_string)).splitlines()
-
+    
         media_count = 0
+        item_count = 0
         ext = ""
         subprocess.run("mkdir {}".format(self.out_name))
         subprocess.run("cd {}".format(self.out_name))
@@ -173,11 +174,15 @@ class SWDLT:
                 media_get = requests.get(str(url))
                 ext = mimetypes.guess_extension(media_get.headers['content-type'])
                 media_count = media_count + 1
+                item_count = item_count + 1
                 with open('MEDIA_{0}{1}'.format(media_count, ext), 'wb') as media:
                     media.write(media_get.content)
                     
                 media.close()
-                self.show_progress("", "", str(media_count), str(len(gallery_urls)))
+                self.show_progress("", "", str(item_count), str(len(gallery_urls)))
+                
+            else:
+                item_count = item_count + 1
 
         if media_count < 1:
             subprocess.run("jump shortcuts")
@@ -238,7 +243,7 @@ class SWDLT:
             return
             
         elif curr:
-            print("\rProgress: %.1f%s" % ((100 / float(total)) * int(curr), "%"), end="")
+            print("\rProgress: %.1f%s" % ((100 / int(total)) * int(curr), "%"), end="")
             return
             
         else:
