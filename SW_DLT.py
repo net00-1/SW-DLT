@@ -29,17 +29,17 @@ class SWDLT:
     def check_setup(self):
         reboot = False
         if "Package(s) not found" in subprocess.getoutput("pip show youtube-dl"):
-            self.show_progress("", 12.5, "", "")
+            self.show_progress("", "12.5", "", "")
             subprocess.run("pip -q install --upgrade youtube-dl")
             reboot = True
             
-        self.show_progress("", 25, "", "")
+        self.show_progress("", "25", "", "")
         if "Package(s) not found" in subprocess.getoutput("pip show gallery-dl"):
-            self.show_progress("", 37.5, "", "")
+            self.show_progress("", "37.5", "", "")
             subprocess.run("pip -q install --upgrade gallery-dl")
             reboot = True
             
-        self.show_progress("", 50, "", "")
+        self.show_progress("", "50", "", "")
         if reboot is True:
             raise Exception(self.REBOOT_EXC)
             
@@ -47,54 +47,54 @@ class SWDLT:
         if os.path.exists("./bin") is False:
             subprocess.run("mkdir bin")
             subprocess.run("cd bin")
-            self.show_progress("", 62.5, "", "")
+            self.show_progress("", "62.5", "", "")
             req1 = requests.get(self.FFMPEG_URL)
             with open('./ffmpeg.wasm', 'wb') as ffmpeg:
                 ffmpeg.write(req1.content)
                 
             ffmpeg.close()
-            self.show_progress("", 75, "", "")
-            self.show_progress("", 87.5, "", "")
+            self.show_progress("", "75", "", "")
+            self.show_progress("", "87.5", "", "")
             req2 = requests.get(self.FFPROBE_URL)
             with open('./ffprobe.wasm', 'wb') as ffprobe:
                 ffprobe.write(req2.content)
                 
             ffprobe.close()
-            self.show_progress("", 100, "", "")
+            self.show_progress("", "100", "", "")
             
         else:
             subprocess.run("cd bin")
             if os.path.exists("./ffprobe.wasm") is False:
-                self.show_progress("", 62.5, "", "")
+                self.show_progress("", "62.5", "", "")
                 req2 = requests.get(self.FFPROBE_URL)
                 with open('./ffprobe.wasm', 'wb') as ffprobe:
                     ffprobe.write(req2.content)
                     
                 ffprobe.close()
 
-            self.show_progress("", 75, "", "")
+            self.show_progress("", "75", "", "")
             if os.path.exists("./ffmpeg.wasm") is False:
-                self.show_progress("", 87.5, "", "")
+                self.show_progress("", "87.5", "", "")
                 req1 = requests.get(self.FFMPEG_URL)
                 with open('./ffmpeg.wasm', 'wb') as ffmpeg:
                     ffmpeg.write(req1.content)
                     
                 ffmpeg.close()
                 
-            self.show_progress("", 100, "", "")
+            self.show_progress("", "100", "", "")
         subprocess.run("jump shortcuts")
 
     def erase_dependencies(self):
         subprocess.run("pip uninstall -q -y youtube-dl")
-        self.show_progress("", 25, "", "")
+        self.show_progress("", "25", "", "")
         subprocess.run("pip uninstall -q -y gallery-dl")
-        self.show_progress("", 50, "", "")
+        self.show_progress("", "50", "", "")
         subprocess.run("cd")
         subprocess.run("cd bin")
         subprocess.run("rm -f ffmpeg.wasm")
-        self.show_progress("", 75, "", "")
+        self.show_progress("", "75", "", "")
         subprocess.run("rm -f ffprobe.wasm")
-        self.show_progress("", 100, "", "")
+        self.show_progress("", "100", "", "")
 
         raise Exception(self.ERASED_EXC)
 
@@ -177,7 +177,7 @@ class SWDLT:
                     media.write(media_get.content)
                     
                 media.close()
-                self.show_progress("", "", media_count, len(gallery_urls))
+                self.show_progress("", "", str(media_count), str(len(gallery_urls)))
 
         if media_count < 1:
             subprocess.run("jump shortcuts")
@@ -234,11 +234,11 @@ class SWDLT:
 
     def show_progress(self, ytdl_hook, num="", curr="", total=""):
         if num:
-            print("\rProgress: %.1f%s" % (num, "%"), end="")
+            print("\rProgress: %.1f%s" % (float(num), "%"), end="")
             return
             
         elif curr:
-            print("\rProgress: %.1f%s" % ((100 / total) * curr, "%"), end="")
+            print("\rProgress: %.1f%s" % ((100 / float(total)) * int(curr), "%"), end="")
             return
             
         else:
@@ -247,6 +247,7 @@ class SWDLT:
                 return
             elif ytdl_hook["status"] == "finished":
                 print(" ")
+                return
 
 
 def main():
