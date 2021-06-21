@@ -9,7 +9,7 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 - Download images/clips/GIFs (from single items to massive albums)
 - Support for both a-Shell and a-Shell Mini apps
 
-**Main post with full description and download link: [RoutineHub](https://routinehub.co/shortcut/7284)**
+**RoutineHub download link: [RoutineHub](https://routinehub.co/shortcut/7284)**
 
 ## Planned Changes
 
