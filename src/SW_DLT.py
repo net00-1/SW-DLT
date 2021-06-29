@@ -12,9 +12,10 @@ import os
 try:
     import requests
     import youtube_dl
-    
+
 except:
     pass
+
 
 class SWDLT:
     FFMPEG_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffmpeg.wasm"
@@ -22,79 +23,69 @@ class SWDLT:
     REBOOT_EXC = "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=EXCEPTION.vars.restartRequired"
     ERASED_EXC = "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=EXCEPTION.vars.erasedAll"
     DERROR_EXC = "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=EXCEPTION.vars.downloadError"
+
     def __init__(self, media_url):
         self.media_url = media_url
         self.out_name = datetime.datetime.today().strftime("%d-%m-%y-%H-%M-%S")
 
-    def check_setup(self):
+    def validate_setup(self):
         reboot = False
         if "Package(s) not found" in subprocess.getoutput("pip show youtube-dl"):
-            self.show_progress("", "12.5", "", "")
+            self.show_progress("", "12.5", 0, 0)
             subprocess.run("pip -q install --upgrade youtube-dl")
             reboot = True
-            
-        self.show_progress("", "25", "", "")
+
+        self.show_progress("", "25", 0, 0)
         if "Package(s) not found" in subprocess.getoutput("pip show gallery-dl"):
-            self.show_progress("", "37.5", "", "")
+            self.show_progress("", "37.5", 0, 0)
             subprocess.run("pip -q install --upgrade gallery-dl")
             reboot = True
-            
-        self.show_progress("", "50", "", "")
+
+        self.show_progress("", "50", 0, 0)
         if reboot is True:
             raise Exception(self.REBOOT_EXC)
-            
+
         subprocess.run("cd")
         if os.path.exists("./bin") is False:
             subprocess.run("mkdir bin")
             subprocess.run("cd bin")
-            self.show_progress("", "62.5", "", "")
+            self.show_progress("", "62.5", 0, 0)
             req1 = requests.get(self.FFMPEG_URL)
             with open('./ffmpeg.wasm', 'wb') as ffmpeg:
                 ffmpeg.write(req1.content)
-                
-            ffmpeg.close()
-            self.show_progress("", "75", "", "")
-            self.show_progress("", "87.5", "", "")
+
+            self.show_progress("", "75", 0, 0)
+            self.show_progress("", "87.5", 0, 0)
             req2 = requests.get(self.FFPROBE_URL)
             with open('./ffprobe.wasm', 'wb') as ffprobe:
                 ffprobe.write(req2.content)
-                
-            ffprobe.close()
-            self.show_progress("", "100", "", "")
-            
+
+            self.show_progress("", "100", 0, 0)
+
         else:
             subprocess.run("cd bin")
             if os.path.exists("./ffprobe.wasm") is False:
-                self.show_progress("", "62.5", "", "")
+                self.show_progress("", "62.5", 0, 0)
                 req2 = requests.get(self.FFPROBE_URL)
                 with open('./ffprobe.wasm', 'wb') as ffprobe:
                     ffprobe.write(req2.content)
-                    
-                ffprobe.close()
 
-            self.show_progress("", "75", "", "")
+            self.show_progress("", "75", 0, 0)
             if os.path.exists("./ffmpeg.wasm") is False:
-                self.show_progress("", "87.5", "", "")
+                self.show_progress("", "87.5", 0, 0)
                 req1 = requests.get(self.FFMPEG_URL)
                 with open('./ffmpeg.wasm', 'wb') as ffmpeg:
                     ffmpeg.write(req1.content)
-                    
-                ffmpeg.close()
-                
-            self.show_progress("", "100", "", "")
+
+            self.show_progress("", "100", 0, 0)
         subprocess.run("jump shortcuts")
 
     def erase_dependencies(self):
-        subprocess.run("pip uninstall -q -y youtube-dl")
-        self.show_progress("", "25", "", "")
-        subprocess.run("pip uninstall -q -y gallery-dl")
-        self.show_progress("", "50", "", "")
-        subprocess.run("cd")
-        subprocess.run("cd bin")
-        subprocess.run("rm -f ffmpeg.wasm")
-        self.show_progress("", "75", "", "")
-        subprocess.run("rm -f ffprobe.wasm")
-        self.show_progress("", "100", "", "")
+        cleanup_cmds = ("pip uninstall -q -y youtube-dl", "pip uninstall -q -y gallery-dl", "cd", "cd bin",
+                        "rm -f ffmpeg.wasm", "rm -f ffprobe.wasm")
+        for i in range(len(cleanup_cmds)):
+            subprocess.run(cleanup_cmds[i])
+            self.show_progress("", "", i + 1, len(cleanup_cmds))
 
         raise Exception(self.ERASED_EXC)
 
@@ -108,21 +99,21 @@ class SWDLT:
                 "progress_hooks": [self.show_progress],
                 "outtmpl": "{}.%(ext)s".format(self.out_name)
             }
-            
+
         else:
             video_fps = sys.argv[4]
             format_opts = {
                 "format": "bestvideo[ext=mp4][height>={0}][fps>={1}]+bestaudio[ext*=4]/bestvideo[ext=mp4][height>={0}][fps<={1}]+bestaudio[ext*=4]/bestvideo[ext!*=4][height>={0}][fps>={1}]+bestaudio[ext!*=4]/bestvideo[ext!*=4][height>={0}][fps<={1}]+bestaudio[ext!*=4]/bestvideo[ext=mp4][height<={0}][fps>={1}]+bestaudio[ext*=4]/bestvideo[ext=mp4][height<={0}][fps<={1}]+bestaudio[ext*=4]/bestvideo[ext!*=4][height<={0}][fps>={1}]+bestaudio[ext!*=4]/bestvideo[ext!*=4][height<={0}][fps<={1}]+bestaudio[ext!*=4]/best[ext=mp4][height>={0}][fps>={1}]/best[ext=mp4][height>={0}][fps<={1}]/best[ext!*=4][height>={0}][fps>={1}]/best[ext!*=4][height>={0}][fps<={1}]/best[ext=mp4][height<={0}][fps>={1}]/best[ext=mp4][height<={0}][fps<={1}]/best[ext!*=4][height<={0}][fps>={1}]/best[ext!*=4][height<={0}][fps<={1}]".format(
                     video_res, video_fps),
-                "playlist_items": "1-1", 
+                "playlist_items": "1-1",
                 "quiet": True,
                 "progress_hooks": [self.show_progress],
                 "outtmpl": "{}.%(ext)s".format(self.out_name)
             }
-            
+
         try:
             self.single_ytdl(format_opts)
-            
+
         except:
             raise Exception(self.DERROR_EXC)
 
@@ -134,10 +125,10 @@ class SWDLT:
             "progress_hooks": [self.show_progress],
             "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
             "outtmpl": "{}.%(ext)s".format(self.out_name)
-            }
+        }
         try:
             self.single_ytdl(format_opts)
-            
+
         except:
             raise Exception(self.DERROR_EXC)
 
@@ -146,74 +137,76 @@ class SWDLT:
             meta_data = vid_obj.extract_info(self.media_url, download=False)
             vid_title = meta_data.get("title", None)
             vid_obj.download([self.media_url])
-            
+
         re_pattern = re.compile(self.out_name + "\.[\w]{2,4}")
         file_name = re_pattern.search(subprocess.getoutput("ls").replace("\n", " ")).group(0)
         subprocess.run("open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{1}".format(file_name, urllib.parse.quote(vid_title)))
-        return
 
-    def gallery_download(self, gallery_auth_string):
+    def gallery_download(self, gallery_auth_str):
         gallery_range = sys.argv[3]
-        gallery_urls = None
+        gallery_urls = []
+        name_count = 0
+        iter_count = 0
+        file_ext = ""
 
         if gallery_range == "-all":
-            gallery_urls = subprocess.getoutput("gallery-dl -G {0} {1}".format(self.media_url, gallery_auth_string)).splitlines()
-            
+            gallery_urls = subprocess.getoutput(
+                "gallery-dl -G {0} {1}".format(self.media_url, gallery_auth_str)).splitlines()
+
         else:
             gallery_urls = subprocess.getoutput(
-                "gallery-dl -G {0} --range '{1}' {2}".format(self.media_url, gallery_range, gallery_auth_string)).splitlines()
-    
-        media_count = 0
-        item_count = 0
-        ext = ""
+                "gallery-dl -G {0} --range '{1}' {2}".format(self.media_url, gallery_range, gallery_auth_str)).splitlines()
+
         subprocess.run("mkdir {}".format(self.out_name))
         subprocess.run("cd {}".format(self.out_name))
 
         for url in gallery_urls:
             if url.startswith("http"):
                 media_get = requests.get(str(url))
-                ext = mimetypes.guess_extension(media_get.headers['content-type'])
-                media_count = media_count + 1
-                item_count = item_count + 1
-                with open('MEDIA_{0}{1}'.format(media_count, ext), 'wb') as media:
-                    media.write(media_get.content)
-                    
-                media.close()
-                self.show_progress("", "", str(item_count), str(len(gallery_urls)))
-                
-            else:
-                item_count = item_count + 1
+                file_ext = mimetypes.guess_extension(media_get.headers['content-type'])
+                name_count += 1
+                iter_count += 1
+                with open('./MEDIA_{0}{1}'.format(name_count, file_ext), 'wb') as item:
+                    item.write(media_get.content)
 
-        if media_count < 1:
+                self.show_progress("", "", iter_count, len(gallery_urls))
+
+            else:
+                iter_count += 1
+
+        if name_count < 1:
             subprocess.run("jump shortcuts")
             subprocess.run("rm -r -f {}".format(self.out_name))
             raise Exception(self.DERROR_EXC)
 
-        elif media_count < 2:
-            subprocess.run("mv {0} $SHORTCUTS/{1}".format("MEDIA_" + str(media_count) + ext, self.out_name + ext))
+        elif name_count < 2:
+            subprocess.run(
+                "mv {0} $SHORTCUTS/{1}".format("MEDIA_" + str(name_count) + file_ext, self.out_name + file_ext))
             subprocess.run("rm -r -f {}".format(self.out_name))
             subprocess.run(
-                "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{0}".format(self.out_name + ext))
-                
+                "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{0}".format(
+                    self.out_name + file_ext))
+
         else:
             subprocess.run("jump shortcuts")
             shutil.make_archive(self.out_name, "zip", self.out_name)
             subprocess.run("rm -r -f {}".format(self.out_name))
             subprocess.run(
-                "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{0}".format(self.out_name + ".zip"))
+                "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{0}".format(
+                    self.out_name + ".zip"))
 
     def playlist_download(self):
         playlist_type = sys.argv[3]
-        format_opts = None
+        format_opts = {}
 
         if playlist_type == "-v":
             format_opts = {
                 "format": "best[ext=mp4]/best",
                 "quiet": True,
-                "progress_hooks": [self.show_progress], 
+                "progress_hooks": [self.show_progress],
                 "outtmpl": "{}/%(title)s.%(ext)s".format(self.out_name)
             }
-            
+
         else:
             format_opts = {
                 "format": "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
@@ -228,30 +221,29 @@ class SWDLT:
                 meta_data = pl_obj.extract_info(self.media_url, download=False)
                 pl_title = meta_data.get("title", None)
                 pl_obj.download([self.media_url])
-                
+
             shutil.make_archive(self.out_name, "zip", self.out_name)
             subprocess.run("rm -r -f {}".format(self.out_name))
             subprocess.run(
-                "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{1}".format(self.out_name + ".zip", urllib.parse.quote(pl_title)))
+                "open shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{1}".format(
+                    self.out_name + ".zip", urllib.parse.quote(pl_title)))
 
         except:
             raise Exception(self.DERROR_EXC)
 
-    def show_progress(self, ytdl_hook, num="", curr="", total=""):
-        if num:
+    def show_progress(self, ytdl_hook, num="", curr=0, total=0):
+        if num != "":
             print("\rProgress: %.1f%s" % (float(num), "%"), end="")
             return
-            
-        elif curr:
-            print("\rProgress: %.1f%s" % ((100 / int(total)) * int(curr), "%"), end="")
+        elif curr != 0:
+            print("\rProgress: %.1f%s" % ((100 / total) * curr, "%"), end="")
             return
-            
         else:
             if ytdl_hook["status"] == "downloading":
                 print("\rProgress: {}".format(ytdl_hook["_percent_str"].strip()), end="")
                 return
             elif ytdl_hook["status"] == "finished":
-                print(" ")
+                print()
                 return
 
 
@@ -279,7 +271,7 @@ def main():
     print(string_msgs["dependency_check"])
 
     try:
-        sw_dlt_inst.check_setup()
+        sw_dlt_inst.validate_setup()
 
         subprocess.run("rm -f *-*-*-*-*-*.*")
         subprocess.run("rm -r -f *-*-*-*-*-*")
@@ -299,7 +291,7 @@ def main():
             sw_dlt_inst.playlist_download()
 
         elif download_type == "-g":
-            gallery_auth_string = ""
+            gallery_auth_str = ""
             if sys.argv[4] == "-auth":
                 print(string_msgs["gallery_auth_prompt"])
                 user = ""
@@ -314,14 +306,14 @@ def main():
                     if passwd == "":
                         print("Password cannot be blank!\n")
 
-                gallery_auth_string = "-u {0} -p {1}".format(user, passwd)
+                gallery_auth_str = "-u {0} -p {1}".format(user, passwd)
                 subprocess.run("clear")
                 print(string_msgs["gallery_prompt"])
 
             else:
                 print(string_msgs["gallery_prompt"])
 
-            sw_dlt_inst.gallery_download(gallery_auth_string)
+            sw_dlt_inst.gallery_download(gallery_auth_str)
 
         elif download_type == "-e":
             print(string_msgs["erase_prompt"])
