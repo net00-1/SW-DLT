@@ -13,7 +13,6 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 ## Planned Changes
 
-- Migrate shortcut to Jelly
 - Optimize Script
 - Implement feature to read URLs from files
 
