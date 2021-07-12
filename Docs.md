@@ -68,6 +68,13 @@ login details to access private content. **SW-DLT is not able to save any kind o
 as-is, while multi item downloads are packaged in a zip archive. Since gallery-dl is not directly used to download items, there is no proper item naming available.
 Items are given generic names (with zip archives using the current date).
 
+Gallery downloading supports custom download ranges (which are directly passed to gallery-dl). 
+
+Example: `1, 2-5, 7, 9-15`
+
+- Downloads the first item, followed by items 2 to 5, followed by item 7, followed by items 9 to 15
+- The first item is usually the newest item in a social media page
+
 ## Saving Downloaded Media
 
 Downloads are NOT automatically saved by SW-DLT due to the many different file types that are supported. All downloads are shown to the user using the share sheet
