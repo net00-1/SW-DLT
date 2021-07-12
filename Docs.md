@@ -16,11 +16,11 @@ The video download option offers two types of downloads: Default and Custom Qual
 4. Best quality available with any extension (separate video and audio to merge with FFMpeg)
 
 The default quality is the most reliable way to download videos from websites that might not return resolution data to youtube-dl or are not in the list of
-supported websites and need to be downloaded using youtube-dl's generic extractor. This option also mostly avoids using FFMpeg (which saves battery, and speeds up downloads)
+supported websites and need to be downloaded using youtube-dl's generic extractor. This option also mostly avoids using FFMpeg (which saves battery, and speeds up downloads).
 
 **Custom Quality**: videos are downloaded using the closest available resolution and FPS to the user's selection. This is done to add flexibility when the exact
 resolution and frame rate is not available. The priority is as follows: (Merging separate audio and video with FFMpeg will be done first, in case there are no
-separate streams available, muxed streams will be considered)
+separate streams available, muxed streams will be considered).
 
 1. MP4 video with bigger than or equal FPS and resolution to user choice
 2. MP4 video with bigger than or equal resolution and less than or equal FPS to user choice
@@ -34,7 +34,7 @@ separate streams available, muxed streams will be considered)
 ## Audio Downloading
 
 Audio downloads prioritize the best audio available from a website. In case there is no audio only stream, the best muxed video will be used to extract audio from it.
-Audio downloads are also saved with the proper title from youtube-dl
+Audio downloads are also saved with the proper title from youtube-dl.
 
 `bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best`
 
@@ -45,8 +45,8 @@ Audio downloads are also saved with the proper title from youtube-dl
 
 ## Playlist Downloading
 
-Playlist downloads support both downloading all items in the playlist as videos, or as audio only files. There is no quality options for video playlist downloads due to
-the slowness of FFMpeg in a-Shell, and to save battery life. Audio playlist can use FFMpeg to correct errors and to extract audio from videos.
+Playlist downloads support both downloading all items in the playlist as videos or as audio only files. There is no quality options for video playlist downloads due to
+the slowness of FFMpeg in a-Shell, and to save battery life. Audio playlist downlods can use FFMpeg to correct errors and to extract audio from videos.
 
 Video downloads use the formats: `best[ext=mp4]/best`
 
@@ -63,7 +63,7 @@ Audio downloads use the formats `bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=m
 ## Gallery Downloading
 
 Gallery downloads are done using gallery-dl instead of youtube-dl. Gallery-dl works primarily with images, but can be used to download GIFs and Clips from
-social media and other websites. Gallery-dl is able to download items in bulk up to entire websites and user profiles. Gallery downloading supports using user
+social media and other hosting websites. Gallery-dl is able to download items in bulk up to entire websites and user profiles. Gallery downloading supports entering user
 login details to access private content. **SW-DLT is not able to save any kind of login details for security**. Single item downloads with gallery-dl are returned
 as-is, while multi item downloads are packaged in a zip archive. Since gallery-dl is not directly used to download items, there is no proper item naming available.
 Items are given generic names (with zip archives using the current date).
