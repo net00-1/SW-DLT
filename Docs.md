@@ -6,7 +6,7 @@ Detailed information about all the features available on SW-DLT. This informatio
 
 The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the proper titles available from youtube-dl.
 
-**Default Quality**: videos are downloading using the following youtube-dl format string:
+**Default Quality**: videos are downloaded using the following youtube-dl format string:
 
  `best[ext=mp4]/best/bestvideo[ext=mp4]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]` i.e:
 
