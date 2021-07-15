@@ -46,7 +46,8 @@ Audio downloads are also saved with the proper title from youtube-dl.
 ## Playlist Downloading
 
 Playlist downloads support both downloading all items in the playlist as videos or as audio only files. There is no quality options for video playlist downloads due to
-the slowness of FFMpeg in a-Shell, and to save battery life. Audio playlist downlods can use FFMpeg to correct errors and to extract audio from videos.
+the slowness of FFMpeg in a-Shell, and to save battery life. Audio playlist downlods can use FFMpeg to correct errors and to extract audio from videos. Playlists are 
+saved with the proper titles availale from youtube-dl.
 
 Video downloads use the formats: `best[ext=mp4]/best`
 
