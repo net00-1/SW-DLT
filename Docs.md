@@ -83,12 +83,12 @@ preview. From this preview users are able to choose where to send the downloaded
 
 ## Updating Utilities
 
-In order to update the utilities used by SW-DLT, you must first use the deleteAll toggle inside the shortcuts editor screen. This option is used to uninstall all the utilities
+In order to update the utilities used by SW-DLT, you must first use the `deleteAll` toggle inside the shortcuts editor screen. This option is used to uninstall all the utilities
 without having to delete the a-Shell app. The next time a download is requested after deletion, the most recent versions of all the utilities will be installed.
 
 ## Choosing a-Shell App Version
 
-SW-DLT supports both the a-Shell and a-Shell Mini apps. The isMini toggle inside the shortcut editor screen allows you to choose which app to use depending on which app 
+SW-DLT supports both the a-Shell and a-Shell Mini apps. The `isMini` toggle inside the shortcut editor screen allows you to choose which app to use depending on which app 
 is installed.
 
 -  True = uses a-Shell Mini
