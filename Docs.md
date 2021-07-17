@@ -86,6 +86,18 @@ preview. From this preview users are able to choose where to send the downloaded
 In order to update the utilities used by SW-DLT, you must first use the `deleteAll` toggle inside the shortcuts editor screen. This option is used to uninstall all the utilities
 without having to delete the a-Shell app. The next time a download is requested after deletion, the most recent versions of all the utilities will be installed.
 
+## Resuming Downloads
+
+Resuming a download only works if you retry the **LAST** attempted download with the **EXACT** same parameters (URL, quality, type, authentication type, etc).
+You can verify that a download is resuming if you see "SW-DLT (Resuming Download)" as the header in a-Shell when the program is running. You can stop and resume the same
+download as many times as needed, but **if you download something else before completing the partial download, the partial files will be removed**. This ensures no 
+accumulation of more than one partial files in the `$SHORTCUTS` directory. Resuming downloads works with ALL functions of the shortcut.
+
+Example:
+- If you attempted to download video X but interrupted the download, and then you attempt to download video X again, it will be resumed (if the same parameters are used).
+- If you attempted to download video X but interrupted the download, **but then you attempt to download video Y**, the files for video X will be cleaned (at this point
+video Y will take the place as the video that can be resumed if it's interrupted).
+
 ## Choosing a-Shell App Version
 
 SW-DLT supports both the a-Shell and a-Shell Mini apps. The `isMini` toggle inside the shortcut editor screen allows you to choose which app to use depending on which app 
