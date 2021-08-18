@@ -50,36 +50,26 @@ class SWDLT:
         subprocess.run("cd")
         if os.path.exists("./bin") is False:
             subprocess.run("mkdir bin")
-            subprocess.run("cd bin")
-            show_progress("", "62.5", 0, 0)
-            req1 = requests.get(self.FFMPEG_URL)
-            with open('./ffmpeg.wasm', 'wb') as ffmpeg:
-                ffmpeg.write(req1.content)
 
-            show_progress("", "75", 0, 0)
-            show_progress("", "87.5", 0, 0)
-            req2 = requests.get(self.FFPROBE_URL)
+        subprocess.run("cd bin")
+        show_progress("", "62.5", 0, 0)
+
+        if os.path.exists("./ffprobe.wasm") is False:
+            req1 = requests.get(self.FFPROBE_URL)
             with open('./ffprobe.wasm', 'wb') as ffprobe:
-                ffprobe.write(req2.content)
+                ffprobe.write(req1.content)
 
-            show_progress("", "100", 0, 0)
-
+        show_progress("", "75", 0, 0)
+        show_progress("", "87.5", 0, 0)
+        if os.path.exists("{}/bin/ffmpeg".format(os.environ["APPDIR"])):
+            subprocess.run("rm -f ./ffmpeg.wasm")
         else:
-            subprocess.run("cd bin")
-            if os.path.exists("./ffprobe.wasm") is False:
-                show_progress("", "62.5", 0, 0)
-                req2 = requests.get(self.FFPROBE_URL)
-                with open('./ffprobe.wasm', 'wb') as ffprobe:
-                    ffprobe.write(req2.content)
-
-            show_progress("", "75", 0, 0)
             if os.path.exists("./ffmpeg.wasm") is False:
-                show_progress("", "87.5", 0, 0)
-                req1 = requests.get(self.FFMPEG_URL)
+                req2 = requests.get(self.FFMPEG_URL)
                 with open('./ffmpeg.wasm', 'wb') as ffmpeg:
-                    ffmpeg.write(req1.content)
+                    ffmpeg.write(req2.content)
 
-            show_progress("", "100", 0, 0)
+        show_progress("", "100", 0, 0)
         subprocess.run("jump shortcuts")
 
     def erase_dependencies(self):
