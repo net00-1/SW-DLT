@@ -12,14 +12,15 @@ The video download option offers two types of downloads: Default and Custom Qual
 
 1. Best quality available with extension MP4 (video and audio stream)
 2. Best quality available with any extension (video and audio stream)
-3. Best quality available with extension MP4 (separate video and audio to merge with FFMpeg)
-4. Best quality available with any extension (separate video and audio to merge with FFMpeg)
+3. Best quality available with extension MP4 (separate video and audio to merge with FFmpeg)
+4. Best quality available with any extension (separate video and audio to merge with FFmpeg)
 
 The default quality is the most reliable way to download videos from websites that might not return resolution data to youtube-dl or are not in the list of
-supported websites and need to be downloaded using youtube-dl's generic extractor. This option also mostly avoids using FFMpeg (which saves battery, and speeds up downloads).
+supported websites and need to be downloaded using youtube-dl's generic extractor. This option also mostly avoids using FFmpeg to save battery life (FFmpeg can still be used
+to correct video file issues).
 
 **Custom Quality**: videos are downloaded using the closest available resolution and FPS to the user's selection. This is done to add flexibility when the exact
-resolution and frame rate is not available. The priority is as follows: (Merging separate audio and video with FFMpeg will be done first, in case there are no
+resolution and frame rate is not available. The priority is as follows: (Merging separate audio and video with FFmpeg will be done first, in case there are no
 separate streams available, muxed streams will be considered).
 
 1. MP4 video with bigger than or equal FPS and resolution to user choice
@@ -45,9 +46,8 @@ Audio downloads are also saved with the proper title from youtube-dl.
 
 ## Playlist Downloading
 
-Playlist downloads support both downloading all items in the playlist as videos or as audio only files. There is no quality options for video playlist downloads due to
-the slowness of FFMpeg in a-Shell, and to save battery life. Audio playlist downlods can use FFMpeg to correct errors and to extract audio from videos. Playlists are 
-saved with the proper titles availale from youtube-dl.
+Playlist downloads support both downloading all items in the playlist as videos or as audio only files. There are no quality options for video playlist downloads currently. 
+Audio playlist downlods can use FFmpeg to correct errors and to extract audio from videos. Playlists are saved with the proper titles availale from youtube-dl.
 
 Video downloads use the formats: `best[ext=mp4]/best`
 
