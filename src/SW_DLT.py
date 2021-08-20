@@ -32,39 +32,36 @@ class SWDLT:
 
     def validate_setup(self):
         reboot = False
+        show_progress("", "0", 0, 0)
         if "Package(s) not found" in subprocess.getoutput("pip show youtube-dl"):
-            show_progress("", "12.5", 0, 0)
             subprocess.run("pip -q install --upgrade youtube-dl")
             reboot = True
 
         show_progress("", "25", 0, 0)
         if "Package(s) not found" in subprocess.getoutput("pip show gallery-dl"):
-            show_progress("", "37.5", 0, 0)
             subprocess.run("pip -q install --upgrade gallery-dl")
             reboot = True
 
         show_progress("", "50", 0, 0)
-        if reboot is True:
+        if reboot:
             raise Exception(self.REBOOT_EXC)
 
         subprocess.run("cd")
-        if os.path.exists("./bin") is False:
+        if not os.path.exists("./bin"):
             subprocess.run("mkdir bin")
 
         subprocess.run("cd bin")
-        show_progress("", "62.5", 0, 0)
-
-        if os.path.exists("./ffprobe.wasm") is False:
+        if not os.path.exists("./ffprobe.wasm"):
             req1 = requests.get(self.FFPROBE_URL)
             with open('./ffprobe.wasm', 'wb') as ffprobe:
                 ffprobe.write(req1.content)
 
         show_progress("", "75", 0, 0)
-        show_progress("", "87.5", 0, 0)
         if os.path.exists("{}/bin/ffmpeg".format(os.environ["APPDIR"])):
-            subprocess.run("rm -f ./ffmpeg.wasm")
+            subprocess.run("rm -f ffmpeg.wasm")
+
         else:
-            if os.path.exists("./ffmpeg.wasm") is False:
+            if not os.path.exists("./ffmpeg.wasm"):
                 req2 = requests.get(self.FFMPEG_URL)
                 with open('./ffmpeg.wasm', 'wb') as ffmpeg:
                     ffmpeg.write(req2.content)
