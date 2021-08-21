@@ -1,4 +1,5 @@
-# SW-DLT script, do not copy without permission!
+# SW-DLT Script, check Github for documentation.
+# Official release through RoutineHub, avoid using from unknown sources!
 
 import urllib.parse
 import subprocess
