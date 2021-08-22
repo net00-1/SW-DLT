@@ -48,20 +48,21 @@ class SWDLT:
             raise Exception(self.REBOOT_EXC)
 
         subprocess.run("cd")
-        if not os.path.exists("./bin"):
-            subprocess.run("mkdir bin")
-
-        subprocess.run("cd bin")
-        if not os.path.exists("./ffprobe.wasm"):
-            req1 = requests.get(self.FFPROBE_URL)
-            with open('./ffprobe.wasm', 'wb') as ffprobe:
-                ffprobe.write(req1.content)
-
-        show_progress("", "75", 0, 0)
         if os.path.exists("{}/bin/ffmpeg".format(os.environ["APPDIR"])):
-            subprocess.run("rm -f ffmpeg.wasm")
+            subprocess.run("rm -f ./bin/ffmpeg.wasm")
+            subprocess.run("rm -f ./bin/ffprobe.wasm")
 
         else:
+            if not os.path.exists("./bin"):
+                subprocess.run("mkdir bin")
+
+            subprocess.run("cd bin")
+            if not os.path.exists("./ffprobe.wasm"):
+                req1 = requests.get(self.FFPROBE_URL)
+                with open('./ffprobe.wasm', 'wb') as ffprobe:
+                    ffprobe.write(req1.content)
+
+            show_progress("", "75", 0, 0)
             if not os.path.exists("./ffmpeg.wasm"):
                 req2 = requests.get(self.FFMPEG_URL)
                 with open('./ffmpeg.wasm', 'wb') as ffmpeg:
