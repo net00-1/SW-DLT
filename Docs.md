@@ -98,6 +98,11 @@ Example:
 - If you attempted to download video X but interrupted the download, **but then you attempt to download video Y**, the files for video X will be cleaned (at this point
 video Y will take the place as the video that can be resumed if it's interrupted).
 
+## Using Native FFmpeg
+Native FFmpeg will be automatically used if you have the latest version of the a-Shell/a-Shell Mini app that ships with it included. In this case any WebAssembly version of FFmpeg 
+present will be deleted to avoid using it (when both versions are installed the WebAssembly version takes precedence). For older versions of a-Shell, the WebAssembly version will 
+be automatically installed and used. From the user side, this will be completely automatic.
+
 ## Choosing a-Shell App Version
 
 SW-DLT supports both the a-Shell and a-Shell Mini apps. The `isMini` toggle inside the shortcut editor screen allows you to choose which app to use depending on which app 
