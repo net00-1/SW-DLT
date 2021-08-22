@@ -21,7 +21,7 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 - [X] Add authentication prompts for gallery downloads
 
-- [ ] **Priority: enable use of native FFmpeg before a-Shell update**
+- [X] **Priority: enable use of native FFmpeg before a-Shell update**
 
 - [ ] Add quality options for video playlists when usage of ffmpeg.wasm is deprecated
 
