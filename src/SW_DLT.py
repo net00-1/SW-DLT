@@ -1,5 +1,5 @@
 # SW-DLT Script, check Github for documentation.
-# Official release through RoutineHub, avoid using from unknown sources!
+# Official release through RoutineHub, avoid unknown sources!
 
 import urllib.parse
 import subprocess
@@ -94,7 +94,7 @@ class SWDLT:
         else:
             video_fps = sys.argv[4]
             format_opts = {
-                "format": "bestvideo[ext=mp4][height>={0}][fps>={1}]+bestaudio[ext*=4]/bestvideo[ext=mp4][height>={0}][fps<={1}]+bestaudio[ext*=4]/bestvideo[ext!*=4][height>={0}][fps>={1}]+bestaudio[ext!*=4]/bestvideo[ext!*=4][height>={0}][fps<={1}]+bestaudio[ext!*=4]/bestvideo[ext=mp4][height<={0}][fps>={1}]+bestaudio[ext*=4]/bestvideo[ext=mp4][height<={0}][fps<={1}]+bestaudio[ext*=4]/bestvideo[ext!*=4][height<={0}][fps>={1}]+bestaudio[ext!*=4]/bestvideo[ext!*=4][height<={0}][fps<={1}]+bestaudio[ext!*=4]/best[ext=mp4][height>={0}][fps>={1}]/best[ext=mp4][height>={0}][fps<={1}]/best[ext!*=4][height>={0}][fps>={1}]/best[ext!*=4][height>={0}][fps<={1}]/best[ext=mp4][height<={0}][fps>={1}]/best[ext=mp4][height<={0}][fps<={1}]/best[ext!*=4][height<={0}][fps>={1}]/best[ext!*=4][height<={0}][fps<={1}]".format(
+                "format": "worstvideo[ext=mp4][height>={0}][fps>={1}]+bestaudio[ext*=4]/worstvideo[ext=mp4][height>={0}][fps<={1}]+bestaudio[ext*=4]/worstvideo[ext!*=4][height>={0}][fps>={1}]+bestaudio[ext!*=4]/worstvideo[ext!*=4][height>={0}][fps<={1}]+bestaudio[ext!*=4]/bestvideo[ext=mp4][height<={0}][fps>={1}]+bestaudio[ext*=4]/bestvideo[ext=mp4][height<={0}][fps<={1}]+bestaudio[ext*=4]/bestvideo[ext!*=4][height<={0}][fps>={1}]+bestaudio[ext!*=4]/bestvideo[ext!*=4][height<={0}][fps<={1}]+bestaudio[ext!*=4]/worst[ext=mp4][height>={0}][fps>={1}]/worst[ext=mp4][height>={0}][fps<={1}]/worst[ext!*=4][height>={0}][fps>={1}]/worst[ext!*=4][height>={0}][fps<={1}]/best[ext=mp4][height<={0}][fps>={1}]/best[ext=mp4][height<={0}][fps<={1}]/best[ext!*=4][height<={0}][fps>={1}]/best[ext!*=4][height<={0}][fps<={1}]".format(
                     video_res, video_fps),
                 "playlist_items": "1-1",
                 "quiet": True,
