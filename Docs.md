@@ -81,6 +81,8 @@ Example: `1, 2-5, 7, 9-15`
 Downloads are NOT automatically saved by SW-DLT due to the many different file types that are supported. All downloads are shown to the user using the share sheet
 preview. From this preview users are able to choose where to send the downloaded item(s).
 
+It is recommended to have the VLC app or another universal media player app to enable playing media on unsupported formats for iOS/iPadOS.
+
 ## Updating Utilities
 
 In order to update the utilities used by SW-DLT, you must first use the `deleteAll` toggle inside the shortcuts editor screen. This option is used to uninstall all the utilities
