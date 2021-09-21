@@ -11,7 +11,7 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 **RoutineHub download link: [RoutineHub](https://routinehub.co/shortcut/7284)**
 
-## Planned Changes
+## Planned 
 
 - [X] Add standard progress bar
 
@@ -30,3 +30,4 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 ## Disclaimers
 - Use this shortcut for downloading media you own easily
 - All software used (Youtube-dl, Gallery-dl, SW-DLT, a-Shell) is open source and free
+- It is recommended to have the VLC app or another universal media player app to play unsupported media formats in iOS/iPadOS.
