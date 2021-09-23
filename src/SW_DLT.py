@@ -152,6 +152,7 @@ class SW_DLT:
         gallery_urls = []
         iteration = 1
         item_num = 1
+        file_ext = ""
 
         # Obtaining URL list to download
         if gallery_range == "-all":
@@ -272,7 +273,7 @@ def auth_prompt():
     while not username:
         username = input("Enter Username/E-mail:\n>>")
         if not username:
-            print("Username\E-mail cannot be blank!\n")
+            print("Username/E-mail cannot be blank!\n")
     
     while not password:
         password = input("Enter Password:\n>>")
@@ -298,7 +299,7 @@ def main():
         "dependency_check": "SW-DLT\nValidating Dependencies."
     }
 
-    #Hashes all arguments to generate unique ID
+    # Hashes all arguments to generate unique ID
     file_id = "SW_DLT_DL_{}".format(hashlib.md5(str(sys.argv).encode("utf-8")).hexdigest()[0:20])
 
     sw_dlt_inst = SW_DLT(sys.argv[1], file_id)
