@@ -41,12 +41,12 @@ class SW_DLT:
         reboot = False
         show_progress("", 0, 4)
         if "Package(s) not found" in subprocess.getoutput("pip show youtube-dl"):
-            subprocess.run("pip -q install --upgrade youtube-dl")
+            subprocess.run("pip -q install --disable-pip-version-check --upgrade youtube-dl")
             reboot = True
 
         show_progress("", 1, 4)
         if "Package(s) not found" in subprocess.getoutput("pip show gallery-dl"):
-            subprocess.run("pip -q install --upgrade gallery-dl")
+            subprocess.run("pip -q install --disable-pip-version-check --upgrade gallery-dl")
             reboot = True
         
         show_progress("", 2, 4)
