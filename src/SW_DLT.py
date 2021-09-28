@@ -39,17 +39,21 @@ class SW_DLT:
     @staticmethod
     def validate_install():
         reboot = False
-        show_progress("", 0, 4)
+        show_progress("", 0, 5)
+        if "shortcuts" not in subprocess.getoutput("showmarks"):
+            subprocess.getoutput("bookmark shortcuts")
+
+        show_progress("", 1, 5)
         if "Package(s) not found" in subprocess.getoutput("pip show youtube-dl"):
             subprocess.run("pip -q install --disable-pip-version-check --upgrade youtube-dl")
             reboot = True
 
-        show_progress("", 1, 4)
+        show_progress("", 2, 5)
         if "Package(s) not found" in subprocess.getoutput("pip show gallery-dl"):
             subprocess.run("pip -q install --disable-pip-version-check --upgrade gallery-dl")
             reboot = True
         
-        show_progress("", 2, 4)
+        show_progress("", 3, 5)
         if reboot:
             raise Exception(Consts.REBOOT_EXC)
         
@@ -70,13 +74,13 @@ class SW_DLT:
                 with open('./ffprobe.wasm', 'wb') as ffprobe:
                     ffprobe.write(req1.content)
 
-            show_progress("", 3, 4)
+            show_progress("", 4, 5)
             if not os.path.exists("./ffmpeg.wasm"):
                 req2 = requests.get(Consts.FFMPEG_URL)
                 with open('./ffmpeg.wasm', 'wb') as ffmpeg:
                     ffmpeg.write(req2.content)
 
-        show_progress("", 4, 4)
+        show_progress("", 5, 5)
         subprocess.run("jump shortcuts")
     
     @staticmethod
