@@ -236,7 +236,7 @@ def show_progress(dl_stream, curr=0, total=0):
     # dl_stream is the progress hook from yt-dlp that feeds download status data
     # Other progress types are based on ratio of current item to the total
     if dl_stream == "":
-        print(f"\rProgress: {Consts.CGREEN}{curr/total:.1%}%{Consts.ENDL}", end="")
+        print(f"\rProgress: {Consts.CGREEN}{curr/total:.1%}{Consts.ENDL}", end="")
         return
     else:
         if dl_stream["status"] == "downloading":
