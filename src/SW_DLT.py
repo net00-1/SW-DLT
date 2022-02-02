@@ -359,6 +359,5 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
 
 if __name__ == "__main__":
     subprocess.run(main(*sys.argv))
-    print(main(*sys.argv))
     # Post-run cleanup
     subprocess.run("clear")
