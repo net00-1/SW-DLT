@@ -4,9 +4,9 @@ Detailed information about all the features available on SW-DLT. This informatio
 
 ## Video Downloading
 
-The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the proper titles available from youtube-dl.
+The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the proper titles available from `yt-dlp`.
 
-**Default Quality**: videos are downloaded using the following youtube-dl format string:
+**Default Quality**: videos are downloaded using the following `yt-dlp` format string:
 
  `best[ext=mp4]/best/bestvideo[ext=mp4]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]` i.e:
 
@@ -15,8 +15,8 @@ The video download option offers two types of downloads: Default and Custom Qual
 3. Best quality available with extension MP4 (separate video and audio to merge with FFmpeg)
 4. Best quality available with any extension (separate video and audio to merge with FFmpeg)
 
-The default quality is the most reliable way to download videos from websites that might not return resolution data to youtube-dl or are not in the list of
-supported websites and need to be downloaded using youtube-dl's generic extractor. This option also mostly avoids using FFmpeg to save battery life (FFmpeg can still be used
+The default quality is the most reliable way to download videos from websites that might not return resolution data to `yt-dlp` or are not in the list of
+supported websites and need to be downloaded using `yt-dlp`'s generic extractor. This option also mostly avoids using FFmpeg to save battery life (FFmpeg can still be used
 to correct video file issues).
 
 **Custom Quality**: videos are downloaded using the closest available resolution and FPS to the user's selection. This is done to add flexibility when the exact
@@ -35,7 +35,7 @@ separate streams available, muxed streams will be considered).
 ## Audio Downloading
 
 Audio downloads prioritize the best audio available from a website. In case there is no audio only stream, the best muxed video will be used to extract audio from it.
-Audio downloads are also saved with the proper title from youtube-dl.
+Audio downloads are also saved with the proper title from `yt-dlp`.
 
 `bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best`
 
@@ -47,7 +47,7 @@ Audio downloads are also saved with the proper title from youtube-dl.
 ## Playlist Downloading
 
 Playlist downloads support both downloading all items in the playlist as videos or as audio only files. There are no quality options for video playlist downloads currently. 
-Audio playlist downlods can use FFmpeg to correct errors and to extract audio from videos. Playlists are saved with the proper titles availale from youtube-dl.
+Audio playlist downlods can use FFmpeg to correct errors and to extract audio from videos. Playlists are saved with the proper titles availale from `yt-dlp`.
 
 Video downloads use the formats: `best[ext=mp4]/best`
 
@@ -63,13 +63,13 @@ Audio downloads use the formats `bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=m
 
 ## Gallery Downloading
 
-Gallery downloads are done using gallery-dl instead of youtube-dl. Gallery-dl works primarily with images, but can be used to download GIFs and Clips from
-social media and other hosting websites. Gallery-dl is able to download items in bulk up to entire websites and user profiles. Gallery downloading supports entering user
-login details to access private content. **SW-DLT is not able to save any kind of login details for security**. Single item downloads with gallery-dl are returned
-as-is, while multi item downloads are packaged in a zip archive. Since gallery-dl is not directly used to download items, there is no proper item naming available.
+Gallery downloads are done using `gallery-dl` instead of `yt-dlp`. `gallery-dl` works primarily with images, but can be used to download GIFs and Clips from
+social media and other hosting websites. `gallery-dl` is able to download items in bulk up to entire websites and user profiles. Gallery downloading supports entering user
+login details to access private content. **SW-DLT is not able to save any kind of login details for security**. Single item downloads with `gallery-dl` are returned
+as-is, while multi item downloads are packaged in a zip archive. Since `gallery-dl` is not directly used to download items, there is no proper item naming available.
 Items are given generic names (with zip archives using the current date).
 
-Gallery downloading supports custom download ranges (which are directly passed to gallery-dl). 
+Gallery downloading supports custom download ranges (which are directly passed to `gallery-dl`). 
 
 Example: `1, 2-5, 7, 9-15`
 
