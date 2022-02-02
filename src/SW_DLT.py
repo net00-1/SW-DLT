@@ -106,7 +106,6 @@ class SW_DLT:
             "no_warnings": True,
             "noprogress": True,
             "progress_hooks": [show_progress],
-            "postprocessor_hooks": [show_processing],
             "outtmpl": f"{self.file_id}.%(ext)s"
         }
 
@@ -125,7 +124,6 @@ class SW_DLT:
             "no_warnings": True,
             "noprogress": True,
             "progress_hooks": [show_progress],
-            "postprocessor_hooks": [show_processing],
             "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
             "outtmpl": f"{self.file_id}.%(ext)s"
         }
@@ -216,7 +214,6 @@ class SW_DLT:
             "no_warnings": True,
             "noprogress": True,
             "progress_hooks": [show_progress],
-            "postprocessor_hooks": [show_processing],
             "outtmpl": f"{self.file_id}/%(title)s.%(ext)s"
         }
 
@@ -245,14 +242,8 @@ def show_progress(dl_stream, curr=0, total=0):
         if dl_stream["status"] == "downloading":
             print(f"\rDownloading: {Consts.CGREEN}{dl_stream['_percent_str'].strip()}{Consts.ENDL}", end="")
         elif dl_stream["status"] == "finished":
-            print()
+            print("Processing")
         return
-
-def show_processing(process_stream):
-    if process_stream["status"] == "processing":
-        print(f"\rPost-Processing", end="")
-        return
-    print()
 
 
 def auth_prompt():
