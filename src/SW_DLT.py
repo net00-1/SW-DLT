@@ -27,6 +27,7 @@ class Consts:
     REBOOT_EXC = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=EXCEPTION.vars.restartRequired"
     ERASED_EXC = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=EXCEPTION.vars.erasedAll"
     DERROR_EXC = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=EXCEPTION.vars.downloadError"
+    CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m" , "\033[1m", "\033[0m"
 
 
 class SW_DLT:
@@ -59,7 +60,7 @@ class SW_DLT:
 
         subprocess.run("cd")
         # If native FFmpeg is present, removes any wasm version on device.
-        if os.path.exists("{}/bin/ffmpeg".format(os.environ["APPDIR"])):
+        if os.path.exists(f"{os.environ['APPDIR']}/bin/ffmpeg"):
             subprocess.run("rm -f ./bin/ffmpeg.wasm")
             subprocess.run("rm -f ./bin/ffprobe.wasm")
 
@@ -97,13 +98,15 @@ class SW_DLT:
         default_format = "best[ext=mp4]/best/bestvideo[ext=mp4]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]"
         custom_format = "worstvideo[ext=mp4][height>={0}][fps>={1}]+bestaudio[ext*=4]/worstvideo[ext=mp4][height>={0}][fps<={1}]+bestaudio[ext*=4]/worstvideo[ext!*=4][height>={0}][fps>={1}]+bestaudio[ext!*=4]/worstvideo[ext!*=4][height>={0}][fps<={1}]+bestaudio[ext!*=4]/bestvideo[ext=mp4][height<={0}][fps>={1}]+bestaudio[ext*=4]/bestvideo[ext=mp4][height<={0}][fps<={1}]+bestaudio[ext*=4]/bestvideo[ext!*=4][height<={0}][fps>={1}]+bestaudio[ext!*=4]/bestvideo[ext!*=4][height<={0}][fps<={1}]+bestaudio[ext!*=4]/worst[ext=mp4][height>={0}][fps>={1}]/worst[ext=mp4][height>={0}][fps<={1}]/worst[ext!*=4][height>={0}][fps>={1}]/worst[ext!*=4][height>={0}][fps<={1}]/best[ext=mp4][height<={0}][fps>={1}]/best[ext=mp4][height<={0}][fps<={1}]/best[ext!*=4][height<={0}][fps>={1}]/best[ext!*=4][height<={0}][fps<={1}]".format(
             video_res, video_fps)
+
         dl_options = {
             "format": default_format if video_res == "-d" else custom_format,
             "playlist_items": "1-1",
             "quiet": True,
             "no_warnings": True,
+            "noprogress": True,
             "progress_hooks": [show_progress],
-            "outtmpl": "{}.%(ext)s".format(self.file_id)
+            "outtmpl": f"{self.file_id}.%(ext)s"
         }
 
         try:
@@ -119,9 +122,10 @@ class SW_DLT:
             "playlist_items": "1-1",
             "quiet": True,
             "no_warnings": True,
+            "noprogress": True,
             "progress_hooks": [show_progress],
             "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
-            "outtmpl": "{}.%(ext)s".format(self.file_id)
+            "outtmpl": f"{self.file_id}.%(ext)s"
         }
 
         try:
@@ -135,12 +139,12 @@ class SW_DLT:
         # Uses yt-dlp to download single video or audio items
         with yt_dlp.YoutubeDL(dl_options) as vid_obj:
             meta_data = vid_obj.extract_info(self.media_url, download=False)
-            vid_title = meta_data.get("title", self.date_id) #2nd argument is alternate title
+            vid_title = meta_data.get("title", self.date_id) # 2nd argument is alternate title
             vid_obj.download([self.media_url])
 
         re_pattern = re.compile(self.file_id + "\\.[\\w]{2,4}")
         file_name = re_pattern.search(subprocess.getoutput("ls")).group(0)
-        return "shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{1}".format(file_name, urllib.parse.quote(vid_title))
+        return f"shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{file_name}.TITLE.{urllib.parse.quote(vid_title)}"
 
     def gallery_download(self, gallery_range, auth_str):
         gallery_urls = []
@@ -154,21 +158,21 @@ class SW_DLT:
             ).splitlines()
 
         # Creating temp folder to store media
-        subprocess.run("mkdir -p {}".format(self.file_id))
-        subprocess.run("cd {}".format(self.file_id))
+        subprocess.run(f"mkdir -p {self.file_id}")
+        subprocess.run(f"cd {self.file_id}")
 
         present_items = subprocess.getoutput("ls")
         
         for url in gallery_urls:
-            if "MEDIA_{}".format(item_num) in present_items:
+            if f"MEDIA_{item_num}" in present_items:
                 item_num += 1
                 iteration += 1
                 continue
 
             if url.startswith("http"):
                 item_get = requests.get(str(url))
-                file_ext = mimetypes.guess_extension(item_get.headers['content-type'])
-                with open('./MEDIA_{0}{1}'.format(item_num, file_ext), 'wb') as media_item:
+                file_ext = mimetypes.guess_extension(item_get.headers["content-type"])
+                with open(f"./MEDIA_{item_num}{file_ext}", "wb") as media_item:
                     media_item.write(item_get.content)
 
                 show_progress("", iteration, len(gallery_urls))
@@ -181,7 +185,7 @@ class SW_DLT:
         # Less than 2 items means no URLs returned, removes temp folder and raises Exception
         if item_num < 2:
             subprocess.run("jump shortcuts")
-            subprocess.run("rm -r -f {}".format(self.file_id))
+            subprocess.run(f"rm -r -f {self.file_id}")
             raise Exception(Consts.DERROR_EXC)
 
         # Less than 3 items means a single item, removes folder and directly outputs the item
@@ -190,7 +194,7 @@ class SW_DLT:
             subprocess.run(
                 "mv {0} $SHORTCUTS/{1}".format("MEDIA_1" + file_ext, self.file_id + file_ext))
 
-            subprocess.run("rm -r -f {}".format(self.file_id))
+            subprocess.run(f"rm -r -f {self.file_id}")
             return "shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{1}".format(
                 self.file_id + file_ext, self.date_id + file_ext)
 
@@ -198,7 +202,7 @@ class SW_DLT:
         else:
             subprocess.run("jump shortcuts")
             shutil.make_archive(self.file_id, "zip", self.file_id)
-            subprocess.run("rm -r -f {}".format(self.file_id))
+            subprocess.run(f"rm -r -f {self.file_id}")
             return "shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{1}".format(
                 self.file_id + ".zip", self.date_id + ".zip")
 
@@ -208,8 +212,9 @@ class SW_DLT:
             "postprocessors": [] if playlist_type == "-v" else [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
             "quiet": True,
             "no_warnings": True,
+            "noprogress": True,
             "progress_hooks": [show_progress],
-            "outtmpl": "{}/%(title)s.%(ext)s".format(self.file_id)
+            "outtmpl": f"{self.file_id}/%(title)s.%(ext)s"
         }
 
         try:
@@ -219,7 +224,7 @@ class SW_DLT:
                 pl_obj.download([self.media_url])
 
             shutil.make_archive(self.file_id, "zip", self.file_id)
-            subprocess.run("rm -r -f {}".format(self.file_id))
+            subprocess.run(f"rm -r -f {self.file_id}")
             return "shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{1}".format(
                     self.file_id + ".zip", urllib.parse.quote(pl_title))
 
@@ -231,11 +236,11 @@ def show_progress(dl_stream, curr=0, total=0):
     # dl_stream is the progress hook from yt-dlp that feeds download status data
     # Other progress types are based on ratio of current item to the total
     if dl_stream == "":
-        print("\rProgress: %.1f%s" % ((100 / total) * curr, "%"), end="")
+        print(f"\rProgress: {Consts.CGREEN}{((100 / total) * curr):.1%}%{Consts.ENDL}", end="")
         return
     else:
         if dl_stream["status"] == "downloading":
-            print("\rProgress: {}".format(dl_stream["_percent_str"].strip()), end="")
+            print(f"\rProgress: {Consts.CGREEN}{dl_stream['_percent_str'].strip()}{Consts.ENDL}", end="")
         elif dl_stream["status"] == "finished":
             print()
         return
@@ -259,31 +264,35 @@ def auth_prompt():
     return [username, password]
 
 
-def main(media_url=None, process_type=None, res_pltype_range=None, fps_auth=None):
-    # Arg 1: media URL to download, placeholder when using erase utility
+def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fps_auth=None):
+    # Arg 0: self instance, not used by the script
+    # Arg 1: media URL to download OR placeholder when using erase utility
     # Arg 2: main process to run
-    # Arg 3: resolution for video, type for playlist, range for gallery
-    # Arg 4: FPS for video, authentication for gallery download
+    # Arg 3: resolution for video OR type for playlist OR range for gallery
+    # Arg 4: FPS for video OR authentication for gallery download
 
     info_msgs = {
-        "video_prompt": "Video Download\nCustom qualities require processing.",
-        "audio_prompt": "Audio Download\nSometimes audio processing is needed.",
-        "playlist_prompt": "Playlist Download\nProcess time depends on playlist length.",
-        "gallery_prompt": "Gallery Download\nProcess time depends on collection length.",
-        "gallery_auth_prompt": "Log-in required, log-in details are NOT SAVED",
-        "erase_prompt": "Deleting All Dependencies.",
-        "dependency_check": "SW-DLT\nValidating Dependencies."
+        "video_prompt": f"{Consts.CBLUE}Video Download{Consts.ENDL}\n{Consts.CYELLOW}Custom qualities require processing{Consts.ENDL}",
+        "audio_prompt": f"{Consts.CBLUE}Audio Download{Consts.ENDL}\n{Consts.CYELLOW}Sometimes audio processing is needed{Consts.ENDL}",
+        "playlist_prompt": f"{Consts.CBLUE}Playlist Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on playlist length{Consts.ENDL}",
+        "gallery_prompt": f"{Consts.CBLUE}Gallery Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on collection length{Consts.ENDL}",
+        "gallery_auth_prompt": f"{Consts.CYELLOW}Log-in required, log-in details are NOT SAVED{Consts.ENDL}",
+        "erase_prompt": f"{Consts.CYELLOW}Deleting All Dependencies{Consts.ENDL}",
+        "dependency_check": f"{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Validating Dependencies{Consts.ENDL}"
     }
 
     # Hashes all arguments to generate unique ID
-    file_id = "SW_DLT_DL_{}".format(hashlib.md5(str(sys.argv).encode("utf-8")).hexdigest()[0:20])
+    file_id = "SW_DLT_DL_{}".format(hashlib.md5(str([self, media_url, process_type, res_pltype_range, fps_auth])
+    .encode("utf-8"))
+    .hexdigest()[0:20])
 
     sw_dlt_inst = SW_DLT(media_url, file_id)
-    header = ""
+    header = f"{Consts.SBOLD}SW-DLT{Consts.ENDL}"
 
     try:
         # Pre-download check and cleanup
         subprocess.run("clear")
+        print(header)
         print(info_msgs["dependency_check"])
 
         sw_dlt_inst.validate_install()
@@ -291,9 +300,9 @@ def main(media_url=None, process_type=None, res_pltype_range=None, fps_auth=None
         if file_id not in subprocess.getoutput("ls"):
             subprocess.run("rm -f SW_DLT_DL_*.*")
             subprocess.run("rm -r -f SW-DLT_DL_*")
-            header = "SW-DLT"
+            pass
         else:
-            header = "SW-DLT (Resuming Download)"
+            header = f"{Consts.SBOLD}SW-DLT (Resuming Download){Consts.ENDL}"
 
         subprocess.run("clear")
         print(header)
@@ -334,6 +343,5 @@ def main(media_url=None, process_type=None, res_pltype_range=None, fps_auth=None
 
 if __name__ == "__main__":
     subprocess.run(main(*sys.argv))
-
     # Post-run cleanup
     subprocess.run("clear")
