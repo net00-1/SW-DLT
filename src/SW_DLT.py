@@ -234,6 +234,7 @@ class SW_DLT:
         except:
             raise Exception(Consts.DERROR_EXC)
 
+
 def show_progress(data_stream, curr=0, total=0):
     # data_stream type of data received, can be manual (for gallery-dl downloads), util (for utility processes)
     # or it can also be yt-dlp download data streams
@@ -251,6 +252,7 @@ def show_progress(data_stream, curr=0, total=0):
         elif data_stream["status"] == "finished":
             print(f"\x1b[1K\r{Consts.CGREEN}Downloaded{Consts.ENDL}")
     return
+
 
 def format_processing(process_stream):
     if process_stream["status"] == "started":
