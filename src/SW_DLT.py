@@ -40,21 +40,21 @@ class SW_DLT:
     @staticmethod
     def validate_install():
         reboot = False
-        show_progress("", 0, 5)
+        show_progress("manual", 0, 5)
         if "shortcuts" not in subprocess.getoutput("showmarks"):
             subprocess.run("bookmark shortcuts")
 
-        show_progress("", 1, 5)
+        show_progress("manual", 1, 5)
         if "Package(s) not found" in subprocess.getoutput("pip show yt-dlp"):
             subprocess.run("pip -q install yt-dlp --disable-pip-version-check --upgrade --no-dependencies")
             reboot = True
 
-        show_progress("", 2, 5)
+        show_progress("manual", 2, 5)
         if "Package(s) not found" in subprocess.getoutput("pip show gallery-dl"):
             subprocess.run("pip -q install gallery-dl --disable-pip-version-check --upgrade")
             reboot = True
 
-        show_progress("", 3, 5)
+        show_progress("manual", 3, 5)
         if reboot:
             raise Exception(Consts.REBOOT_EXC)
 
@@ -75,13 +75,13 @@ class SW_DLT:
                 with open('./ffprobe.wasm', 'wb') as ffprobe:
                     ffprobe.write(req1.content)
 
-            show_progress("", 4, 5)
+            show_progress("manual", 4, 5)
             if not os.path.exists("./ffmpeg.wasm"):
                 req2 = requests.get(Consts.FFMPEG_URL)
                 with open('./ffmpeg.wasm', 'wb') as ffmpeg:
                     ffmpeg.write(req2.content)
 
-        show_progress("", 5, 5)
+        show_progress("manual", 5, 5)
         subprocess.run("jump shortcuts")
 
     @staticmethod
@@ -90,7 +90,7 @@ class SW_DLT:
             "rm -f ./bin/ffprobe.wasm")
         for i in range(len(cleanup_cmds)):
             subprocess.run(cleanup_cmds[i])
-            show_progress("", i + 1, len(cleanup_cmds))
+            show_progress("manual", i + 1, len(cleanup_cmds))
 
         raise Exception(Consts.ERASED_EXC)
 
@@ -106,6 +106,7 @@ class SW_DLT:
             "no_warnings": True,
             "noprogress": True,
             "progress_hooks": [show_progress],
+            "postprocessor_hooks": [show_processing],
             "outtmpl": f"{self.file_id}.%(ext)s"
         }
 
@@ -124,6 +125,7 @@ class SW_DLT:
             "no_warnings": True,
             "noprogress": True,
             "progress_hooks": [show_progress],
+            "postprocessor_hooks": [show_processing],
             "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
             "outtmpl": f"{self.file_id}.%(ext)s"
         }
@@ -175,7 +177,7 @@ class SW_DLT:
                 with open(f"./MEDIA_{item_num}{file_ext}", "wb") as media_item:
                     media_item.write(item_get.content)
 
-                show_progress("", iteration, len(gallery_urls))
+                show_progress("manual", iteration, len(gallery_urls))
                 item_num += 1
                 iteration += 1
 
@@ -214,6 +216,7 @@ class SW_DLT:
             "no_warnings": True,
             "noprogress": True,
             "progress_hooks": [show_progress],
+            "postprocessor_hooks": [show_processing],
             "outtmpl": f"{self.file_id}/%(title)s.%(ext)s"
         }
 
@@ -235,15 +238,21 @@ class SW_DLT:
 def show_progress(dl_stream, curr=0, total=0):
     # dl_stream is the progress hook from yt-dlp that feeds download status data
     # Other progress types are based on ratio of current item to the total
-    if dl_stream == "":
-        print(f"\rProgress: {Consts.CGREEN}{curr/total:.1%}{Consts.ENDL}", end="")
+    if dl_stream == "manual":
+        print(f"\rDownloading: {Consts.CGREEN}{curr/total:.1%}{Consts.ENDL}", end="")
         return
     else:
         if dl_stream["status"] == "downloading":
-            print(f"\rProgress: {Consts.CGREEN}{dl_stream['_percent_str'].strip()}{Consts.ENDL}", end="")
+            print(f"\rDownloading: {Consts.CGREEN}{dl_stream['_percent_str'].strip()}{Consts.ENDL}", end="")
         elif dl_stream["status"] == "finished":
             print()
         return
+
+def show_processing(process_stream):
+    if process_stream["status"] == "processing":
+        print(f"\rPost-Processing", end="")
+        return
+    print()
 
 
 def auth_prompt():
