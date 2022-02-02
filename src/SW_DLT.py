@@ -40,21 +40,21 @@ class SW_DLT:
     @staticmethod
     def validate_install():
         reboot = False
-        show_progress("manual", 0, 5)
+        show_progress("util", 0, 5)
         if "shortcuts" not in subprocess.getoutput("showmarks"):
             subprocess.run("bookmark shortcuts")
 
-        show_progress("manual", 1, 5)
+        show_progress("util", 1, 5)
         if "Package(s) not found" in subprocess.getoutput("pip show yt-dlp"):
             subprocess.run("pip -q install yt-dlp --disable-pip-version-check --upgrade --no-dependencies")
             reboot = True
 
-        show_progress("manual", 2, 5)
+        show_progress("util", 2, 5)
         if "Package(s) not found" in subprocess.getoutput("pip show gallery-dl"):
             subprocess.run("pip -q install gallery-dl --disable-pip-version-check --upgrade")
             reboot = True
 
-        show_progress("manual", 3, 5)
+        show_progress("util", 3, 5)
         if reboot:
             raise Exception(Consts.REBOOT_EXC)
 
@@ -75,13 +75,13 @@ class SW_DLT:
                 with open('./ffprobe.wasm', 'wb') as ffprobe:
                     ffprobe.write(req1.content)
 
-            show_progress("manual", 4, 5)
+            show_progress("util", 4, 5)
             if not os.path.exists("./ffmpeg.wasm"):
                 req2 = requests.get(Consts.FFMPEG_URL)
                 with open('./ffmpeg.wasm', 'wb') as ffmpeg:
                     ffmpeg.write(req2.content)
 
-        show_progress("manual", 5, 5)
+        show_progress("util", 5, 5)
         subprocess.run("jump shortcuts")
 
     @staticmethod
@@ -90,7 +90,7 @@ class SW_DLT:
             "rm -f ./bin/ffprobe.wasm")
         for i in range(len(cleanup_cmds)):
             subprocess.run(cleanup_cmds[i])
-            show_progress("manual", i + 1, len(cleanup_cmds))
+            show_progress("util", i + 1, len(cleanup_cmds))
 
         raise Exception(Consts.ERASED_EXC)
 
@@ -106,6 +106,7 @@ class SW_DLT:
             "no_warnings": True,
             "noprogress": True,
             "progress_hooks": [show_progress],
+            "postprocessor_hooks": [format_processing],
             "outtmpl": f"{self.file_id}.%(ext)s"
         }
 
@@ -124,6 +125,7 @@ class SW_DLT:
             "no_warnings": True,
             "noprogress": True,
             "progress_hooks": [show_progress],
+            "postprocessor_hooks": [format_processing],
             "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
             "outtmpl": f"{self.file_id}.%(ext)s"
         }
@@ -214,6 +216,7 @@ class SW_DLT:
             "no_warnings": True,
             "noprogress": True,
             "progress_hooks": [show_progress],
+            "postprocessor_hooks": [format_processing],
             "outtmpl": f"{self.file_id}/%(title)s.%(ext)s"
         }
 
@@ -231,19 +234,30 @@ class SW_DLT:
         except:
             raise Exception(Consts.DERROR_EXC)
 
-
-def show_progress(dl_stream, curr=0, total=0):
-    # dl_stream is the progress hook from yt-dlp that feeds download status data
-    # Other progress types are based on ratio of current item to the total
-    if dl_stream == "manual":
-        print(f"\rDownloading: {Consts.CGREEN}{curr/total:.1%}{Consts.ENDL}", end="")
+def show_progress(data_stream, curr=0, total=0):
+    # data_stream type of data received, can be manual (for gallery-dl downloads), util (for utility processes)
+    # or it can also be yt-dlp download data streams
+    if data_stream == "manual":
+        if curr != total:
+            print(f"\rDownloading: {Consts.CGREEN}{curr/total:.1%}{Consts.ENDL}", end="")
+            return
+        print(f"\x1b[1K\r{Consts.CGREEN}Downloaded{Consts.ENDL}")
+    elif data_stream == "util":
+        print(f"\rLoading: {Consts.CGREEN}{curr/total:.1%}{Consts.ENDL}", end="")
         return
     else:
-        if dl_stream["status"] == "downloading":
-            print(f"\rDownloading: {Consts.CGREEN}{dl_stream['_percent_str'].strip()}{Consts.ENDL}", end="")
-        elif dl_stream["status"] == "finished":
-            print("Processing")
-        return
+        if data_stream["status"] == "downloading":
+            print(f"\rDownloading: {Consts.CYELLOW}{data_stream['_percent_str'].strip()}{Consts.ENDL}", end="")
+        elif data_stream["status"] == "finished":
+            print(f"\x1b[1K\r{Consts.CGREEN}Downloaded{Consts.ENDL}")
+    return
+
+def format_processing(process_stream):
+    if process_stream["status"] == "started":
+        print(f"\r{Consts.CYELLOW}Processing{Consts.ENDL}", end="")
+    elif process_stream["status"] == "finished":
+        print(f"\x1b[1K\r{Consts.CGREEN}Processed{Consts.ENDL}")
+    return
 
 
 def auth_prompt():
@@ -343,5 +357,6 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
 
 if __name__ == "__main__":
     subprocess.run(main(*sys.argv))
+    print(main(*sys.argv))
     # Post-run cleanup
     subprocess.run("clear")
