@@ -240,7 +240,7 @@ def show_progress(data_stream, curr=0, total=0):
     # or it can also be yt-dlp download data streams
     if data_stream == "manual":
         if curr != total:
-            print(f"\rDownloading: {Consts.CGREEN}{curr/total:.1%}{Consts.ENDL}", end="")
+            print(f"\rDownloading: {Consts.CYELLOW}{curr/total:.1%}{Consts.ENDL}", end="")
             return
         print(f"\x1b[1K\r{Consts.CGREEN}Downloaded{Consts.ENDL}")
     elif data_stream == "util":
