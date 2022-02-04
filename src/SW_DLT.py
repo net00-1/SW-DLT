@@ -95,7 +95,7 @@ class SW_DLT:
         raise Exception(Consts.ERASED_EXC)
 
     def single_video(self, video_res, video_fps):
-        default_format = "best[ext=mp4][vcodec^=avc1]/best/bestvideo[ext=mp4][vcodec^=avc1]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]"
+        default_format = "best[ext=mp4][vcodec^=avc1]/best[ext=mp4]/best/bestvideo[ext=mp4][vcodec^=avc1]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]"
         custom_format = ""\
             "worstvideo[ext=mp4][height>={0}][fps>={1}][vcodec^=avc1]+bestaudio[ext*=4]/"\
             "worstvideo[ext=mp4][height>={0}][fps<={1}][vcodec^=avc1]+bestaudio[ext*=4]/"\
