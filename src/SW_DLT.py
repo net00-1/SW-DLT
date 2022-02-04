@@ -95,9 +95,24 @@ class SW_DLT:
         raise Exception(Consts.ERASED_EXC)
 
     def single_video(self, video_res, video_fps):
-        default_format = "best[ext=mp4]/best/bestvideo[ext=mp4]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]"
-        custom_format = "worstvideo[ext=mp4][height>={0}][fps>={1}]+bestaudio[ext*=4]/worstvideo[ext=mp4][height>={0}][fps<={1}]+bestaudio[ext*=4]/worstvideo[ext!*=4][height>={0}][fps>={1}]+bestaudio[ext!*=4]/worstvideo[ext!*=4][height>={0}][fps<={1}]+bestaudio[ext!*=4]/bestvideo[ext=mp4][height<={0}][fps>={1}]+bestaudio[ext*=4]/bestvideo[ext=mp4][height<={0}][fps<={1}]+bestaudio[ext*=4]/bestvideo[ext!*=4][height<={0}][fps>={1}]+bestaudio[ext!*=4]/bestvideo[ext!*=4][height<={0}][fps<={1}]+bestaudio[ext!*=4]/worst[ext=mp4][height>={0}][fps>={1}]/worst[ext=mp4][height>={0}][fps<={1}]/worst[ext!*=4][height>={0}][fps>={1}]/worst[ext!*=4][height>={0}][fps<={1}]/best[ext=mp4][height<={0}][fps>={1}]/best[ext=mp4][height<={0}][fps<={1}]/best[ext!*=4][height<={0}][fps>={1}]/best[ext!*=4][height<={0}][fps<={1}]".format(
-            video_res, video_fps)
+        default_format = "best[ext=mp4][vcodec^=avc1]/best/bestvideo[ext=mp4][vcodec^=avc1]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]"
+        custom_format = ""\
+            "worstvideo[ext=mp4][height>={0}][fps>={1}][vcodec^=avc1]+bestaudio[ext*=4]/"\
+            "worstvideo[ext=mp4][height>={0}][fps<={1}][vcodec^=avc1]+bestaudio[ext*=4]/"\
+            "worstvideo[ext!*=4][height>={0}][fps>={1}]+bestaudio[ext!*=4]/"\
+            "worstvideo[ext!*=4][height>={0}][fps<={1}]+bestaudio[ext!*=4]/"\
+            "bestvideo[ext=mp4][height<={0}][fps>={1}][vcodec^=avc1]+bestaudio[ext*=4]/"\
+            "bestvideo[ext=mp4][height<={0}][fps<={1}][vcodec^=avc1]+bestaudio[ext*=4]/"\
+            "bestvideo[ext!*=4][height<={0}][fps>={1}]+bestaudio[ext!*=4]/"\
+            "bestvideo[ext!*=4][height<={0}][fps<={1}]+bestaudio[ext!*=4]/"\
+            "worst[ext=mp4][height>={0}][fps>={1}][vcodec^=avc1]/"\
+            "worst[ext=mp4][height>={0}][fps<={1}][vcodec^=avc1]/"\
+            "worst[ext!*=4][height>={0}][fps>={1}]/"\
+            "worst[ext!*=4][height>={0}][fps<={1}]/"\
+            "best[ext=mp4][height<={0}][fps>={1}][vcodec^=avc1]/"\
+            "best[ext=mp4][height<={0}][fps<={1}][vcodec^=avc1]/"\
+            "best[ext!*=4][height<={0}][fps>={1}]/"\
+            "best[ext!*=4][height<={0}][fps<={1}]".format(video_res, video_fps)
 
         dl_options = {
             "format": default_format if video_res == "-d" else custom_format,
@@ -311,11 +326,11 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
         print(header)
         print(info_msgs["dependency_check"])
 
-        sw_dlt_inst.validate_install()
+        #sw_dlt_inst.validate_install()
         # If the same partial file is not found, deletes all leftovers (important)
         if file_id not in subprocess.getoutput("ls"):
-            subprocess.run("rm -f SW_DLT_DL_*.*")
-            subprocess.run("rm -r -f SW-DLT_DL_*")
+            #subprocess.run("rm -f SW_DLT_DL_*.*")
+            #subprocess.run("rm -r -f SW-DLT_DL_*")
             pass
         else:
             header = f"{Consts.SBOLD}SW-DLT (Resuming Download){Consts.ENDL}"
@@ -358,6 +373,7 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
 
 
 if __name__ == "__main__":
-    subprocess.run(main(*sys.argv))
+    #subprocess.run(main(*sys.argv))
+    print(main(*sys.argv))
     # Post-run cleanup
     subprocess.run("clear")

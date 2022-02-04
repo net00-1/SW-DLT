@@ -11,7 +11,7 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 **RoutineHub download link: [RoutineHub](https://routinehub.co/shortcut/7284)**
 
-## Planned Updates (paused until iOS 15 Shortcuts become more stable)
+## Planned Updates
 
 - [X] Add standard progress bar
 
@@ -25,7 +25,7 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 - [X] iOS 15 support
 
-- [ ] Migrate to `yt-dlp`
+- [x] Migrate to `yt-dlp`
 
 - [ ] Add quality options for video playlists when usage of ffmpeg.wasm is deprecated
 
