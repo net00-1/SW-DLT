@@ -99,18 +99,26 @@ class SW_DLT:
         custom_format = ""\
             "worstvideo[ext=mp4][height>={0}][fps>={1}][vcodec^=avc1]+bestaudio[ext*=4]/"\
             "worstvideo[ext=mp4][height>={0}][fps<={1}][vcodec^=avc1]+bestaudio[ext*=4]/"\
+            "worstvideo[ext=mp4][height>={0}][fps>={1}]+bestaudio[ext*=4]/"\
+            "worstvideo[ext=mp4][height>={0}][fps<={1}]+bestaudio[ext*=4]/"\
             "worstvideo[ext!*=4][height>={0}][fps>={1}]+bestaudio[ext!*=4]/"\
             "worstvideo[ext!*=4][height>={0}][fps<={1}]+bestaudio[ext!*=4]/"\
             "bestvideo[ext=mp4][height<={0}][fps>={1}][vcodec^=avc1]+bestaudio[ext*=4]/"\
             "bestvideo[ext=mp4][height<={0}][fps<={1}][vcodec^=avc1]+bestaudio[ext*=4]/"\
+            "bestvideo[ext=mp4][height<={0}][fps>={1}]+bestaudio[ext*=4]/"\
+            "bestvideo[ext=mp4][height<={0}][fps<={1}]+bestaudio[ext*=4]/"\
             "bestvideo[ext!*=4][height<={0}][fps>={1}]+bestaudio[ext!*=4]/"\
             "bestvideo[ext!*=4][height<={0}][fps<={1}]+bestaudio[ext!*=4]/"\
             "worst[ext=mp4][height>={0}][fps>={1}][vcodec^=avc1]/"\
             "worst[ext=mp4][height>={0}][fps<={1}][vcodec^=avc1]/"\
+            "worst[ext=mp4][height>={0}][fps>={1}]/"\
+            "worst[ext=mp4][height>={0}][fps<={1}]/"\
             "worst[ext!*=4][height>={0}][fps>={1}]/"\
             "worst[ext!*=4][height>={0}][fps<={1}]/"\
             "best[ext=mp4][height<={0}][fps>={1}][vcodec^=avc1]/"\
             "best[ext=mp4][height<={0}][fps<={1}][vcodec^=avc1]/"\
+            "best[ext=mp4][height<={0}][fps>={1}]/"\
+            "best[ext=mp4][height<={0}][fps<={1}]/" \
             "best[ext!*=4][height<={0}][fps>={1}]/"\
             "best[ext!*=4][height<={0}][fps<={1}]".format(video_res, video_fps)
 
