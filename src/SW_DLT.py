@@ -97,14 +97,14 @@ class SW_DLT:
     def single_video(self, video_res, video_fps):
         default_format = "best[ext=mp4]/best/bestvideo[ext=mp4]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]"
         custom_format = ""\
-            "bestvideo[ext=mp4][width={0}][fps<={1}]+bestaudio[ext*=4]/"\
-            "bestvideo[ext=mp4][width={0}][fps>={1}]+bestaudio[ext*=4]/"\
-            "bestvideo[ext!*=4][width={0}][fps<={1}]+bestaudio[ext!*=4]/"\
-            "bestvideo[ext!*=4][width={0}][fps>={1}]+bestaudio[ext!*=4]/"\
-            "best[ext=mp4][width={0}][fps<={1}]/"\
-            "best[ext=mp4][width={0}][fps>={1}]/"\
-            "best[ext!*=4][width={0}][fps<={1}]/"\
-            "best[ext!*=4][width={0}][fps>={1}]".format(video_res, video_fps)
+            "bestvideo[ext=mp4][width<={0}][fps<={1}]+bestaudio[ext*=4]/"\
+            "bestvideo[ext=mp4][width<={0}][fps>={1}]+bestaudio[ext*=4]/"\
+            "bestvideo[ext!*=4][width<={0}][fps<={1}]+bestaudio[ext!*=4]/"\
+            "bestvideo[ext!*=4][width<={0}][fps>={1}]+bestaudio[ext!*=4]/"\
+            "best[ext=mp4][width<={0}][fps<={1}]/"\
+            "best[ext=mp4][width<={0}][fps>={1}]/"\
+            "best[ext!*=4][width<={0}][fps<={1}]/"\
+            "best[ext!*=4][width<={0}][fps>={1}]".format(video_res, video_fps)
 
         dl_options = {
             "format": default_format if video_res == "-d" else custom_format,
