@@ -348,15 +348,15 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
         # Process selection
         if process_type == "-v":
             print(info_msgs["video_prompt"])
-            return "open " + sw_dlt_inst.single_video(res_pltype_range, fps_auth)
+            return sw_dlt_inst.single_video(res_pltype_range, fps_auth)
 
         elif process_type == "-a":
             print(info_msgs["audio_prompt"])
-            return "open " + sw_dlt_inst.single_audio()
+            return sw_dlt_inst.single_audio()
 
         elif process_type == "-p":
             print(info_msgs["playlist_prompt"])
-            return "open " + sw_dlt_inst.playlist_download(res_pltype_range)
+            return sw_dlt_inst.playlist_download(res_pltype_range)
 
         elif process_type == "-g":
             auth_str = ""
@@ -369,18 +369,18 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
             else:
                 print(info_msgs["gallery_prompt"])
 
-            return "open " + sw_dlt_inst.gallery_download(res_pltype_range, auth_str)
+            return sw_dlt_inst.gallery_download(res_pltype_range, auth_str)
 
         elif process_type == "-e":
             print(info_msgs["erase_prompt"])
-            return "open " + sw_dlt_inst.erase_dependencies()
+            return sw_dlt_inst.erase_dependencies()
 
     except Exception as exc_url:
         # All raised exceptions are handled here and send the user back to the shortcut with a message
-        return "open " + str(exc_url.args[0])
+        return str(exc_url.args[0])
 
 
 if __name__ == "__main__":
-    subprocess.run(main(*sys.argv))
+    subprocess.run("open " + main(*sys.argv))
     # Post-run cleanup
     subprocess.run("clear")
