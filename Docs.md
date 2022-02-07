@@ -23,14 +23,14 @@ to correct video file issues).
 
 The priority of videos to search is as follows (in `yt-dlp` format syntax):
 
-1. `bestvideo[ext=mp4][width<=X][fps<=Y]+bestaudio[ext*=4]`
-2. `bestvideo[ext=mp4][width<=X][fps>=Y]+bestaudio[ext*=4]`
-3. `bestvideo[ext!*=4][width<=X][fps<=Y]+bestaudio[ext!*=4]`
-4. `bestvideo[ext!*=4][width<=X][fps>=Y]+bestaudio[ext!*=4]`
-5. `best[ext=mp4][width<=X][fps<=Y]`
-6. `best[ext=mp4][width<=X][fps>=Y]`
-7. `best[ext!*=4][width<=X][fps<=Y]`
-8. `best[ext!*=4][width<=X][fps>=Y]`
+1. `bestvideo[ext=mp4][width=X][fps<=Y]+bestaudio[ext*=4]`
+2. `bestvideo[ext!*=4][width=X][fps<=Y]+bestaudio[ext!*=4]`
+3. `bestvideo[ext=mp4][width<=X][fps<=Y]+bestaudio[ext*=4]`
+4. `bestvideo[ext!*=4][width<=X][fps<=Y]+bestaudio[ext!*=4]`
+5. `best[ext=mp4][width=X][fps<=Y]`
+6. `best[ext!*=4][width=X][fps<=Y]`
+7. `best[ext=mp4][width<=X][fps<=Y]`
+8. `best[ext!*=4][width<=X][fps<=Y]`
 
 ## Audio Downloading
 
