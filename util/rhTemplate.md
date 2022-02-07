@@ -28,8 +28,6 @@
 
 **[Demo Video Download](https://i.imgur.com/BhqTF5j.mp4)**
 
-- Using my own video
-
 ### Other Features
 
 - App Swap: Change between a-Shell or a-Shell mini easily and save storage space by using the lightweight version.
