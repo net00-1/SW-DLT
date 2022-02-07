@@ -19,18 +19,18 @@ The default quality is the most reliable way to download videos from websites th
 supported websites and need to be downloaded using `yt-dlp`'s generic extractor. This option also mostly avoids using FFmpeg to save battery life (FFmpeg can still be used
 to correct video file issues).
 
-**Custom Quality**: videos are downloaded using the closest available resolution and FPS to the user's selection. This is done to add flexibility when the exact
-resolution and frame rate is not available. The priority is as follows: (Merging separate audio and video with FFmpeg will be done first, in case there are no
-separate streams available, muxed streams will be considered).
+**Custom Quality**: Custom quality videos are selected based on the `width` of the video image that corresponds to the "quality" selected by the user (i.e. if the user chooses 1080p, videos with width of 1920 pixels are searched). This is due to the slight variations in `height` that are grouped under a quality spec like "1080p," and would always be missed by a `height` search. For this reason the custom quality option is not recommended for portrait videos.
 
-1. MP4 video with bigger than or equal FPS and resolution to user choice
-2. MP4 video with bigger than or equal resolution and less than or equal FPS to user choice
-3. ANY video with bigger than or equal FPS and resolution to user choice
-4. ANY video with bigger than or equal resolution and less than or equal FPS to user choice
-5. MP4 video with less than or equal resolution and bigger than or equal FPS to user choice
-6. MP4 video with less than or equal resolution and FPS to user choice
-7. ANY video with less than or equal resolution and bigger than or equal FPS to user choice
-8. ANY video with less than or equal resolution and FPS to user choice
+The priority of videos to search is as follows (in `yt-dlp` format syntax):
+
+1. `bestvideo[ext=mp4][width=X][fps>=Y]+bestaudio[ext*=4]`
+2. `bestvideo[ext=mp4][width=X][fps<=Y]+bestaudio[ext*=4]`
+3. `bestvideo[ext!*=4][width=X][fps>=Y]+bestaudio[ext!*=4]`
+4. `bestvideo[ext!*=4][width=X][fps<=Y]+bestaudio[ext!*=4]`
+5. `best[ext=mp4][width=X][fps>=Y]`
+6. `best[ext=mp4][width=X][fps<=Y]`
+7. `best[ext!*=4][width=X][fps>=Y]`
+8. `best[ext!*=4][width=X][fps<=Y]`
 
 ## Audio Downloading
 

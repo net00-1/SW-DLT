@@ -95,32 +95,16 @@ class SW_DLT:
         raise Exception(Consts.ERASED_EXC)
 
     def single_video(self, video_res, video_fps):
-        default_format = "best[ext=mp4][vcodec^=avc1]/best[ext=mp4]/best/bestvideo[ext=mp4][vcodec^=avc1]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]"
+        default_format = "best[ext=mp4]/best/bestvideo[ext=mp4]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]"
         custom_format = ""\
-            "worstvideo[ext=mp4][height>={0}][fps>={1}][vcodec^=avc1]+bestaudio[ext*=4]/"\
-            "worstvideo[ext=mp4][height>={0}][fps<={1}][vcodec^=avc1]+bestaudio[ext*=4]/"\
-            "worstvideo[ext=mp4][height>={0}][fps>={1}]+bestaudio[ext*=4]/"\
-            "worstvideo[ext=mp4][height>={0}][fps<={1}]+bestaudio[ext*=4]/"\
-            "worstvideo[ext!*=4][height>={0}][fps>={1}]+bestaudio[ext!*=4]/"\
-            "worstvideo[ext!*=4][height>={0}][fps<={1}]+bestaudio[ext!*=4]/"\
-            "bestvideo[ext=mp4][height<={0}][fps>={1}][vcodec^=avc1]+bestaudio[ext*=4]/"\
-            "bestvideo[ext=mp4][height<={0}][fps<={1}][vcodec^=avc1]+bestaudio[ext*=4]/"\
-            "bestvideo[ext=mp4][height<={0}][fps>={1}]+bestaudio[ext*=4]/"\
-            "bestvideo[ext=mp4][height<={0}][fps<={1}]+bestaudio[ext*=4]/"\
-            "bestvideo[ext!*=4][height<={0}][fps>={1}]+bestaudio[ext!*=4]/"\
-            "bestvideo[ext!*=4][height<={0}][fps<={1}]+bestaudio[ext!*=4]/"\
-            "worst[ext=mp4][height>={0}][fps>={1}][vcodec^=avc1]/"\
-            "worst[ext=mp4][height>={0}][fps<={1}][vcodec^=avc1]/"\
-            "worst[ext=mp4][height>={0}][fps>={1}]/"\
-            "worst[ext=mp4][height>={0}][fps<={1}]/"\
-            "worst[ext!*=4][height>={0}][fps>={1}]/"\
-            "worst[ext!*=4][height>={0}][fps<={1}]/"\
-            "best[ext=mp4][height<={0}][fps>={1}][vcodec^=avc1]/"\
-            "best[ext=mp4][height<={0}][fps<={1}][vcodec^=avc1]/"\
-            "best[ext=mp4][height<={0}][fps>={1}]/"\
-            "best[ext=mp4][height<={0}][fps<={1}]/" \
-            "best[ext!*=4][height<={0}][fps>={1}]/"\
-            "best[ext!*=4][height<={0}][fps<={1}]".format(video_res, video_fps)
+            "bestvideo[ext=mp4][width={0}][fps>={1}]+bestaudio[ext*=4]/"\
+            "bestvideo[ext=mp4][width={0}][fps<={1}]+bestaudio[ext*=4]/"\
+            "bestvideo[ext!*=4][width={0}][fps>={1}]+bestaudio[ext!*=4]/"\
+            "bestvideo[ext!*=4][width={0}][fps<={1}]+bestaudio[ext!*=4]/"\
+            "best[ext=mp4][width={0}][fps>={1}]/"\
+            "best[ext=mp4][width={0}][fps<={1}]/"\
+            "best[ext!*=4][width={0}][fps>={1}]/"\
+            "best[ext!*=4][width={0}][fps<={1}]".format(video_res, video_fps)
 
         dl_options = {
             "format": default_format if video_res == "-d" else custom_format,
