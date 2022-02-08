@@ -19,18 +19,16 @@ The default quality is the most reliable way to download videos from websites th
 supported websites and need to be downloaded using `yt-dlp`'s generic extractor. This option also mostly avoids using FFmpeg to save battery life (FFmpeg can still be used
 to correct video file issues).
 
-**Custom Quality**: Custom quality videos are selected based on the `width` of the video image that corresponds to the "quality" selected by the user (i.e. if the user chooses 1080p, videos with width of 1920 pixels are searched). This is due to the slight variations in `height` that are grouped under a quality spec like "1080p," and would always be missed by a `height` search. For this reason the custom quality option is not recommended for portrait videos.
+**Custom Quality**: Custom quality videos are selected based on the `height` of the video image that corresponds to the "quality" selected by the user. Videos in playable `mp4` are preferred over other formats, unless the user is searching for qualities higher than 1080p (as those are generally available on other formats like `webm`). 
 
-The priority of videos to search is as follows (in `yt-dlp` format syntax):
+The priority of videos to search is as follows (in `yt-dlp` format syntax, `Z` varies if the user selects either 1440p or 2160p):
 
-1. `bestvideo[ext=mp4][width=X][fps<=Y]+bestaudio[ext*=4]`
-2. `bestvideo[ext!*=4][width=X][fps<=Y]+bestaudio[ext!*=4]`
-3. `bestvideo[ext=mp4][width<=X][fps<=Y]+bestaudio[ext*=4]`
-4. `bestvideo[ext!*=4][width<=X][fps<=Y]+bestaudio[ext!*=4]`
-5. `best[ext=mp4][width=X][fps<=Y]`
-6. `best[ext!*=4][width=X][fps<=Y]`
-7. `best[ext=mp4][width<=X][fps<=Y]`
-8. `best[ext!*=4][width<=X][fps<=Y]`
+1. `bestvideo[ext=mp4][height=X][fps<=Y]+bestaudio[ext*=4]`
+2. `bestvideo[ext!*=4][height=X][fps<=Y]+bestaudio[ext!*=4]`
+3. `bestvideo[Z][height<=X][fps<=Y]+bestaudio[Z]`
+4. `best[ext=mp4][height=X][fps<=Y]`
+5. `best[ext!*=4][height=X][fps<=Y]`
+6. `best[Z][height<=X][fps<=Y]`
 
 ## Audio Downloading
 
