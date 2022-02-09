@@ -113,10 +113,10 @@ class SW_DLT:
         custom_format = ""\
             "bestvideo[ext=mp4][height={0}][fps<={1}]+bestaudio[ext*=4]/"\
             "bestvideo[ext!*=4][height={0}][fps<={1}]+bestaudio[ext!*=4]/"\
-            "{3}"\
+            "{2}"\
             "best[ext=mp4][height={0}][fps<={1}]/"\
             "best[ext!*=4][height={0}][fps<={1}]/"\
-            "{4}".format(video_res, video_fps, format_priority[0], format_priority[1])
+            "{3}".format(video_res, video_fps, format_priority[0], format_priority[1])
 
         dl_options = {
             "format": default_format if video_res == "-d" else custom_format,

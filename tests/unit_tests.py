@@ -42,7 +42,7 @@ class unit_tests(unittest.TestCase):
         expect_redirect = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.mp4.TITLE.{1}".format(hash, title)
 
         dl_inst = SW_DLT(url, hash)
-        self.assertEqual(dl_inst.single_video("1920", "30"), expect_redirect)
+        self.assertEqual(dl_inst.single_video("1080", "30"), expect_redirect)
 
     def test_custom_video_webm(self):
         # Tests a custom quality option for video, resulting in non-native format
@@ -53,7 +53,7 @@ class unit_tests(unittest.TestCase):
         expect_redirect = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.webm.TITLE.{1}".format(hash, title)
 
         dl_inst = SW_DLT(url, hash)
-        self.assertEqual(dl_inst.single_video("3840", "60"), expect_redirect)
+        self.assertEqual(dl_inst.single_video("2160", "60"), expect_redirect)
 
     @unittest.skip
     def test_video_playlist(self):
