@@ -1,3 +1,7 @@
 {
-	"test": "test"
+    "result": "success",
+    "version": "3E15",
+    "url": "https://www.icloud.com/shortcuts/fa3767cdd1f44e87a7f28d4c286c7253",
+    "notes": "- Changed custom quality priority to select more appropriate formats and resolutions (less videos will be unplayable natively than before)",
+    "release": "February 10, 2022"
 }
