@@ -64,7 +64,7 @@ Audio downloads use the formats `bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=m
 Gallery downloads are done using `gallery-dl` instead of `yt-dlp`. `gallery-dl` works primarily with images, but can be used to download GIFs and Clips from
 social media and other hosting websites. `gallery-dl` is able to download items in bulk up to entire websites and user profiles. 
 
-**Important: authentication for gallery-dl downloads is affected by an issue in newer a-Shell versions where input to the Python interpreter from a shortcut freezes the app. As a workaround, you can add credentials to a gallery-dl [configuration file](https://github.com/mikf/gallery-dl#username--password). The file can be saved at `${XDG_CONFIG_HOME}/gallery-dl/config.json`**
+**IMPORTANT: authentication for gallery-dl downloads is affected by an issue in newer a-Shell versions where input to the Python interpreter from a shortcut freezes the app. As a workaround, you can add credentials to a gallery-dl [configuration file](https://github.com/mikf/gallery-dl#username--password). The file can be saved at `${XDG_CONFIG_HOME}/gallery-dl/config.json`**
 
 Gallery downloading supports entering user
 login details to access private content. **SW-DLT is not able to save any kind of login details for security (OR READ NOTE ABOVE)**. Single item downloads with `gallery-dl` are returned
