@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "3E15",
-    "url": "https://www.icloud.com/shortcuts/fa3767cdd1f44e87a7f28d4c286c7253",
-    "notes": "- Changed custom quality priority to select more appropriate formats and resolutions (less videos will be unplayable natively than before)",
-    "release": "February 10, 2022"
+    "version": "3E16",
+    "url": "https://www.icloud.com/shortcuts/eb435dd73b274810af1ef9335bd9d94e",
+    "notes": "NOTICE: migrated updater to a more responsive host. Consider updating as soon as possible to avoid slow performance. Also contains minor improvements.",
+    "release": "August 22, 2022"
 }
