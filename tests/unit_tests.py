@@ -4,7 +4,6 @@ import sys
 import os
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
-
 from SW_DLT import SW_DLT
 
 class unit_tests(unittest.TestCase):
@@ -33,6 +32,7 @@ class unit_tests(unittest.TestCase):
         dl_inst = SW_DLT(url, hash)
         self.assertEqual(dl_inst.single_audio(), expect_redirect)
 
+    @unittest.skip
     def test_custom_video(self):
         # Tests a custom quality option for video, resulting in a native format
         url = "https://www.youtube.com/watch?v=LXb3EKWsInQ"
@@ -44,6 +44,7 @@ class unit_tests(unittest.TestCase):
         dl_inst = SW_DLT(url, hash)
         self.assertEqual(dl_inst.single_video("1080", "30"), expect_redirect)
 
+    @unittest.skip
     def test_custom_video_webm(self):
         # Tests a custom quality option for video, resulting in non-native format
         url = "https://www.youtube.com/watch?v=DQiKmZapox0"
@@ -93,7 +94,7 @@ class unit_tests(unittest.TestCase):
     @unittest.skip
     def test_gallery_download(self):
         # Tests downloading using gallery-dl
-        url = "https://www.instagram.com/microsoft/?hl=en" # Invalid video URL
+        url = "https://www.instagram.com/microsoft/?hl=en"
         hash = "SW_DLT_DL_GALLERY"
 
         dl_inst = SW_DLT(url, hash)

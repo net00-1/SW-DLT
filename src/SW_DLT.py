@@ -8,7 +8,6 @@ import datetime
 import hashlib
 import shutil
 import sys
-import re
 import os
 
 # Modules not shipped with Python, expected to fail on first run
@@ -36,6 +35,13 @@ class SW_DLT:
         self.media_url = media_url
         self.file_id = file_id
         self.date_id = datetime.datetime.today().strftime("%d-%m-%y-%H-%M-%S")
+        self.global_options = {
+            "quiet": True,
+            "no_warnings": True,
+            "noprogress": True,
+            "progress_hooks": [show_progress],
+            "postprocessor_hooks": [format_processing],
+        }
 
     @staticmethod
     def validate_install():
@@ -121,12 +127,8 @@ class SW_DLT:
         dl_options = {
             "format": default_format if video_res == "-d" else custom_format,
             "playlist_items": "1-1",
-            "quiet": True,
-            "no_warnings": True,
-            "noprogress": True,
-            "progress_hooks": [show_progress],
-            "postprocessor_hooks": [format_processing],
-            "outtmpl": f"{self.file_id}.%(ext)s"
+            "outtmpl": f"{self.file_id}.%(ext)s",
+            **self.global_options
         }
 
         try:
@@ -140,13 +142,9 @@ class SW_DLT:
         dl_options = {
             "format": "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
             "playlist_items": "1-1",
-            "quiet": True,
-            "no_warnings": True,
-            "noprogress": True,
-            "progress_hooks": [show_progress],
-            "postprocessor_hooks": [format_processing],
             "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
-            "outtmpl": f"{self.file_id}.%(ext)s"
+            "outtmpl": f"{self.file_id}.%(ext)s",
+            **self.global_options
         }
 
         try:
@@ -163,15 +161,15 @@ class SW_DLT:
             vid_title = meta_data.get("title", self.date_id) # 2nd argument is alternate title
             vid_obj.download([self.media_url])
 
-        re_pattern = re.compile(self.file_id + "\\.[\\w]{2,4}")
-        file_name = re_pattern.search(subprocess.getoutput("ls")).group(0)
-        return f"shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{file_name}.TITLE.{urllib.parse.quote(vid_title)}"
+        for file in subprocess.getoutput("ls").splitlines():
+            if file.startswith(self.file_id):
+                return f"shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{file}.TITLE.{urllib.parse.quote(vid_title)}"
+        raise Exception()
 
     def gallery_download(self, gallery_range, auth_str):
         gallery_urls = []
         iteration = 1
         item_num = 1
-        file_ext = ""
 
         # Obtaining URL list to download
         gallery_urls = subprocess.getoutput(
@@ -179,9 +177,8 @@ class SW_DLT:
             ).splitlines()
 
         # Creating temp folder to store media
-        subprocess.run(f"mkdir -p {self.file_id}")
-        subprocess.run(f"cd {self.file_id}")
-
+        subprocess.run(f'mkdir -p {self.file_id}')
+        subprocess.run(f'cd {self.file_id}')
         present_items = subprocess.getoutput("ls")
         
         for url in gallery_urls:
@@ -231,12 +228,8 @@ class SW_DLT:
         dl_options = {
             "format": "best[ext=mp4]/best" if playlist_type == "-v" else "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
             "postprocessors": [] if playlist_type == "-v" else [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
-            "quiet": True,
-            "no_warnings": True,
-            "noprogress": True,
-            "progress_hooks": [show_progress],
-            "postprocessor_hooks": [format_processing],
-            "outtmpl": f"{self.file_id}/%(title)s.%(ext)s"
+            "outtmpl": f"{self.file_id}/%(title)s.%(ext)s",
+            **self.global_options
         }
 
         try:
@@ -256,7 +249,7 @@ class SW_DLT:
 
 def show_progress(data_stream, curr=0, total=0):
     # data_stream type of data received, can be manual (for gallery-dl downloads), util (for utility processes)
-    # or it can also be yt-dlp download data streams
+    # it can also be yt-dlp download data streams
     if data_stream == "manual":
         if curr != total:
             print(f"\rDownloading: {Consts.CYELLOW}{curr/total:.1%}{Consts.ENDL}", end="")
