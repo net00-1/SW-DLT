@@ -94,7 +94,7 @@ class unit_tests(unittest.TestCase):
     @unittest.skip
     def test_gallery_download(self):
         # Tests downloading using gallery-dl
-        url = "https://www.instagram.com/microsoft/?hl=en" # Invalid video URL
+        url = "https://www.instagram.com/microsoft/?hl=en"
         hash = "SW_DLT_DL_GALLERY"
 
         dl_inst = SW_DLT(url, hash)

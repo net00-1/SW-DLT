@@ -177,8 +177,8 @@ class SW_DLT:
             ).splitlines()
 
         # Creating temp folder to store media
-        subprocess.run(f"mkdir -p {self.file_id}")
-        subprocess.run(f"cd {self.file_id}")
+        subprocess.run(f'mkdir -p {self.file_id}')
+        subprocess.run(f'cd {self.file_id}')
         present_items = subprocess.getoutput("ls")
         
         for url in gallery_urls:
