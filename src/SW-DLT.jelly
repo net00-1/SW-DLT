@@ -63,10 +63,7 @@ if(ShortcutInput.as(Text) .beginsWith "output=") {
 }
 
 if(ShortcutInput.as(Text) .beginsWith "exception=") {
-	valueFor(key: "exception", dictionary: ShortcutInput.as(Dictionary)) >> encodedExcProps
-	decodeURL(url: "${encodedExcProps}") >> decodedExcProps
-	getDictionaryFrom(input: decodedMediaProps.as(Text)) >> excProps
-
+	valueFor(key: "exception", dictionary: ShortcutInput.as(Dictionary)) >> excProps
 	valueFor(key: "messagePath", dictionary: excProps) >> msgPath
 	valueFor(key: "${msgPath}", dictionary: properties) >> excMsg
 
