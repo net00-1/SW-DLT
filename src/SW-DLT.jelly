@@ -49,7 +49,7 @@ if(ShortcutInput.as(Text) .beginsWith "output=") {
 		// a-Shell full equivalent
 	} >> mediaFile
 
-	setName(input: mediaFile, name: fileTitle, dontIncludeExtension: true) >> finalMedia
+	setName(input: mediaFile, name: fileTitle, dontIncludeExtension: false) >> finalMedia
 	quicklook(input: finalMedia)
 
 	list(items ["rm -rf SW_DLT*"]) >> cleanupCmd
