@@ -53,8 +53,9 @@ if(ShortcutInput.as(Text) .beginsWith "output=") {
 	setName(input: mediaFile, name: fileTitle, dontIncludeExtension: true) >> finalMedia
 	quicklook(input: finalMedia)
 
+	list(items ["rm -rf SW_DLT*"]) >> cleanupCmd
 	if(isMini.as(Boolean)) {
-		executeCommand(command:["rm -rf SW_DLT*"], openWindow: close, keepGoing: false)
+		executeCommand(command: cleanupCmd, openWindow: close, keepGoing: false)
 	}
 	else {
 		// a-Shell full equivalent
@@ -179,11 +180,11 @@ URL: ${displayURL}
 		valueFor(key: "vars.gallery${gAuthChoice}", dictionary: properties) >> gAuth
 
 		choose(list: properties.key(lists.galleryRange).as(List), prompt: "${properties.key(vars.galleryRangePrompt)}", multiple: false, all: false) >> gRangeChoice
-		if(gRanceChoise.as(Text) == "All Items") {
-			var args = "${vars.defaultGallery} ${gAuthChoice}"
+		if(gRangeChoice.as(Text) == "All Items") {
+			var args = "${properties.key(vars.defaultGallery)} ${gAuthChoice}"
 		} 
 		else {
-			askForInput(prompt: "${vars.galleryCRPrompt}", type: Text, default: "1-10") >> custRange
+			askForInput(prompt: "${properties.key(vars.galleryCRPrompt)}", type: Text, default: "1-10") >> custRange
 			var args = "-g ${custRange} ${gAuthChoice}"
 		}
 	}
@@ -193,12 +194,12 @@ if(args == nil) {
 	exit()
 }
 
-var runScript = ["jump shortcuts", "python SW_DLT.py ${mediaURL} ${args}"]
+list(items: ["jump shortcuts", "python SW_DLT.py ${mediaURL} ${args}"]) >> runScript
 var scriptSource = """
 
 """
 
-setName(input: script, name: "SW_DLT.py", dontIncludeExtension: true) >> scriptFile
+setName(input: scriptSource, name: "SW_DLT.py", dontIncludeExtension: true) >> scriptFile
 if(isMini.as(Boolean)) {
 	putFile(file: scriptFile, overwrite: true)
 	executeCommand(command:runScript, openWindow: close, keepGoing: false)
