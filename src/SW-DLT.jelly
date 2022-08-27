@@ -38,11 +38,10 @@ valueFor(key: "deleteAll", dictionary: globalSettings) >> deleteAll
 
 if(ShortcutInput.as(Text) .beginsWith "output=") {
 	valueFor(key: "output", dictionary: ShortcutInput.as(Dictionary)) >> encodedMediaProps
-	decodeURL(url: "${encodedMediaProps}") >> decodedMediaProps
-	getDictionaryFrom(input: decodedMediaProps) >> mediaProps
+	decodeURL(url: "${encodedMediaProps}") >> mediaProps
 
-	valueFor(key: "fileName", dictionary: mediaProps) >> fileName
-	valueFor(key: "fileTitle", dictionary: mediaProps) >> fileTitle
+	valueFor(key: "fileName", dictionary: mediaProps.as(Dictionary)) >> fileName
+	valueFor(key: "fileTitle", dictionary: mediaProps.as(Dictionary)) >> fileTitle
 	if(isMini.as(Boolean)){
 		getFile(fileName: fileName)
 	}
