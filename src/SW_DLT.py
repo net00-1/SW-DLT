@@ -173,7 +173,7 @@ class SW_DLT:
 
         # Obtaining URL list to download
         gallery_urls = subprocess.getoutput(
-                "gallery-dl -G {0}{1}{2}".format(self.media_url, " " if gallery_range == "-all" else f" --range '{gallery_range}' ", auth_str)
+                "gallery-dl -G {0}{1}{2}".format(self.media_url, " " if gallery_range == "-d" else f" --range '{gallery_range}' ", auth_str)
             ).splitlines()
 
         # Creating temp folder to store media
@@ -326,8 +326,7 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
         sw_dlt_inst.validate_install()
         # If the same partial file is not found, deletes all leftovers (important)
         if file_id not in subprocess.getoutput("ls"):
-            subprocess.run("rm -f SW_DLT_DL_*.*")
-            subprocess.run("rm -r -f SW-DLT_DL_*")
+            subprocess.run("rm -rf SW-DLT_DL_*")
             pass
         else:
             header = f"{Consts.SBOLD}SW-DLT (Resuming Download){Consts.ENDL}"
@@ -360,7 +359,7 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
 
             return sw_dlt_inst.gallery_download(res_pltype_range, auth_str)
 
-        elif process_type == "-e":
+        elif process_type == "-erase":
             print(info_msgs["erase_prompt"])
             return sw_dlt_inst.erase_dependencies()
 
