@@ -175,7 +175,7 @@ class SW_DLT:
 					"fileName": file,
 					"fileTitle": vid_title
 				}
-				return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(output)}'
+				return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(str(output))}'
 		raise Exception()
 
 	def gallery_download(self, gallery_range, auth_str):
@@ -242,7 +242,7 @@ class SW_DLT:
 				"fileTitle": self.date_id
 			}
 
-		return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(output)}'
+		return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(str(output))}'
 
 	def playlist_download(self, playlist_type):
 		dl_options = {
@@ -265,8 +265,7 @@ class SW_DLT:
 				"fileName": self.file_id + ".zip",
 				"fileTitle": pl_title
 			}
-			return "shortcuts://run-shortcut?name=SW-DLT&input=text&text=OUTPUT.{0}.TITLE.{1}".format(
-				self.file_id + ".zip", urllib.parse.quote(pl_title))
+			return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(str(output))}'
 
 		except:
 			raise Exception(Consts.DERROR_EXC)
