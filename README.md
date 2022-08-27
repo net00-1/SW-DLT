@@ -1,6 +1,6 @@
 # SW-DLT API
 
-Static JSON API endpoints
+Static API endpoints
 
 ## /updates/
 
