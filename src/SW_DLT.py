@@ -7,6 +7,7 @@ import mimetypes
 import datetime
 import hashlib
 import shutil
+import json
 import sys
 import os
 
@@ -175,7 +176,7 @@ class SW_DLT:
 					"fileName": file,
 					"fileTitle": vid_title
 				}
-				return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(str(output))}'
+				return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(output))}'
 		raise Exception()
 
 	def gallery_download(self, gallery_range, auth_str):
@@ -242,7 +243,7 @@ class SW_DLT:
 				"fileTitle": self.date_id
 			}
 
-		return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(str(output))}'
+		return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(output))}'
 
 	def playlist_download(self, playlist_type):
 		dl_options = {
@@ -265,7 +266,7 @@ class SW_DLT:
 				"fileName": self.file_id + ".zip",
 				"fileTitle": pl_title
 			}
-			return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(str(output))}'
+			return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(output))}'
 
 		except:
 			raise Exception(Consts.DERROR_EXC)
