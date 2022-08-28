@@ -64,7 +64,7 @@ if(ShortcutInput.as(Text) .beginsWith "output=") {
 
 if(ShortcutInput.as(Text) .beginsWith "exception=") {
 	valueFor(key: "exception", dictionary: ShortcutInput.as(Dictionary)) >> excPath
-	valueFor(key: "${msgPath}", dictionary: properties) >> excMsg
+	valueFor(key: "${excPath}", dictionary: properties) >> excMsg
 
 	alert(alert: "${excMsg}", title: "Exception Alert", cancel: false)
 	exit()
