@@ -159,7 +159,7 @@ URL: ${displayURL}
 		}
 	}
 
-	if(dlChoiceKeyText == "audiooDownload") {
+	if(dlChoiceKeyText == "audioDownload") {
 		var args = properties.key(vars.defaultAudio)
 	}
 
