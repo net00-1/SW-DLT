@@ -76,7 +76,7 @@ macro updateMenu() {
 	var updateMenuHeader = """
 An Update is Available (${metadata.key(version)} -> ${latestVer})
 Changelog:
-${response.as(Dictionary).key(notes)}
+${response.as(Dictionary).key(notes).as(Text)}
 	"""
 	menu("${updateMenuHeader}", ["Update Directly", "Skip This Time"]) {
 		case("Update Directly"):
