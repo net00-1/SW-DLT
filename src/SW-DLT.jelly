@@ -179,11 +179,11 @@ URL: ${displayURL}
 
 		choose(list: properties.key(lists.galleryRange).as(List), prompt: "${properties.key(vars.galleryRangePrompt)}", multiple: false, all: false) >> gRangeChoice
 		if(gRangeChoice.as(Text) == "All Items") {
-			var args = "${properties.key(vars.defaultGallery)} ${gAuthChoice}"
+			var args = "${properties.key(vars.defaultGallery)} ${gAuth}"
 		} 
 		else {
 			askForInput(prompt: "${properties.key(vars.galleryCRPrompt)}", type: Text, default: "1-10") >> custRange
-			var args = "-g ${custRange} ${gAuthChoice}"
+			var args = "-g ${custRange} ${gAuth}"
 		}
 	}
 }
