@@ -25,10 +25,10 @@ False = disabled
 dictionary(json: globalSettingsJson) >> globalSettings
 //-----END OF USER SETTINGS-----
 if(ShortcutInput == nil) {
-	var mediaURL = Clipboard
+    var mediaURL = Clipboard
 }
 else {
-	var mediaURL = ShortcutInput
+    var mediaURL = ShortcutInput
 }
 
 dictionary(json: propertiesJson) >> properties
@@ -37,86 +37,86 @@ valueFor(key: "isMini", dictionary: globalSettings) >> isMini
 valueFor(key: "deleteAll", dictionary: globalSettings) >> deleteAll
 
 if(ShortcutInput.as(Text) .beginsWith "output=") {
-	valueFor(key: "output", dictionary: ShortcutInput.as(Dictionary)) >> encodedMediaProps
-	decodeURL(url: "${encodedMediaProps}") >> mediaProps
+    valueFor(key: "output", dictionary: ShortcutInput.as(Dictionary)) >> encodedMediaProps
+    decodeURL(url: "${encodedMediaProps}") >> mediaProps
 
-	valueFor(key: "fileName", dictionary: mediaProps.as(Dictionary)) >> fileName
-	valueFor(key: "fileTitle", dictionary: mediaProps.as(Dictionary)) >> fileTitle
-	if(isMini.as(Boolean)){
-		getFile(fileName: fileName)
-	}
-	else {
-		// a-Shell full equivalent
-	} >> mediaFile
+    valueFor(key: "fileName", dictionary: mediaProps.as(Dictionary)) >> fileName
+    valueFor(key: "fileTitle", dictionary: mediaProps.as(Dictionary)) >> fileTitle
+    if(isMini.as(Boolean)){
+        getFile(fileName: fileName)
+    }
+    else {
+        // a-Shell full equivalent
+    } >> mediaFile
 
-	setName(input: mediaFile, name: fileTitle, dontIncludeExtension: false) >> finalMedia
-	quicklook(input: finalMedia)
+    setName(input: mediaFile, name: fileTitle, dontIncludeExtension: false) >> finalMedia
+    quicklook(input: finalMedia)
 
-	list(items: ["rm -rf SW_DLT*"]) >> cleanupCmd
-	if(isMini.as(Boolean)) {
-		executeCommand(command: cleanupCmd, openWindow: close, keepGoing: false)
-	}
-	else {
-		// a-Shell full equivalent
-	}
-	exit()
+    list(items: ["rm -rf SW_DLT*"]) >> cleanupCmd
+    if(isMini.as(Boolean)) {
+        executeCommand(command: cleanupCmd, openWindow: close, keepGoing: false)
+    }
+    else {
+        // a-Shell full equivalent
+    }
+    exit()
 }
 
 if(ShortcutInput.as(Text) .beginsWith "exception=") {
-	valueFor(key: "exception", dictionary: ShortcutInput.as(Dictionary)) >> excPath
-	valueFor(key: "${excPath}", dictionary: properties) >> excMsg
+    valueFor(key: "exception", dictionary: ShortcutInput.as(Dictionary)) >> excPath
+    valueFor(key: "${excPath}", dictionary: properties) >> excMsg
 
-	alert(alert: "${excMsg}", title: "Exception Alert", cancel: false)
-	exit()
+    alert(alert: "${excMsg}", title: "Exception Alert", cancel: false)
+    exit()
 }
 
 url(url: "${properties.key(vars.updateEndpoint)}") >> apiEndpoint
 downloadURL(url: apiEndpoint, method: GET, headers: {}, requestType: Json, requestJSON: {}) >> response
 macro updateMenu() {
-	var updateMenuHeader = """
+    var updateMenuHeader = """
 An Update is Available (${metadata.key(version)} -> ${latestVer})
 Changelog:
 ${changelogText}
-	"""
-	menu("${updateMenuHeader}", ["Update Directly", "Skip This Time"]) {
-		case("Update Directly"):
-			replaceText(input: "${response.as(Dictionary).key(url)}", find: "^.+?(?=\/shortcut)", replace: "shortcuts:/", isRegex: true, caseSensitive: false) >> updateURL
-			openURL(url: updateURL)
-			exit()
-		case("Skip This Time"):
-	} >> menuResult
+    """
+    menu("${updateMenuHeader}", ["Update Directly", "Skip This Time"]) {
+        case("Update Directly"):
+            replaceText(input: "${response.as(Dictionary).key(url)}", find: "^.+?(?=\/shortcut)", replace: "shortcuts:/", isRegex: true, caseSensitive: false) >> updateURL
+            openURL(url: updateURL)
+            exit()
+        case("Skip This Time"):
+    } >> menuResult
 }
 
 if(response != nil) {
-	valueFor(key: "version", dictionary: response.as(Dictionary)) >> latestVer
-	getTextFrom(input: response.key(notes)) >> changelogText
-	if(latestVer.as(Text) != "${metadata.key(version)}") {
-		updateMenu()
-	}
+    valueFor(key: "version", dictionary: response.as(Dictionary)) >> latestVer
+    getTextFrom(input: response.key(notes)) >> changelogText
+    if(latestVer.as(Text) != "${metadata.key(version)}") {
+        updateMenu()
+    }
 }
 
 if(deleteAll.as(Boolean)) {
-	alert(alert: "${properties.key(vars.deleteAllPrompt)}", title: "${properties.key(vars.deleteAllTitle)}", cancel: true)
-	var args = properties.key(vars.deleteAll)
-	mediaURL = properties.key(vars.urlPlaceholder)
+    alert(alert: "${properties.key(vars.deleteAllPrompt)}", title: "${properties.key(vars.deleteAllTitle)}", cancel: true)
+    var args = properties.key(vars.deleteAll)
+    mediaURL = properties.key(vars.urlPlaceholder)
 } 
 else {
-	getURLSFromInput(text: "${mediaURL}") >> urls
-	if(urls == nil) {
-		alert(alert: "${properties.key(vars.noURLFound)}", title: "${properties.key(vars.noURLFoundTitle)}", cancel: false)
-		exit()
-	}
+    getURLSFromInput(text: "${mediaURL}") >> urls
+    if(urls == nil) {
+        alert(alert: "${properties.key(vars.noURLFound)}", title: "${properties.key(vars.noURLFoundTitle)}", cancel: false)
+        exit()
+    }
 
-	count(type: Characters, input: mediaURL) >> charCount
-	if(charCount.as(Number) <= 30) {
-		var displayURL = "${mediaURL}"
-	} 
-	else {
-		matchText(text: "${mediaURL}", regex: "^.{30}", caseSensitive: false) >> urlPreview
-		var displayURL = "${urlPreview}..."
-	}
+    count(type: Characters, input: mediaURL) >> charCount
+    if(charCount.as(Number) <= 30) {
+        var displayURL = "${mediaURL}"
+    } 
+    else {
+        matchText(text: "${mediaURL}", regex: "^.{30}", caseSensitive: false) >> urlPreview
+        var displayURL = "${urlPreview}..."
+    }
 
-	var mainMenuTemplate = """
+    var mainMenuTemplate = """
 BEGIN:VCARD
 N:Download Video;;;;
 PHOTO;ENCODING=b:${properties.key(icons.vIcon)}
@@ -137,60 +137,60 @@ N:Download Image/Gallery;;;;
 PHOTO;ENCODING=b:${properties.key(icons.gIcon)}
 ORG:Images, GIFs, Clips, Albums, Entire Profiles;
 END:VCARD
-	"""
-	setName(input: mainMenuTemplate, name: "mainMenu.vcf", dontIncludeExtension: true) >> mainMenu
+    """
+    setName(input: mainMenuTemplate, name: "mainMenu.vcf", dontIncludeExtension: true) >> mainMenu
 
-	var mainMenuHeader = """
+    var mainMenuHeader = """
 SW-DLT: Main Menu
 URL: ${displayURL}
-	"""
-	choose(list: mainMenu.as(Contact), prompt: "${mainMenuHeader}", multiple: false, all: false) >> dlChoice
-	valueFor(key: "${dlChoice}", dictionary: properties.key(listMap).as(Dictionary)) >> dlChoiceKey
-	var dlChoiceKeyText = dlChoiceKey.as(Text)
-	if(dlChoiceKeyText == "videoDownload") {
-		choose(list: properties.key(lists.videoRes).as(List), prompt: "${properties.key(vars.videoResPrompt)}", multiple: false, all: false) >> resChoice
-		valueFor(key: "${resChoice}", dictionary: properties.key(listMap).as(Dictionary)) >> res
-		if(res != "default") {
-			choose(list: properties.key(lists.videoFPS).as(List), prompt: "${properties.key(vars.videoFPSPrompt)}", multiple: false, all: false) >> fpsChoice
-			valueFor(key: "${fpsChoice}", dictionary: properties.key(listMap).as(Dictionary)) >> fps
-			var args = "-v ${res} ${fps}"
-		} 
-		else {
-			var args = properties.key(vars.defaultVideo)
-		}
-	}
+    """
+    choose(list: mainMenu.as(Contact), prompt: "${mainMenuHeader}", multiple: false, all: false) >> dlChoice
+    valueFor(key: "${dlChoice}", dictionary: properties.key(listMap).as(Dictionary)) >> dlChoiceKey
+    var dlChoiceKeyText = dlChoiceKey.as(Text)
+    if(dlChoiceKeyText == "videoDownload") {
+        choose(list: properties.key(lists.videoRes).as(List), prompt: "${properties.key(vars.videoResPrompt)}", multiple: false, all: false) >> resChoice
+        valueFor(key: "${resChoice}", dictionary: properties.key(listMap).as(Dictionary)) >> res
+        if(res != "default") {
+            choose(list: properties.key(lists.videoFPS).as(List), prompt: "${properties.key(vars.videoFPSPrompt)}", multiple: false, all: false) >> fpsChoice
+            valueFor(key: "${fpsChoice}", dictionary: properties.key(listMap).as(Dictionary)) >> fps
+            var args = "-v ${res} ${fps}"
+        } 
+        else {
+            var args = properties.key(vars.defaultVideo)
+        }
+    }
 
-	if(dlChoiceKeyText == "audioDownload") {
-		var args = properties.key(vars.defaultAudio)
-	}
+    if(dlChoiceKeyText == "audioDownload") {
+        var args = properties.key(vars.defaultAudio)
+    }
 
-	if(dlChoiceKeyText == "playlistDownload") {
-		choose(list: properties.key(lists.playlistType).as(List), prompt: "${properties.key(vars.playlistPrompt)}", multiple: false, all: false) >> playlistChoice
-		if(playlistChoice == "Video Playlist") {
-			var args = properties.key(vars.videoPlaylist)
-		} 
-		else {
-			var args = properties.key(vars.audioPlaylist)
-		}
-	}
+    if(dlChoiceKeyText == "playlistDownload") {
+        choose(list: properties.key(lists.playlistType).as(List), prompt: "${properties.key(vars.playlistPrompt)}", multiple: false, all: false) >> playlistChoice
+        if(playlistChoice == "Video Playlist") {
+            var args = properties.key(vars.videoPlaylist)
+        } 
+        else {
+            var args = properties.key(vars.audioPlaylist)
+        }
+    }
 
-	if(dlChoiceKeyText == "galleryDownload") {
-		choose(list: properties.key(lists.galleryAuth).as(List), prompt: "${properties.key(vars.galleryAuthPrompt)}", multiple: false, all: false) >> gAuthChoice
-		valueFor(key: "vars.gallery${gAuthChoice}", dictionary: properties) >> gAuth
+    if(dlChoiceKeyText == "galleryDownload") {
+        choose(list: properties.key(lists.galleryAuth).as(List), prompt: "${properties.key(vars.galleryAuthPrompt)}", multiple: false, all: false) >> gAuthChoice
+        valueFor(key: "vars.gallery${gAuthChoice}", dictionary: properties) >> gAuth
 
-		choose(list: properties.key(lists.galleryRange).as(List), prompt: "${properties.key(vars.galleryRangePrompt)}", multiple: false, all: false) >> gRangeChoice
-		if(gRangeChoice.as(Text) == "All Items") {
-			var args = "${properties.key(vars.defaultGallery)} ${gAuth}"
-		} 
-		else {
-			askForInput(prompt: "${properties.key(vars.galleryCRPrompt)}", type: Text, default: "1-10") >> custRange
-			var args = "-g ${custRange} ${gAuth}"
-		}
-	}
+        choose(list: properties.key(lists.galleryRange).as(List), prompt: "${properties.key(vars.galleryRangePrompt)}", multiple: false, all: false) >> gRangeChoice
+        if(gRangeChoice.as(Text) == "All Items") {
+            var args = "${properties.key(vars.defaultGallery)} ${gAuth}"
+        } 
+        else {
+            askForInput(prompt: "${properties.key(vars.galleryCRPrompt)}", type: Text, default: "1-10") >> custRange
+            var args = "-g ${custRange} ${gAuth}"
+        }
+    }
 }
 
 if(args == nil) {
-	exit()
+    exit()
 }
 
 list(items: ["jump shortcuts", "python SW_DLT.py ${mediaURL} ${args}"]) >> runScript
@@ -200,9 +200,9 @@ var scriptSource = """
 
 setName(input: scriptSource, name: "SW_DLT.py", dontIncludeExtension: true) >> scriptFile
 if(isMini.as(Boolean)) {
-	putFile(file: scriptFile, overwrite: true)
-	executeCommand(command:runScript, openWindow: close, keepGoing: false)
+    putFile(file: scriptFile, overwrite: true)
+    executeCommand(command:runScript, openWindow: close, keepGoing: false)
 }
 else {
-	// a-Shell full equivalent
+    // a-Shell full equivalent
 }
