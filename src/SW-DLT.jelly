@@ -52,7 +52,7 @@ if(ShortcutInput.as(Text) .beginsWith "output=") {
 	setName(input: mediaFile, name: fileTitle, dontIncludeExtension: false) >> finalMedia
 	quicklook(input: finalMedia)
 
-	list(items ["rm -rf SW_DLT*"]) >> cleanupCmd
+	list(items: ["rm -rf SW_DLT*"]) >> cleanupCmd
 	if(isMini.as(Boolean)) {
 		executeCommand(command: cleanupCmd, openWindow: close, keepGoing: false)
 	}
