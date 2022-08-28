@@ -76,7 +76,7 @@ macro updateMenu() {
 	var updateMenuHeader = """
 An Update is Available (${metadata.key(version)} -> ${latestVer})
 Changelog:
-${response.as(Dictionary).key(notes).as(Text)}
+${changelogText}
 	"""
 	menu("${updateMenuHeader}", ["Update Directly", "Skip This Time"]) {
 		case("Update Directly"):
@@ -89,6 +89,7 @@ ${response.as(Dictionary).key(notes).as(Text)}
 
 if(response != nil) {
 	valueFor(key: "version", dictionary: response.as(Dictionary)) >> latestVer
+	getTextFrom(input: response.key(notes)) >> changelogText
 	if(latestVer.as(Text) != "${metadata.key(version)}") {
 		updateMenu()
 	}
