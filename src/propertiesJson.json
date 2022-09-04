@@ -38,7 +38,7 @@
         "Download Video": "videoDownload",
         "Download Audio": "audioDownload",
         "Download Playlist": "playlistDownload",
-        "Download Image/Gallery": "galleryDownload",
+        "Download Gallery": "galleryDownload",
         "About" : "aboutPage"
     },
     "lists": {

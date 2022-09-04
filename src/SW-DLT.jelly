@@ -118,7 +118,7 @@ PHOTO;ENCODING=b:${properties.key(icons.pIcon)}
 ORG:Video or Audio, at Default Quality;
 END:VCARD
 BEGIN:VCARD
-N:Download Image/Gallery;;;;
+N:Download Gallery;;;;
 PHOTO;ENCODING=b:${properties.key(icons.gIcon)}
 ORG:Images, GIFs, Clips, Albums, Entire Profiles;
 END:VCARD
