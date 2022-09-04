@@ -4,7 +4,7 @@
         "videoResPrompt": "Select Video Quality (Closest Available)",
         "videoFPSPrompt": "Select Video Framerate (Closest Available)",
         "playlistPrompt": "Select Type of Playlist Download",
-        "galleryAuthPrompt": "Select Type of Download, Private Downloads Require Username & Password (NOTE: in case of freezing, see About -> Documentation)",
+        "galleryAuthPrompt": "Downloading private content is currently broken, see About -> Shortcut Documentation for a guide to store credentials in a-Shell.",
         "galleryRangePrompt": "Select Item Range to Download",
         "galleryCRPrompt": "Type a range of items to download. Newest item is at first position (1). Example: 1,2,3-7,10. Commas select individual items, hyphen declares a sub-range. Both can be combined.",
         "noURL": "NA, use clipboard/Share Sheet",
@@ -12,7 +12,7 @@
         "deleteAllPrompt": "Deletion mode is ON. Are you sure you want to delete all dependencies?",
         "restartRequired": "Required dependencies were installed in a-Shell. This process needed the shortcut to restart once.",
         "downloadError": "The download encountered an error. Try using (if applicable) the default quality, reviewing your login details, or checking website compatibility.",
-        "erasedAll": "All the dependencies used by this shortcut have been erased. They will be reinstalled & updated if a download is requested",
+        "erasedAll": "All the dependencies used by this shortcut have been erased. They will be reinstalled & updated if a download is requested.",
         "docsURL": "https://github.com/net00-1/SW-DLT/blob/master/Docs.md",
         "bchAddress": "bitcoincash:qq5l9j3cgah8s6rz3xd5aet0u8wml2ezsgst9fedzz",
         "defaultVideo": "-v -d",
@@ -23,7 +23,7 @@
         "urlPlaceholder": "utility",
         "deleteAll": "-erase",
         "galleryPrivate": "-auth",
-        "galleryPublic": "-noauth"
+        "galleryContinue": "-noauth"
     },
     "listMap": {
         "Default": "default",
@@ -64,8 +64,7 @@
             "Custom Range"
         ],
         "galleryAuth": [
-            "Public",
-            "Private"
+            "Continue"
         ]
     },
     "icons": {
