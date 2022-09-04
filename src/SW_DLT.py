@@ -47,56 +47,49 @@ class SW_DLT:
     @staticmethod
     def validate_install():
         reboot = False
-        show_progress("util", 0, 5)
-        if "shortcuts" not in subprocess.getoutput("showmarks"):
-            subprocess.run("bookmark shortcuts")
-
-        show_progress("util", 1, 5)
+        show_progress("util", 0, 4)
         if "Package(s) not found" in subprocess.getoutput("pip show yt-dlp"):
             subprocess.run(
                 "pip -q install yt-dlp --disable-pip-version-check --upgrade --no-dependencies")
             reboot = True
 
-        show_progress("util", 2, 5)
+        show_progress("util", 1, 4)
         if "Package(s) not found" in subprocess.getoutput("pip show gallery-dl"):
             subprocess.run(
                 "pip -q install gallery-dl --disable-pip-version-check --upgrade")
             reboot = True
 
-        show_progress("util", 3, 5)
+        show_progress("util", 2, 4)
         if reboot:
             raise Exception(Consts.REBOOT_EXC)
 
-        subprocess.run("cd")
-        # If native FFmpeg is present, removes any wasm version on device.
+        # If native FFmpeg is present, removes any web assembly version on device.
         if os.path.exists(f"{os.environ['APPDIR']}/bin/ffmpeg"):
-            subprocess.run("rm -f ./bin/ffmpeg.wasm")
-            subprocess.run("rm -f ./bin/ffprobe.wasm")
+            subprocess.run(f"rm -f {os.environ['HOME']}/Documents/bin/ffmpeg.wasm")
+            subprocess.run(f"rm -f {os.environ['HOME']}/Documents/bin/ffprobe.wasm")
 
-        # If native FFmpeg is not present, installs any required wasm files
+        # Otherwise, installs any required web assembly files
         else:
-            if not os.path.exists("./bin"):
-                subprocess.run("mkdir bin")
+            if not os.path.exists(f"{os.environ['HOME']}/Documents/bin"):
+                subprocess.run(f"mkdir {os.environ['HOME']}/Documents/bin")
 
-            subprocess.run("cd bin")
-            if not os.path.exists("./ffprobe.wasm"):
+            if not os.path.exists(f"{os.environ['HOME']}/Documents/bin/ffprobe.wasm"):
                 req1 = requests.get(Consts.FFPROBE_URL)
-                with open('./ffprobe.wasm', 'wb') as ffprobe:
+                with open(f"{os.environ['HOME']}/Documents/bin/ffprobe.wasm", 'wb') as ffprobe:
                     ffprobe.write(req1.content)
 
-            show_progress("util", 4, 5)
-            if not os.path.exists("./ffmpeg.wasm"):
+            show_progress("util", 3, 4)
+            if not os.path.exists(f"{os.environ['HOME']}/Documents/bin/ffmpeg.wasm"):
                 req2 = requests.get(Consts.FFMPEG_URL)
-                with open('./ffmpeg.wasm', 'wb') as ffmpeg:
+                with open(f"{os.environ['HOME']}/Documents/bin/ffmpeg.wasm", 'wb') as ffmpeg:
                     ffmpeg.write(req2.content)
 
-        show_progress("util", 5, 5)
-        subprocess.run("jump shortcuts")
+        show_progress("util", 4, 4)
 
     @staticmethod
     def erase_dependencies():
-        cleanup_cmds = ("pip uninstall -q -y yt-dlp", "pip uninstall -q -y gallery-dl", "cd", "rm -f ./bin/ffmpeg.wasm",
-                        "rm -f ./bin/ffprobe.wasm")
+        cleanup_cmds = ("pip uninstall -q -y yt-dlp", "pip uninstall -q -y gallery-dl", f"rm -rf {os.environ['HOME']}/Documents/bin/ffmpeg.wasm",
+                        f"rm -rf {os.environ['HOME']}/Documents/bin/ffprobe.wasm")
         for i in range(len(cleanup_cmds)):
             subprocess.run(cleanup_cmds[i])
             show_progress("util", i + 1, len(cleanup_cmds))
@@ -140,7 +133,7 @@ class SW_DLT:
         }
 
         try:
-            # Returns shortcuts URL redirect with downloaded file data, any exception is re-thrown
+            # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
             return self.single_download(dl_options)
 
         except:
@@ -156,7 +149,7 @@ class SW_DLT:
         }
 
         try:
-            # Returns shortcuts URL redirect with downloaded file data, any exception is re-thrown
+            # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
             return self.single_download(dl_options)
 
         except:
@@ -166,7 +159,6 @@ class SW_DLT:
         # Uses yt-dlp to download single video or audio items
         with yt_dlp.YoutubeDL(dl_options) as vid_obj:
             meta_data = vid_obj.extract_info(self.media_url, download=False)
-            # 2nd argument is alternate title
             vid_title = meta_data.get("title", self.date_id)
             vid_obj.download([self.media_url])
 
@@ -180,9 +172,8 @@ class SW_DLT:
         raise Exception()
 
     def gallery_download(self, gallery_range, auth_str):
-        gallery_urls = []
-        iteration = 1
-        item_num = 1
+        i = 1
+        mnum = 1
 
         # Obtaining URL list to download
         gallery_urls = subprocess.getoutput(
@@ -192,52 +183,48 @@ class SW_DLT:
 
         # Creating temp folder to store media
         subprocess.run(f'mkdir -p {self.file_id}')
-        subprocess.run(f'cd {self.file_id}')
-        present_items = subprocess.getoutput("ls")
+        cached = subprocess.getoutput(f'ls {self.file_id}')
 
         for url in gallery_urls:
-            if f"MEDIA_{item_num}" in present_items:
-                item_num += 1
-                iteration += 1
+            if f"MEDIA_{mnum}" in cached:
+                mnum += 1
+                i += 1
                 continue
 
             if url.startswith("http"):
-                item_get = requests.get(str(url))
+                req = requests.get(str(url))
                 file_ext = mimetypes.guess_extension(
-                    item_get.headers["content-type"])
-                with open(f"./MEDIA_{item_num}{file_ext}", "wb") as media_item:
-                    media_item.write(item_get.content)
+                    req.headers["content-type"])
+                with open(f'{self.file_id}/MEDIA_{mnum}{file_ext}', "wb") as media_item:
+                    media_item.write(req.content)
 
-                show_progress("manual", iteration, len(gallery_urls))
-                item_num += 1
-                iteration += 1
+                show_progress("manual", i, len(gallery_urls))
+                mnum += 1
+                i += 1
 
             else:
-                iteration += 1
+                i += 1
 
-        # Less than 2 items means no URLs returned, removes temp folder and raises Exception
-        if item_num < 2:
-            subprocess.run("jump shortcuts")
-            subprocess.run(f"rm -r -f {self.file_id}")
+        # No URLs returned, removes temp folder and raises Exception
+        if mnum < 2:
+            subprocess.run(f"rm -rf {self.file_id}")
             raise Exception(Consts.DERROR_EXC)
 
-        # Less than 3 items means a single item, removes folder and directly outputs the item
-        elif item_num < 3:
-            # Moves single item to root of $SHORTCUTS
+        # Single item, removes temp folder and directly outputs the item
+        elif mnum < 3:
             subprocess.run(
-                "mv {0} $SHORTCUTS/{1}".format("MEDIA_1" + file_ext, self.file_id + file_ext))
+                "mv ./{0}/{1} $SHORTCUTS/{2}".format(self.file_id, "MEDIA_1" + file_ext, self.file_id + file_ext))
 
-            subprocess.run(f"rm -r -f {self.file_id}")
+            subprocess.run(f"rm -rf {self.file_id}")
             output = {
                 "fileName": self.file_id + file_ext,
                 "fileTitle": self.date_id
             }
 
-        # For multiple items, zips them and returns zip file
+        # Mutiple items, zips temp folder and returns it, removes temp folder
         else:
-            subprocess.run("jump shortcuts")
             shutil.make_archive(self.file_id, "zip", self.file_id)
-            subprocess.run(f"rm -r -f {self.file_id}")
+            subprocess.run(f"rm -rf {self.file_id}")
             output = {
                 "fileName": self.file_id + ".zip",
                 "fileTitle": self.date_id
@@ -256,7 +243,6 @@ class SW_DLT:
         try:
             with yt_dlp.YoutubeDL(dl_options) as pl_obj:
                 meta_data = pl_obj.extract_info(self.media_url, download=False)
-                # 2nd argument is alternate title
                 pl_title = meta_data.get("title", self.date_id)
                 pl_obj.download([self.media_url])
 
@@ -355,7 +341,6 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
         # If the same partial file is not found, deletes all leftovers (important)
         if file_id not in subprocess.getoutput("ls"):
             subprocess.run("rm -rf SW-DLT_DL_*")
-            pass
         else:
             header = f"{Consts.SBOLD}SW-DLT (Resuming Download){Consts.ENDL}"
 
