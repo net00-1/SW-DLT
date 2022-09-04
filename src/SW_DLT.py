@@ -174,63 +174,65 @@ class SW_DLT:
     def gallery_download(self, gallery_range, auth_str):
         i = 1
         mnum = 1
+        try:
+            # Obtaining URL list to download
+            gallery_urls = subprocess.getoutput(
+                "gallery-dl -G {0}{1}{2}".format(self.media_url, " " if gallery_range ==
+                                                "-d" else f" --range '{gallery_range}' ", auth_str)
+            ).splitlines()
 
-        # Obtaining URL list to download
-        gallery_urls = subprocess.getoutput(
-            "gallery-dl -G {0}{1}{2}".format(self.media_url, " " if gallery_range ==
-                                             "-d" else f" --range '{gallery_range}' ", auth_str)
-        ).splitlines()
+            # Creating temp folder to store media
+            subprocess.run(f'mkdir -p {self.file_id}')
+            cached = subprocess.getoutput(f'ls {self.file_id}')
 
-        # Creating temp folder to store media
-        subprocess.run(f'mkdir -p {self.file_id}')
-        cached = subprocess.getoutput(f'ls {self.file_id}')
+            for url in gallery_urls:
+                if f"MEDIA_{mnum}" in cached:
+                    mnum += 1
+                    i += 1
+                    continue
 
-        for url in gallery_urls:
-            if f"MEDIA_{mnum}" in cached:
-                mnum += 1
-                i += 1
-                continue
+                if url.startswith("http"):
+                    req = requests.get(str(url))
+                    file_ext = mimetypes.guess_extension(
+                        req.headers["content-type"])
+                    with open(f'{self.file_id}/MEDIA_{mnum}{file_ext}', "wb") as media_item:
+                        media_item.write(req.content)
 
-            if url.startswith("http"):
-                req = requests.get(str(url))
-                file_ext = mimetypes.guess_extension(
-                    req.headers["content-type"])
-                with open(f'{self.file_id}/MEDIA_{mnum}{file_ext}', "wb") as media_item:
-                    media_item.write(req.content)
+                    show_progress("manual", i, len(gallery_urls))
+                    mnum += 1
+                    i += 1
 
-                show_progress("manual", i, len(gallery_urls))
-                mnum += 1
-                i += 1
+                else:
+                    i += 1
 
+            # No URLs returned, removes temp folder and raises Exception
+            if mnum < 2:
+                subprocess.run(f"rm -rf {self.file_id}")
+                raise Exception()
+
+            # Single item, removes temp folder and directly outputs the item
+            elif mnum < 3:
+                subprocess.run(
+                    "mv ./{0}/{1} $SHORTCUTS/{2}".format(self.file_id, "MEDIA_1" + file_ext, self.file_id + file_ext))
+
+                subprocess.run(f"rm -rf {self.file_id}")
+                output = {
+                    "fileName": self.file_id + file_ext,
+                    "fileTitle": self.date_id
+                }
+
+            # Mutiple items, zips temp folder and returns it, removes temp folder
             else:
-                i += 1
+                shutil.make_archive(self.file_id, "zip", self.file_id)
+                subprocess.run(f"rm -rf {self.file_id}")
+                output = {
+                    "fileName": self.file_id + ".zip",
+                    "fileTitle": self.date_id
+                }
 
-        # No URLs returned, removes temp folder and raises Exception
-        if mnum < 2:
-            subprocess.run(f"rm -rf {self.file_id}")
+            return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(output))}'
+        except:
             raise Exception(Consts.DERROR_EXC)
-
-        # Single item, removes temp folder and directly outputs the item
-        elif mnum < 3:
-            subprocess.run(
-                "mv ./{0}/{1} $SHORTCUTS/{2}".format(self.file_id, "MEDIA_1" + file_ext, self.file_id + file_ext))
-
-            subprocess.run(f"rm -rf {self.file_id}")
-            output = {
-                "fileName": self.file_id + file_ext,
-                "fileTitle": self.date_id
-            }
-
-        # Mutiple items, zips temp folder and returns it, removes temp folder
-        else:
-            shutil.make_archive(self.file_id, "zip", self.file_id)
-            subprocess.run(f"rm -rf {self.file_id}")
-            output = {
-                "fileName": self.file_id + ".zip",
-                "fileTitle": self.date_id
-            }
-
-        return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(output))}'
 
     def playlist_download(self, playlist_type):
         dl_options = {
