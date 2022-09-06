@@ -27,9 +27,13 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 - [x] Migrate to `yt-dlp`
 
-- [ ] Add quality options for video playlists when usage of ffmpeg.wasm is deprecated
+- [ ] Migrate shortcut code to Jellycuts
 
-- [ ] Implement feature to read URLs from files
+- [ ] Build support for sporadic update checks
+
+- [ ] Build support for custom save locations
+
+- [ ] Build support for URL files
 
 ## Disclaimers
 - Use this shortcut for downloading media you own or are authorized to download
