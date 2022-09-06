@@ -128,7 +128,7 @@ class SW_DLT:
         dl_options = {
             "format": default_format if video_res == "-d" else custom_format,
             "playlist_items": "1-1",
-            "outtmpl": f"{self.file_id}.%(ext)s",
+            "outtmpl": f'{self.file_id}.%(ext)s',
             **self.global_options
         }
 
@@ -144,7 +144,7 @@ class SW_DLT:
             "format": "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
             "playlist_items": "1-1",
             "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
-            "outtmpl": f"{self.file_id}.%(ext)s",
+            "outtmpl": f'{self.file_id}.%(ext)s',
             **self.global_options
         }
 
@@ -186,7 +186,7 @@ class SW_DLT:
             cached = subprocess.getoutput(f'ls {self.file_id}')
 
             for url in gallery_urls:
-                if f"MEDIA_{mnum}" in cached:
+                if f'MEDIA_{mnum}' in cached:
                     mnum += 1
                     i += 1
                     continue
@@ -207,7 +207,7 @@ class SW_DLT:
 
             # No URLs returned, removes temp folder and raises Exception
             if mnum < 2:
-                subprocess.run(f"rm -rf {self.file_id}")
+                subprocess.run(f'rm -rf {self.file_id}')
                 raise Exception()
 
             # Single item, removes temp folder and directly outputs the item
@@ -215,7 +215,7 @@ class SW_DLT:
                 subprocess.run(
                     "mv ./{0}/{1} $SHORTCUTS/{2}".format(self.file_id, "MEDIA_1" + file_ext, self.file_id + file_ext))
 
-                subprocess.run(f"rm -rf {self.file_id}")
+                subprocess.run(f'rm -rf {self.file_id}')
                 output = {
                     "file_name": self.file_id + file_ext,
                     "file_title": self.date_id
@@ -224,7 +224,7 @@ class SW_DLT:
             # Mutiple items, zips temp folder and returns it, removes temp folder
             else:
                 shutil.make_archive(self.file_id, "zip", self.file_id)
-                subprocess.run(f"rm -rf {self.file_id}")
+                subprocess.run(f'rm -rf {self.file_id}')
                 output = {
                     "file_name": self.file_id + ".zip",
                     "file_title": self.date_id
@@ -238,7 +238,7 @@ class SW_DLT:
         dl_options = {
             "format": "best[ext=mp4]/best" if playlist_type == "-v" else "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
             "postprocessors": [] if playlist_type == "-v" else [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
-            "outtmpl": f"{self.file_id}/%(title)s.%(ext)s",
+            "outtmpl": f'{self.file_id}/%(title)s.%(ext)s',
             **self.global_options
         }
 
@@ -249,7 +249,7 @@ class SW_DLT:
                 pl_obj.download([self.media_url])
 
             shutil.make_archive(self.file_id, "zip", self.file_id)
-            subprocess.run(f"rm -r -f {self.file_id}")
+            subprocess.run(f'rm -r -f {self.file_id}')
             output = {
                 "file_name": self.file_id + ".zip",
                 "file_title": pl_title
@@ -266,27 +266,27 @@ def show_progress(data_stream, curr=0, total=0):
     if data_stream == "manual":
         if curr != total:
             print(
-                f"\rDownloading: {Consts.CYELLOW}{curr/total:.1%}{Consts.ENDL}", end="")
+                f'\rDownloading: {Consts.CYELLOW}{curr/total:.1%}{Consts.ENDL}', end="")
             return
-        print(f"\x1b[1K\r{Consts.CGREEN}Downloaded{Consts.ENDL}")
+        print(f'\x1b[1K\r{Consts.CGREEN}Downloaded{Consts.ENDL}')
     elif data_stream == "util":
         print(
-            f"\rLoading: {Consts.CYELLOW}{curr/total:.1%}{Consts.ENDL}", end="")
+            f'\rLoading: {Consts.CYELLOW}{curr/total:.1%}{Consts.ENDL}', end="")
         return
     else:
         if data_stream["status"] == "downloading":
             print(
                 f"\rDownloading: {Consts.CYELLOW}{data_stream['_percent_str'].strip()}{Consts.ENDL}", end="")
         elif data_stream["status"] == "finished":
-            print(f"\x1b[1K\r{Consts.CGREEN}Downloaded{Consts.ENDL}")
+            print(f'\x1b[1K\r{Consts.CGREEN}Downloaded{Consts.ENDL}')
     return
 
 
 def format_processing(process_stream):
     if process_stream["status"] == "started":
-        print(f"\r{Consts.CYELLOW}Processing{Consts.ENDL}", end="")
+        print(f'\r{Consts.CYELLOW}Processing{Consts.ENDL}', end="")
     elif process_stream["status"] == "finished":
-        print(f"\x1b[1K\r{Consts.CGREEN}Processed{Consts.ENDL}")
+        print(f'\x1b[1K\r{Consts.CGREEN}Processed{Consts.ENDL}')
     return
 
 
@@ -316,13 +316,13 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
     # Arg 4: FPS for video OR authentication for gallery download
 
     info_msgs = {
-        "video_prompt": f"{Consts.CBLUE}Video Download{Consts.ENDL}\n{Consts.CYELLOW}Custom qualities require processing{Consts.ENDL}",
-        "audio_prompt": f"{Consts.CBLUE}Audio Download{Consts.ENDL}\n{Consts.CYELLOW}Sometimes audio processing is needed{Consts.ENDL}",
-        "playlist_prompt": f"{Consts.CBLUE}Playlist Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on playlist length{Consts.ENDL}",
-        "gallery_prompt": f"{Consts.CBLUE}Gallery Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on collection length{Consts.ENDL}",
-        "gallery_auth_prompt": f"{Consts.CYELLOW}Log-in required, log-in details are NOT SAVED{Consts.ENDL}",
-        "erase_prompt": f"{Consts.CYELLOW}Deleting All Dependencies{Consts.ENDL}",
-        "dependency_check": f"{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Validating Dependencies{Consts.ENDL}"
+        "video_prompt": f'{Consts.CBLUE}Video Download{Consts.ENDL}\n{Consts.CYELLOW}Custom qualities require processing{Consts.ENDL}',
+        "audio_prompt": f'{Consts.CBLUE}Audio Download{Consts.ENDL}\n{Consts.CYELLOW}Sometimes audio processing is needed{Consts.ENDL}',
+        "playlist_prompt": f'{Consts.CBLUE}Playlist Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on playlist length{Consts.ENDL}',
+        "gallery_prompt": f'{Consts.CBLUE}Gallery Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on collection length{Consts.ENDL}',
+        "gallery_auth_prompt": f'{Consts.CYELLOW}Log-in required, log-in details are NOT SAVED{Consts.ENDL}',
+        "erase_prompt": f'{Consts.CYELLOW}Deleting All Dependencies{Consts.ENDL}',
+        "dependency_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Validating Dependencies{Consts.ENDL}'
     }
 
     # Hashes all arguments to generate unique ID
@@ -331,7 +331,7 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
                                     .hexdigest()[0:20])
 
     sw_dlt_inst = SW_DLT(media_url, file_id)
-    header = f"{Consts.SBOLD}SW-DLT{Consts.ENDL}"
+    header = f'{Consts.SBOLD}SW-DLT{Consts.ENDL}'
 
     try:
         # Pre-download check and cleanup
@@ -344,7 +344,7 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
         if file_id not in subprocess.getoutput("ls"):
             subprocess.run("rm -rf SW-DLT_DL_*")
         else:
-            header = f"{Consts.SBOLD}SW-DLT (Resuming Download){Consts.ENDL}"
+            header = f'{Consts.SBOLD}SW-DLT (Resuming Download){Consts.ENDL}'
 
         subprocess.run("clear")
         print(header)
