@@ -1,7 +1,7 @@
 certifi==2022.6.15
-charset-normalizer==2.1.0
-gallery-dl==1.22.4
+charset-normalizer==2.1.1
+gallery-dl==1.23.0
 idna==3.3
 requests==2.28.1
-urllib3==1.26.11
-yt-dlp==2022.7.18
+urllib3==1.26.12
+yt-dlp==2022.9.1
