@@ -31,8 +31,8 @@ if(ShortcutInput.as(Text) .beginsWith "output=") {
     valueFor(key: "output", dictionary: ShortcutInput.as(Dictionary)) >> encodedMediaProps
     decodeURL(url: "${encodedMediaProps}") >> mediaProps
 
-    valueFor(key: "fileName", dictionary: mediaProps.as(Dictionary)) >> fileName
-    valueFor(key: "fileTitle", dictionary: mediaProps.as(Dictionary)) >> fileTitle
+    valueFor(key: "file_name", dictionary: mediaProps.as(Dictionary)) >> fileName
+    valueFor(key: "file_title", dictionary: mediaProps.as(Dictionary)) >> fileTitle
     if(isMini.as(Boolean)){
         getFile(fileName: fileName)
     }

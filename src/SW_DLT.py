@@ -165,8 +165,8 @@ class SW_DLT:
         for file in subprocess.getoutput("ls").splitlines():
             if file.startswith(self.file_id):
                 output = {
-                    "fileName": file,
-                    "fileTitle": vid_title
+                    "file_name": file,
+                    "file_title": vid_title
                 }
                 return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(output))}'
         raise Exception()
@@ -217,8 +217,8 @@ class SW_DLT:
 
                 subprocess.run(f"rm -rf {self.file_id}")
                 output = {
-                    "fileName": self.file_id + file_ext,
-                    "fileTitle": self.date_id
+                    "file_name": self.file_id + file_ext,
+                    "file_title": self.date_id
                 }
 
             # Mutiple items, zips temp folder and returns it, removes temp folder
@@ -226,8 +226,8 @@ class SW_DLT:
                 shutil.make_archive(self.file_id, "zip", self.file_id)
                 subprocess.run(f"rm -rf {self.file_id}")
                 output = {
-                    "fileName": self.file_id + ".zip",
-                    "fileTitle": self.date_id
+                    "file_name": self.file_id + ".zip",
+                    "file_title": self.date_id
                 }
 
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(output))}'
@@ -251,8 +251,8 @@ class SW_DLT:
             shutil.make_archive(self.file_id, "zip", self.file_id)
             subprocess.run(f"rm -r -f {self.file_id}")
             output = {
-                "fileName": self.file_id + ".zip",
-                "fileTitle": pl_title
+                "file_name": self.file_id + ".zip",
+                "file_title": pl_title
             }
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(output))}'
 
