@@ -1,6 +1,7 @@
 # This testing template should only be run within the a-Shell app to avoid unexpected behavior
 # It is assumed the target SW_DLT source is located in the same directory as the testing suite
 
+import importlib.util
 import urllib.parse
 import subprocess
 import unittest
@@ -164,6 +165,37 @@ class TestSWDLT(unittest.TestCase):
         ge_inst.date_id = "DGT_DATE_TITLE"
         with self.assertRaisesRegex(Exception, exc_msg):
             ge_inst.gallery_download("-d", "")
+
+    # @unittest.skip
+    def test_playlist_error(self):
+        # Tests error handling on a yt-dlp playlist download
+        url = ""
+        hash = "SW_DLT_DL_PLAYLIST_ERROR_TEST"
+        
+        exc_msg = "shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\=exception\=vars\.downloadError"
+        
+        ge_inst = SW_DLT(url, hash)
+        with self.assertRaisesRegex(Exception, exc_msg):
+            ge_inst.playlist_download("-v")
+
+    # @unittest.skip
+    def test_missing_dependencies(self):
+        url = "https://url.placeholder.com"
+        hash = "SW_DLT_MISSING_DEPS_ERROR_TEST"
+
+        subprocess.run("pip uninstall -y yt-dlp")
+        subprocess.run("pip uninstall -y gallery-dl")
+
+        exc_msg = "shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\=exception\=vars\.restartRequired"
+
+        md_inst = SW_DLT(url, hash)
+        with self.subTest():
+            with self.assertRaisesRegex(Exception, exc_msg):
+                md_inst.validate_install()
+        with self.subTest():
+            self.assertEqual(True, importlib.util.find_spec("gallery_dl") is not None)
+        with self.subTest():
+            self.assertEqual(True, importlib.util.find_spec("yt_dlp") is not None)
 
     @classmethod
     def tearDownClass(cls):

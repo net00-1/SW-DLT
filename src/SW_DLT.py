@@ -1,6 +1,7 @@
 # SW-DLT script, check Github for documentation.
 # Official release through RoutineHub, avoid unknown sources!
 
+import importlib.util
 import urllib.parse
 import subprocess
 import mimetypes
@@ -48,13 +49,13 @@ class SW_DLT:
     def validate_install():
         reboot = False
         show_progress("util", 0, 4)
-        if "Package(s) not found" in subprocess.getoutput("pip show yt-dlp"):
+        if importlib.util.find_spec("yt_dlp") is None:
             subprocess.run(
                 "pip -q install yt-dlp --disable-pip-version-check --upgrade --no-dependencies")
             reboot = True
 
         show_progress("util", 1, 4)
-        if "Package(s) not found" in subprocess.getoutput("pip show gallery-dl"):
+        if importlib.util.find_spec("gallery_dl") is None:
             subprocess.run(
                 "pip -q install gallery-dl --disable-pip-version-check --upgrade")
             reboot = True
