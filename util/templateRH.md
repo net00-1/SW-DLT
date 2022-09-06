@@ -12,11 +12,11 @@
 
 **REQUIRED APP:**
 
-* **[a-Shell Terminal (~900MB)](https://apps.apple.com/us/app/a-shell/id1473805438)**
+* **[a-Shell Terminal (~1.2GB)](https://apps.apple.com/us/app/a-shell/id1473805438)**
 
 **OR**
 
-* **[a-Shell Mini Terminal (~300MB)](https://apps.apple.com/us/app/a-shell-mini/id1543537943)**
+* **[a-Shell Mini Terminal (~350MB)](https://apps.apple.com/us/app/a-shell-mini/id1543537943)**
 
 ### Download media from a massive collection of websites ([1](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) & [2](https://github.com/mikf/gallery-dl/blob/master/docs/supportedsites.md)).
 - Videos with quality & framerate selector
@@ -28,7 +28,7 @@
 
 **[Demo Video Download](https://i.imgur.com/BhqTF5j.mp4)**
 
-### Other Features
+### Additional Features
 
 - App Swap: Change between a-Shell or a-Shell mini easily and save storage space by using the lightweight version.
 - Complete uninstall: completely uninstall the shortcut and its dependencies without deleting the a-Shell or a-Shell Mini app.
@@ -39,6 +39,14 @@
 **[SW-DLT on GitHub](https://github.com/net00-1/SW-DLT)**
 
 Planned features, Source code, bug reports, feature suggestions, and in-depth documentation are available at the GitHub repo for SW-DLT.
+
+### Donations
+
+If you have found this Shortcut useful, consider donating to support future releases. You can donate using BCH by clicking on the below QR code (donations can also be done through the in-shortcut about page):
+
+<a href="bitcoincash:qq5l9j3cgah8s6rz3xd5aet0u8wml2ezsgst9fedzz">
+    <img style="height: 30%; width: auto; text-align:center" src="https://images2.imgbox.com/22/b6/LES5xnRh_o.png" alt="Donation QR">
+</a>
 
 ### Disclaimers
 
