@@ -146,15 +146,11 @@ class TestSWDLT(unittest.TestCase):
         url = ""
         hash = "SW_DLT_DL_YTDLP_ERROR_TEST"
         
-        expected_output = {
-            "file_name": f'{hash}.mp4',
-            "file_title": ""
-        }
-        
-        expected_redirect = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=exception=vars.downloadError"
+        exc_msg = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=exception=vars.downloadError"
         
         dv_inst = SW_DLT(url, hash)
-        self.assertEqual(dv_inst.single_video("-d", None), expected_redirect)
+        with self.assertRaisesRegex(Exception, exc_msg):
+            dv_inst.single_video("-d", None)
 
     # @unittest.skip
     def test_gallery_error(self):
@@ -162,16 +158,12 @@ class TestSWDLT(unittest.TestCase):
         url = ""
         hash = "SW_DLT_DL_GALLERY_ERROR_TEST"
         
-        expected_output = {
-            "file_name": f'{hash}.zip',
-            "file_title": "DGT_DATE_TITLE"
-        }
+        exc_msg = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=exception=vars.downloadError"
         
-        expected_redirect = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=exception=vars.downloadError"
-        
-        dg_inst = SW_DLT(url, hash)
-        dg_inst.date_id = "DGT_DATE_TITLE"
-        self.assertEqual(dg_inst.gallery_download("-d", ""), expected_redirect)
+        ge_inst = SW_DLT(url, hash)
+        ge_inst.date_id = "DGT_DATE_TITLE"
+        with self.assertRaisesRegex(Exception, exc_msg):
+            ge_inst.gallery_download("-d", "")
 
     @classmethod
     def tearDownClass(cls):
