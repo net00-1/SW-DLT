@@ -146,7 +146,7 @@ class TestSWDLT(unittest.TestCase):
         url = ""
         hash = "SW_DLT_DL_YTDLP_ERROR_TEST"
         
-        exc_msg = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=exception=vars.downloadError"
+        exc_msg = "shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\=exception\=vars\.downloadError"
         
         dv_inst = SW_DLT(url, hash)
         with self.assertRaisesRegex(Exception, exc_msg):
@@ -158,7 +158,7 @@ class TestSWDLT(unittest.TestCase):
         url = ""
         hash = "SW_DLT_DL_GALLERY_ERROR_TEST"
         
-        exc_msg = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=exception=vars.downloadError"
+        exc_msg = "shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\=exception\=vars\.downloadError"
         
         ge_inst = SW_DLT(url, hash)
         ge_inst.date_id = "DGT_DATE_TITLE"
