@@ -37,7 +37,7 @@ if(ShortcutInput.as(Text) .beginsWith "output=") {
         getFile(fileName: fileName)
     }
     else {
-        // a-Shell full equivalent
+        // a-Shell full: getFile(fileName: fileName)
     } >> mediaFile
 
     setName(input: mediaFile, name: fileTitle, dontIncludeExtension: false) >> finalMedia
@@ -48,7 +48,7 @@ if(ShortcutInput.as(Text) .beginsWith "output=") {
         executeCommand(command: cleanupCmd, openWindow: close, keepGoing: false)
     }
     else {
-        // a-Shell full equivalent
+        // a-Shell full: executeCommand(command: cleanupCmd, openWindow: close, keepGoing: false)
     }
     exit()
 }
@@ -309,5 +309,6 @@ if(isMini.as(Boolean)) {
     executeCommand(command:runScript, openWindow: close, keepGoing: false)
 }
 else {
-    // a-Shell full equivalent
+    // a-Shell full: putFile(file: scriptFile, overwrite: true)
+    // a-Shell full: executeCommand(command:runScript, openWindow: close, keepGoing: false)
 }
