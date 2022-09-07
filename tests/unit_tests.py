@@ -179,7 +179,8 @@ class TestSWDLT(unittest.TestCase):
             ge_inst.playlist_download("-v")
 
     # @unittest.skip
-    def test_missing_dependencies(self):
+    def z_test_missing_dependencies(self):
+        # Tests installation of dependencies, must run after all other tests
         url = "https://url.placeholder.com"
         hash = "SW_DLT_MISSING_DEPS_ERROR_TEST"
 
