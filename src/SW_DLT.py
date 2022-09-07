@@ -184,7 +184,7 @@ class SW_DLT:
 
             # Creating temp folder to store media
             subprocess.run(f'mkdir -p {self.file_id}')
-            cached = os.listdir(self.file_id)
+            cached = str(os.listdir(self.file_id))
 
             for url in gallery_urls:
                 if f'MEDIA_{mnum}' in cached:
