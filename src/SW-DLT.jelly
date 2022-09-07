@@ -24,6 +24,10 @@ dictionary(json: globalSettingsJson) >> globalSettings
 
 dictionary(json: propertiesJson) >> properties
 
+getName(input: ShortcutInput) >> altInput
+matchText(text: altInput, regex: "^DEBUG$", caseSensitive: true) >> mode
+getTextFrom(input: mode) >> RUN_MODE
+
 valueFor(key: "isMini", dictionary: globalSettings) >> isMini
 valueFor(key: "deleteAll", dictionary: globalSettings) >> deleteAll
 
@@ -148,7 +152,7 @@ END:VCARD
     setName(input: mainMenuTemplate, name: "mainMenu.vcf", dontIncludeExtension: true) >> mainMenu
 
     var mainMenuHeader = """
-SW-DLT: Main Menu
+SW-DLT: Main Menu ${RUN_MODE}
 URL: ${displayURL}
     """
     choose(list: mainMenu.as(Contact), prompt: "${mainMenuHeader}", multiple: false, all: false) >> dlChoice
@@ -292,6 +296,25 @@ URL: ${displayURL}
         richTextFromHTML(html: fixedTemplate) >> aboutHTML
         quicklook(input: aboutHTML.as(RichText))
     }
+}
+
+if(RUN_MODE == "DEBUG"){
+    var state = """
+DEBUG_REPORT
+RAW_INPUT: 
+${ShortcutInput.as(Text)}
+
+CHOSEN_OPTION:
+${dlChoice}
+
+ARGS:
+${args}
+
+TARGET_COMMAND:
+python SW_DLT.py ${mediaURL} ${args}
+        """
+    quicklook(input: state)
+    exit()
 }
 
 if(args == nil) {
