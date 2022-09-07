@@ -163,7 +163,7 @@ class SW_DLT:
             vid_title = meta_data.get("title", self.date_id)
             vid_obj.download([self.media_url])
 
-        for file in subprocess.getoutput("ls").splitlines():
+        for file in os.listdir():
             if file.startswith(self.file_id):
                 output = {
                     "file_name": file,
@@ -184,7 +184,7 @@ class SW_DLT:
 
             # Creating temp folder to store media
             subprocess.run(f'mkdir -p {self.file_id}')
-            cached = subprocess.getoutput(f'ls {self.file_id}')
+            cached = os.listdir(self.file_id)
 
             for url in gallery_urls:
                 if f'MEDIA_{mnum}' in cached:
@@ -342,7 +342,7 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
 
         sw_dlt_inst.validate_install()
         # If the same partial file is not found, deletes all leftovers (important)
-        if file_id not in subprocess.getoutput("ls"):
+        if file_id not in os.listdir():
             subprocess.run("rm -rf SW-DLT_DL_*")
         else:
             header = f'{Consts.SBOLD}SW-DLT (Resuming Download){Consts.ENDL}'
