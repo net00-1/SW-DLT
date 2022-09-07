@@ -348,7 +348,7 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
                     shutil.rmtree(file)
                     continue
                 os.remove(file)
-            else:
+            elif file.startswith(file_id):
                 header = f'{Consts.SBOLD}SW-DLT (Resuming Download){Consts.ENDL}'
 
         subprocess.run("clear")
