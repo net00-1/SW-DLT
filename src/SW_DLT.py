@@ -342,7 +342,7 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
 
         sw_dlt_inst.validate_install()
         # If the same partial file is not found, deletes all leftovers (important)
-        if file_id not in os.listdir():
+        if file_id not in str(os.listdir()):
             subprocess.run("rm -rf SW-DLT_DL_*")
         else:
             header = f'{Consts.SBOLD}SW-DLT (Resuming Download){Consts.ENDL}'
