@@ -13,6 +13,7 @@
         "restartRequired": "Required dependencies were installed in a-Shell. This process needed the shortcut to restart once.",
         "downloadError": "The download encountered an error. Try using (if applicable) the default quality, reviewing your login details, or checking website compatibility.",
         "erasedAll": "All the dependencies used by this shortcut have been erased. They will be reinstalled & updated if a download is requested.",
+        "unknownError": "An unknown error was encountered during execution. If you see this message repeatedly please raise an issue (repository in the about page).",
         "docsURL": "https://github.com/net00-1/SW-DLT/blob/master/Docs.md",
         "bchAddress": "bitcoincash:qq5l9j3cgah8s6rz3xd5aet0u8wml2ezsgst9fedzz",
         "defaultVideo": "-v -d",

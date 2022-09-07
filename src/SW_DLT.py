@@ -30,6 +30,7 @@ class Consts:
     REBOOT_EXC = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=exception=vars.restartRequired"
     ERASED_EXC = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=exception=vars.erasedAll"
     DERROR_EXC = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=exception=vars.downloadError"
+    UNK_EXC = "shortcuts://run-shortcut?name=SW-DLT&input=text&text=exception=vars.unknownError"
 
 
 class SW_DLT:
@@ -385,6 +386,8 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
 
     except Exception as exc_url:
         # All raised exceptions are handled here and send the user back to the shortcut with a message
+        if str(exc_url.args[0]) not in [Consts.DERROR_EXC, Consts.REBOOT_EXC, Consts.ERASED_EXC]:
+            return Consts.UNK_EXC
         return str(exc_url.args[0])
 
 
