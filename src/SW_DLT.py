@@ -3,6 +3,7 @@
 
 import importlib.util
 import urllib.parse
+import contextlib
 import subprocess
 import mimetypes
 import datetime
@@ -66,14 +67,13 @@ class SW_DLT:
 
         # If native FFmpeg is present, removes any web assembly version on device.
         if os.path.exists(f"{os.environ['APPDIR']}/bin/ffmpeg"):
-            subprocess.run(f"rm -f {os.environ['HOME']}/Documents/bin/ffmpeg.wasm")
-            subprocess.run(f"rm -f {os.environ['HOME']}/Documents/bin/ffprobe.wasm")
+            with contextlib.suppress(FileNotFoundError):
+                os.remove(f"{os.environ['HOME']}/Documents/bin/ffmpeg.wasm")
+                os.remove(f"{os.environ['HOME']}/Documents/bin/ffprobe.wasm")
 
         # Otherwise, installs any required web assembly files
         else:
-            if not os.path.exists(f"{os.environ['HOME']}/Documents/bin"):
-                subprocess.run(f"mkdir {os.environ['HOME']}/Documents/bin")
-
+            os.makedirs(f"{os.environ['HOME']}/Documents/bin", exist_ok=True)
             if not os.path.exists(f"{os.environ['HOME']}/Documents/bin/ffprobe.wasm"):
                 req1 = requests.get(Consts.FFPROBE_URL)
                 with open(f"{os.environ['HOME']}/Documents/bin/ffprobe.wasm", 'wb') as ffprobe:
@@ -179,11 +179,11 @@ class SW_DLT:
             # Obtaining URL list to download
             gallery_urls = subprocess.getoutput(
                 "gallery-dl -G {0}{1}{2}".format(self.media_url, " " if gallery_range ==
-                                                "-d" else f" --range '{gallery_range}' ", auth_str)
+                                                 "-d" else f" --range '{gallery_range}' ", auth_str)
             ).splitlines()
 
             # Creating temp folder to store media
-            subprocess.run(f'mkdir -p {self.file_id}')
+            os.makedirs(self.file_id, exist_ok=True)
             cached = str(os.listdir(self.file_id))
 
             for url in gallery_urls:
@@ -208,15 +208,15 @@ class SW_DLT:
 
             # No URLs returned, removes temp folder and raises Exception
             if mnum < 2:
-                subprocess.run(f'rm -rf {self.file_id}')
+                shutil.rmtree(self.file_id, True)
                 raise Exception()
 
             # Single item, removes temp folder and directly outputs the item
             elif mnum < 3:
-                subprocess.run(
-                    "mv ./{0}/{1} $SHORTCUTS/{2}".format(self.file_id, "MEDIA_1" + file_ext, self.file_id + file_ext))
+                os.replace("{0}/{1}".format(self.file_id, "MEDIA_1" + file_ext),
+                           "{0}/{1}".format(os.environ["SHORTCUTS"]), self.file_id + file_ext)
 
-                subprocess.run(f'rm -rf {self.file_id}')
+                shutil.rmtree(self.file_id, True)
                 output = {
                     "file_name": self.file_id + file_ext,
                     "file_title": self.date_id
@@ -225,7 +225,7 @@ class SW_DLT:
             # Mutiple items, zips temp folder and returns it, removes temp folder
             else:
                 shutil.make_archive(self.file_id, "zip", self.file_id)
-                subprocess.run(f'rm -rf {self.file_id}')
+                shutil.rmtree(self.file_id, True)
                 output = {
                     "file_name": self.file_id + ".zip",
                     "file_title": self.date_id
@@ -250,7 +250,7 @@ class SW_DLT:
                 pl_obj.download([self.media_url])
 
             shutil.make_archive(self.file_id, "zip", self.file_id)
-            subprocess.run(f'rm -r -f {self.file_id}')
+            shutil.rmtree(self.file_id, True)
             output = {
                 "file_name": self.file_id + ".zip",
                 "file_title": pl_title
@@ -342,10 +342,14 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
 
         sw_dlt_inst.validate_install()
         # If the same partial file is not found, deletes all leftovers (important)
-        if file_id not in str(os.listdir()):
-            subprocess.run("rm -rf SW-DLT_DL_*")
-        else:
-            header = f'{Consts.SBOLD}SW-DLT (Resuming Download){Consts.ENDL}'
+        for file in os.listdir():
+            if file.startswith("SW-DLT_DL_") and not file.startswith(file_id):
+                if os.path.isdir(file):
+                    shutil.rmtree(file)
+                    continue
+                os.remove(file)
+            else:
+                header = f'{Consts.SBOLD}SW-DLT (Resuming Download){Consts.ENDL}'
 
         subprocess.run("clear")
         print(header)
