@@ -283,7 +283,7 @@ URL: ${displayURL}
                 <img class='qr-code' src='data:image/png;base64|${properties.key(icons.donationQR)}'>
             </a>
             <p></p>
-            <a href='${properties.key(vars.docsURL)}'>Shortcut Documentation</a>
+            <a href='${properties.key(vars.docsURL)}'>Repository & Documentation</a>
         </div>
         <div class='footer'>
         <hr />
