@@ -215,7 +215,7 @@ class SW_DLT:
             # Single item, removes temp folder and directly outputs the item
             elif mnum < 3:
                 os.replace("{0}/{1}".format(self.file_id, "MEDIA_1" + file_ext),
-                           "{0}/{1}".format(os.environ["SHORTCUTS"]), self.file_id + file_ext)
+                           "{0}/{1}".format(os.environ["SHORTCUTS"], self.file_id + file_ext))
 
                 shutil.rmtree(self.file_id, True)
                 output = {
