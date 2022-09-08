@@ -24,15 +24,15 @@
 - Video or audio playlists
 - GIFs, clips, images (From single items to massive albums or entire webpages/profiles)
 
-<img src="https://i.imgur.com/kPvyTqJ.png" alt="SW-DLTShowcase"/>
+<img src="https://images2.imgbox.com/99/24/s3b4891P_o.png" alt="showcase"/>
 
-**[Demo Video Download](https://i.imgur.com/BhqTF5j.mp4)**
+**[Video Demonstration](https://sendvid.com/yllwo8to)**
 
 ### Additional Features
 
-- App Swap: Change between a-Shell or a-Shell mini easily and save storage space by using the lightweight version.
-- Complete uninstall: completely uninstall the shortcut and its dependencies without deleting the a-Shell or a-Shell Mini app.
-- Resuming downloads: downloads can be resumed if interrupted, for more information visit the GitHub documentation.
+- Multi-app support: Change between a-Shell or a-Shell mini easily and save storage space by using the lightweight version.
+- Clean uninstall: completely uninstall the shortcut and its dependencies without deleting the a-Shell or a-Shell Mini app.
+- Resumable downloads: downloads can be resumed if interrupted, for more information visit the GitHub documentation.
 
 ### Documentation, Source Code & Maintenance
 
