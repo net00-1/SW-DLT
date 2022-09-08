@@ -42,11 +42,9 @@ Planned features, Source code, bug reports, feature suggestions, and in-depth do
 
 ### Donations
 
-If you have found this Shortcut useful, consider donating to support future releases. You can donate using BCH by clicking on the below QR code (donations can also be done through the in-shortcut about page):
+If you have found this Shortcut useful, consider donating to support future releases. You can donate using BCH by hold-pressing on, or scanning the below QR code (donations can also be done through the in-shortcut about page):
 
-<a href="bitcoincash:qq5l9j3cgah8s6rz3xd5aet0u8wml2ezsgst9fedzz">
-    <img style="height: 30%; width: auto; text-align:center" src="https://images2.imgbox.com/22/b6/LES5xnRh_o.png" alt="Donation QR">
-</a>
+<img src="https://thumbs2.imgbox.com/f1/c4/zBOYunlX_t.png" alt="donationqr">
 
 ### Disclaimers
 
