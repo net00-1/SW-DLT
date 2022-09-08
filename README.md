@@ -25,9 +25,9 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 - [X] iOS 15 support
 
-- [x] Migrate to `yt-dlp`
+- [X] Migrate to `yt-dlp`
 
-- [ ] Migrate shortcut code to Jellycuts
+- [X] Migrate shortcut code to Jellycuts
 
 - [ ] Build support for sporadic update checks
 
