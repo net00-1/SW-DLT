@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "3E16",
-    "url": "https://www.icloud.com/shortcuts/951836e1710b45c2ad09d055af7eb12b",
-    "notes": "NOTICE: migrated updater to a more responsive host. Consider updating as soon as possible to avoid slow performance. Also contains minor improvements.",
-    "release": "August 22, 2022"
+    "version": "3E17",
+    "url": "https://www.icloud.com/shortcuts/859e56a485f34216a89ba7c80b7ed0c8",
+    "notes": "Rebuilt shortcut actions from the ground up using Jellycuts (Source code available in the repository). Major reliability fixes, speed improvements and optimizations. Added about page with link to the repository documentation and a donation button (thanks!).",
+    "release": "September 9, 2022"
 }
