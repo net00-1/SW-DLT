@@ -172,7 +172,7 @@ class SW_DLT:
                     "file_name": file,
                     "file_title": vid_title
                 }
-                return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(output))}'
+                return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
         raise Exception()
 
     def gallery_download(self, gallery_range, auth_str):
@@ -236,7 +236,7 @@ class SW_DLT:
                     "file_title": self.date_id
                 }
 
-            return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(output))}'
+            return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
         except:
             raise Exception(Consts.DERROR_EXC)
 
@@ -261,7 +261,7 @@ class SW_DLT:
                 "file_name": self.file_id + ".zip",
                 "file_title": pl_title
             }
-            return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(output))}'
+            return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
 
         except:
             raise Exception(Consts.DERROR_EXC)
