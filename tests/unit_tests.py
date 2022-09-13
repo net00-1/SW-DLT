@@ -155,14 +155,9 @@ class TestSWDLT(unittest.TestCase):
         # Tests error handling on a yt-dlp download
         url = ""
         hash = "SW_DLT_DL_YTDLP_ERROR_TEST"
-        
-        expected_output = {
-            "output_code": "exception",
-            "exc_path": "vars.downloadError"
-        }
 
-        exc_msg = f'shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\={urllib.parse.quote(json.dumps(expected_output))}'
-        
+        exc_msg = '{"output_code":"exception","exc_path":"vars.downloadError"}'
+
         dv_inst = SW_DLT(url, hash)
         with self.assertRaisesRegex(Exception, exc_msg):
             dv_inst.single_video("-d", None)
@@ -172,14 +167,9 @@ class TestSWDLT(unittest.TestCase):
         # Tests error handling on a gallery-dl download
         url = ""
         hash = "SW_DLT_DL_GALLERY_ERROR_TEST"
-        
-        expected_output = {
-            "output_code": "exception",
-            "exc_path": "vars.downloadError"
-        }
 
-        exc_msg = f'shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\={urllib.parse.quote(json.dumps(expected_output))}'        
-        
+        exc_msg = '{"output_code":"exception","exc_path":"vars.downloadError"}'
+
         ge_inst = SW_DLT(url, hash)
         ge_inst.date_id = "DGT_DATE_TITLE"
         with self.assertRaisesRegex(Exception, exc_msg):
@@ -191,32 +181,23 @@ class TestSWDLT(unittest.TestCase):
         url = ""
         hash = "SW_DLT_DL_PLAYLIST_ERROR_TEST"
 
-        expected_output = {
-            "output_code": "exception",
-            "exc_path": "vars.downloadError"
-        }
+        exc_msg = '{"output_code":"exception","exc_path":"vars.downloadError"}'
 
-        exc_msg = f'shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\={urllib.parse.quote(json.dumps(expected_output))}'
-        
         ge_inst = SW_DLT(url, hash)
         with self.assertRaisesRegex(Exception, exc_msg):
             ge_inst.playlist_download("-v")
 
     # @unittest.skip
     def z_test_missing_dependencies(self):
-        # Tests installation of dependencies
+        # Tests installation of dependencies, must run after all other tests
         url = "https://url.placeholder.com"
         hash = "SW_DLT_MISSING_DEPS_ERROR_TEST"
 
         subprocess.run("pip uninstall -y yt-dlp")
         subprocess.run("pip uninstall -y gallery-dl")
-        expected_output = {
-            "output_code": "exception",
-            "exc_path": "vars.restartRequired"
-        }
 
-        exc_msg = f'shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\={urllib.parse.quote(json.dumps(expected_output))}'
-        
+        exc_msg = '{"output_code":"exception","exc_path":"vars.restartRequired"}'
+
         md_inst = SW_DLT(url, hash)
         with self.subTest():
             with self.assertRaisesRegex(Exception, exc_msg):
