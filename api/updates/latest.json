@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "3E17",
-    "url": "https://www.icloud.com/shortcuts/859e56a485f34216a89ba7c80b7ed0c8",
-    "notes": "Rebuilt shortcut actions from the ground up using Jellycuts (Source code available in the repository). Major reliability fixes, speed improvements and optimizations. Added about page with link to the repository documentation and a donation button (thanks!).",
-    "release": "September 9, 2022"
+    "version": "3.17.1",
+    "url": "https://www.icloud.com/shortcuts/c3b1a0ea592b41cca19e9ed5470cf5eb",
+    "notes": "Changed versioning to the standard format. Fixed error when outputting downloads with symbols in their titles.",
+    "release": "September 13, 2022"
 }
