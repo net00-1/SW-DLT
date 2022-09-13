@@ -31,12 +31,19 @@ getTextFrom(input: mode) >> RUN_MODE
 valueFor(key: "isMini", dictionary: globalSettings) >> isMini
 valueFor(key: "deleteAll", dictionary: globalSettings) >> deleteAll
 
-if(ShortcutInput.as(Text) .beginsWith "output=") {
-    valueFor(key: "output", dictionary: ShortcutInput.as(Dictionary)) >> encodedMediaProps
-    decodeURL(url: "${encodedMediaProps}") >> mediaProps
+decodeURL(url: ShortcutInput) >> decodedProps
+valueFor(key: "output_code", dictionary: decodedProps.as(Dictionary)) >> outputCode
+if(outputCode != nil) {
+    if(outputCode == "exception") {
+        valueFor(key: "exc_path", dictionary: decodedProps.as(Dictionary)) >> excPath
+        valueFor(key: "${excPath}", dictionary: properties) >> excMsg
 
-    valueFor(key: "file_name", dictionary: mediaProps.as(Dictionary)) >> fileName
-    valueFor(key: "file_title", dictionary: mediaProps.as(Dictionary)) >> fileTitle
+        alert(alert: "${excMsg}", title: "Exception Alert", cancel: false)
+        exit()
+    }
+
+    valueFor(key: "file_name", dictionary: decodedProps.as(Dictionary)) >> fileName
+    valueFor(key: "file_title", dictionary: decodedProps.as(Dictionary)) >> fileTitle
     if(isMini.as(Boolean)){
         getFile(fileName: fileName)
     }
@@ -54,14 +61,6 @@ if(ShortcutInput.as(Text) .beginsWith "output=") {
     else {
         // a-Shell full: executeCommand(command: cleanupCmd, openWindow: close, keepGoing: false)
     }
-    exit()
-}
-
-if(ShortcutInput.as(Text) .beginsWith "exception=") {
-    valueFor(key: "exception", dictionary: ShortcutInput.as(Dictionary)) >> excPath
-    valueFor(key: "${excPath}", dictionary: properties) >> excMsg
-
-    alert(alert: "${excMsg}", title: "Exception Alert", cancel: false)
     exit()
 }
 
