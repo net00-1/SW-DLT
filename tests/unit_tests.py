@@ -23,7 +23,7 @@ class TestSWDLT(unittest.TestCase):
             "file_title": ""
         }
         
-        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(expected_output))}'
+        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         dv_inst = SW_DLT(url, hash)
         self.assertEqual(dv_inst.single_video("-d", None), expected_redirect)
@@ -41,7 +41,7 @@ class TestSWDLT(unittest.TestCase):
             "file_title": ""
         }
         
-        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(expected_output))}'
+        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         da_inst = SW_DLT(url, hash)
         self.assertEqual(da_inst.single_audio(), expected_redirect)
@@ -58,7 +58,7 @@ class TestSWDLT(unittest.TestCase):
             "file_title": ""
         }
         
-        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(expected_output))}'
+        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         cvn_inst = SW_DLT(url, hash)
         self.assertEqual(cvn_inst.single_video("1080", "60"), expected_redirect)
@@ -75,7 +75,7 @@ class TestSWDLT(unittest.TestCase):
             "file_title": ""
         }
         
-        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(expected_output))}'
+        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         cvmq_inst = SW_DLT(url, hash)
         self.assertEqual(cvmq_inst.single_video("2160", "60"), expected_redirect)
@@ -92,7 +92,7 @@ class TestSWDLT(unittest.TestCase):
             "file_title": ""
         }
         
-        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(expected_output))}'
+        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         vp_inst = SW_DLT(url, hash)
         self.assertEqual(vp_inst.playlist_download("-v"), expected_redirect)
@@ -109,7 +109,7 @@ class TestSWDLT(unittest.TestCase):
             "file_title": ""
         }
         
-        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(expected_output))}'
+        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         ap_inst = SW_DLT(url, hash)
         self.assertEqual(ap_inst.playlist_download("-a"), expected_redirect)
@@ -126,7 +126,7 @@ class TestSWDLT(unittest.TestCase):
             "file_title": "DGT_DATE_TITLE"
         }
         
-        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(expected_output))}'
+        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         dg_inst = SW_DLT(url, hash)
         dg_inst.date_id = "DGT_DATE_TITLE"
@@ -144,7 +144,7 @@ class TestSWDLT(unittest.TestCase):
             "file_title": "CGT_DATE_TITLE"
         }
         
-        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text=output={urllib.parse.quote(json.dumps(expected_output))}'
+        expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         cg_inst = SW_DLT(url, hash)
         cg_inst.date_id = "CGT_DATE_TITLE"
