@@ -33,7 +33,8 @@ valueFor(key: "deleteAll", dictionary: globalSettings) >> deleteAll
 
 decodeURL(url: ShortcutInput) >> decodedProps
 valueFor(key: "output_code", dictionary: decodedProps.as(Dictionary)) >> outputCode
-if(outputCode != nil) {
+
+macro exceptionCheck() {
     if(outputCode == "exception") {
         valueFor(key: "exc_path", dictionary: decodedProps.as(Dictionary)) >> excPath
         valueFor(key: "${excPath}", dictionary: properties) >> excMsg
@@ -41,6 +42,10 @@ if(outputCode != nil) {
         alert(alert: "${excMsg}", title: "Exception Alert", cancel: false)
         exit()
     }
+}
+
+if(outputCode != nil) {
+    exceptionCheck()
 
     valueFor(key: "file_name", dictionary: decodedProps.as(Dictionary)) >> fileName
     valueFor(key: "file_title", dictionary: decodedProps.as(Dictionary)) >> fileTitle
