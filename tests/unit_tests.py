@@ -18,6 +18,7 @@ class TestSWDLT(unittest.TestCase):
         hash = "SW_DLT_DL_DEFAULT_VIDEO_TEST"
         
         expected_output = {
+            "output_code": "success",
             "file_name": f'{hash}.mp4',
             "file_title": ""
         }
@@ -26,6 +27,7 @@ class TestSWDLT(unittest.TestCase):
         
         dv_inst = SW_DLT(url, hash)
         self.assertEqual(dv_inst.single_video("-d", None), expected_redirect)
+
         
     # @unittest.skip
     def test_default_audio(self):
@@ -34,6 +36,7 @@ class TestSWDLT(unittest.TestCase):
         hash = "SW_DLT_DL_DEFAULT_AUDIO_TEST"
         
         expected_output = {
+            "output_code": "success",
             "file_name": f'{hash}.m4a',
             "file_title": ""
         }
@@ -50,6 +53,7 @@ class TestSWDLT(unittest.TestCase):
         hash = "SW_DLT_DL_CUSTOM_VIDEO_NATIVE_TEST"
         
         expected_output = {
+            "output_code": "success",
             "file_name": f'{hash}.mp4',
             "file_title": ""
         }
@@ -66,6 +70,7 @@ class TestSWDLT(unittest.TestCase):
         hash = "SW_DLT_DL_CUSTOM_VIDEO_MAXQ_TEST"
         
         expected_output = {
+            "output_code": "success",
             "file_name": f'{hash}.mp4',
             "file_title": ""
         }
@@ -82,6 +87,7 @@ class TestSWDLT(unittest.TestCase):
         hash = "SW_DLT_DL_VIDEO_PLAYLIST_TEST"
         
         expected_output = {
+            "output_code": "success",
             "file_name": f'{hash}.zip',
             "file_title": ""
         }
@@ -98,6 +104,7 @@ class TestSWDLT(unittest.TestCase):
         hash = "SW_DLT_DL_AUDIO_PLAYLIST_TEST"
         
         expected_output = {
+            "output_code": "success",
             "file_name": f'{hash}.zip',
             "file_title": ""
         }
@@ -114,6 +121,7 @@ class TestSWDLT(unittest.TestCase):
         hash = "SW_DLT_DL_DEFAULT_GALLERY_TEST"
         
         expected_output = {
+            "output_code": "success",
             "file_name": f'{hash}.zip',
             "file_title": "DGT_DATE_TITLE"
         }
@@ -131,6 +139,7 @@ class TestSWDLT(unittest.TestCase):
         hash = "SW_DLT_DL_CUSTOM_GALLERY_TEST"
         
         expected_output = {
+            "output_code": "success",
             "file_name": f'{hash}.jpg',
             "file_title": "CGT_DATE_TITLE"
         }
@@ -147,7 +156,12 @@ class TestSWDLT(unittest.TestCase):
         url = ""
         hash = "SW_DLT_DL_YTDLP_ERROR_TEST"
         
-        exc_msg = "shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\=exception\=vars\.downloadError"
+        expected_output = {
+            "output_code": "exception",
+            "exc_path": "vars.downloadError"
+        }
+
+        exc_msg = f'shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\={urllib.parse.quote(json.dumps(expected_output))}'
         
         dv_inst = SW_DLT(url, hash)
         with self.assertRaisesRegex(Exception, exc_msg):
@@ -159,7 +173,12 @@ class TestSWDLT(unittest.TestCase):
         url = ""
         hash = "SW_DLT_DL_GALLERY_ERROR_TEST"
         
-        exc_msg = "shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\=exception\=vars\.downloadError"
+        expected_output = {
+            "output_code": "exception",
+            "exc_path": "vars.downloadError"
+        }
+
+        exc_msg = f'shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\={urllib.parse.quote(json.dumps(expected_output))}'        
         
         ge_inst = SW_DLT(url, hash)
         ge_inst.date_id = "DGT_DATE_TITLE"
@@ -171,8 +190,13 @@ class TestSWDLT(unittest.TestCase):
         # Tests error handling on a yt-dlp playlist download
         url = ""
         hash = "SW_DLT_DL_PLAYLIST_ERROR_TEST"
-        
-        exc_msg = "shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\=exception\=vars\.downloadError"
+
+        expected_output = {
+            "output_code": "exception",
+            "exc_path": "vars.downloadError"
+        }
+
+        exc_msg = f'shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\={urllib.parse.quote(json.dumps(expected_output))}'
         
         ge_inst = SW_DLT(url, hash)
         with self.assertRaisesRegex(Exception, exc_msg):
@@ -180,15 +204,19 @@ class TestSWDLT(unittest.TestCase):
 
     # @unittest.skip
     def z_test_missing_dependencies(self):
-        # Tests installation of dependencies, must run after all other tests
+        # Tests installation of dependencies
         url = "https://url.placeholder.com"
         hash = "SW_DLT_MISSING_DEPS_ERROR_TEST"
 
         subprocess.run("pip uninstall -y yt-dlp")
         subprocess.run("pip uninstall -y gallery-dl")
+        expected_output = {
+            "output_code": "exception",
+            "exc_path": "vars.restartRequired"
+        }
 
-        exc_msg = "shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\=exception\=vars\.restartRequired"
-
+        exc_msg = f'shortcuts\:\/\/run\-shortcut\?name\=SW\-DLT\&input\=text\&text\={urllib.parse.quote(json.dumps(expected_output))}'
+        
         md_inst = SW_DLT(url, hash)
         with self.subTest():
             with self.assertRaisesRegex(Exception, exc_msg):
