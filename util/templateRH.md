@@ -4,19 +4,19 @@
 
 **Compatibility:**
 
+* **iOS 16:** Supported
+
 * **iOS 15:** Supported
 
 * **iOS 14:** Supported
 
-* **iOS 13:** Supported, not fully tested
-
 **REQUIRED APP:**
 
-* **[a-Shell Terminal (~1.2GB)](https://apps.apple.com/us/app/a-shell/id1473805438)**
+* **[a-Shell Mini Terminal (~350MB)](https://apps.apple.com/us/app/a-shell-mini/id1543537943)**
 
 **OR**
 
-* **[a-Shell Mini Terminal (~350MB)](https://apps.apple.com/us/app/a-shell-mini/id1543537943)**
+* **[a-Shell Terminal (~1.2GB)](https://apps.apple.com/us/app/a-shell/id1473805438)**
 
 ### Download media from a massive collection of websites ([1](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) & [2](https://github.com/mikf/gallery-dl/blob/master/docs/supportedsites.md)).
 - Videos with quality & framerate selector

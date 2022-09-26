@@ -69,7 +69,7 @@ if(outputCode != nil) {
     exit()
 }
 
-url(url: "${properties.key(vars.updateEndpoint)}") >> apiEndpoint
+valueFor(key: "updateEndpoint", dictionary: properties.key(vars).as(Dictionary)) >> apiEndpoint
 downloadURL(url: apiEndpoint, method: GET, headers: {}, requestType: Json, requestJSON: {}) >> response
 macro updateMenu() {
     var updateMenuHeader = """
