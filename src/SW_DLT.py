@@ -40,34 +40,31 @@ class SW_DLT:
         # args[1]: main process to run
         # args[2] (dependent): resolution for video, type for playlist, or range for gallery
         # args[3] (dependent): framerate for video
-        try:
-            self.file_id = file_id
-            self.date_id = datetime.datetime.today().strftime("%d-%m-%y-%H-%M-%S")
-            self.media_url = args[0]
-            self.ytdlp_globals = {
-                "quiet": True,
-                "no_warnings": True,
-                "noprogress": True,
-                "progress_hooks": [show_progress],
-                "postprocessor_hooks": [format_processing],
-            }
+        self.file_id = file_id
+        self.date_id = datetime.datetime.today().strftime("%d-%m-%y-%H-%M-%S")
+        self.media_url = args[0]
+        self.ytdlp_globals = {
+            "quiet": True,
+            "no_warnings": True,
+            "noprogress": True,
+            "progress_hooks": [show_progress],
+            "postprocessor_hooks": [format_processing],
+        }
 
-            processes = {
-                "-v": self.single_video,
-                "-a": self.single_audio,
-                "-p": self.playlist_download,
-                "-g": self.gallery_download,
-                "-e": self.erase_dependencies
-            }
-            self.process = processes[args[1]]
-            if len(args) > 2:
-                self.video_res = args[2] if args[1] == "-v" else ""
-                self.gallery_range = args[2] if args[1] == "-g" else ""
-                self.playlist_type = args[2] if args[1] == "-p" else ""
-            if len(args) > 3:
-                self.video_fps = args[3]
-        except:
-            raise Exception(Consts.UNK_EXC)
+        processes = {
+            "-v": self.single_video,
+            "-a": self.single_audio,
+            "-p": self.playlist_download,
+            "-g": self.gallery_download,
+            "-e": self.erase_dependencies
+        }
+        self.process = processes[args[1]]
+        if len(args) > 2:
+            self.video_res = args[2] if args[1] == "-v" else ""
+            self.gallery_range = args[2] if args[1] == "-g" else ""
+            self.playlist_type = args[2] if args[1] == "-p" else ""
+        if len(args) > 3:
+            self.video_fps = args[3]
 
     @staticmethod
     def validate_install():
@@ -325,9 +322,10 @@ def main():
         "-e": f'{Consts.CYELLOW}Deleting All Dependencies{Consts.ENDL}',
         "dep_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Validating Dependencies{Consts.ENDL}'
     }
-    try: 
+    try:
         # Hashes all arguments to generate unique ID
-        file_id = "SW_DLT_DL_{}".format(hashlib.md5(str(*sys.argv).encode("utf-8")).hexdigest()[0:20])
+        file_id = "SW_DLT_DL_{}".format(hashlib.md5(
+            str(*sys.argv).encode("utf-8")).hexdigest()[0:20])
 
         sw_dlt_inst = SW_DLT(file_id, *sys.argv[1:])
         header = f'{Consts.SBOLD}SW-DLT{Consts.ENDL}'
