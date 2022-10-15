@@ -190,16 +190,13 @@ URL: ${displayURL}
     }
 
     if(dlChoiceKeyText == "galleryDownload") {
-        choose(list: properties.key(lists.galleryAuth).as(List), prompt: "${properties.key(vars.galleryAuthPrompt)}", multiple: false, all: false) >> gAuthChoice
-        valueFor(key: "vars.gallery${gAuthChoice}", dictionary: properties) >> gAuth
-
         choose(list: properties.key(lists.galleryRange).as(List), prompt: "${properties.key(vars.galleryRangePrompt)}", multiple: false, all: false) >> gRangeChoice
         if(gRangeChoice.as(Text) == "All Items") {
-            var args = "${properties.key(vars.defaultGallery)} ${gAuth}"
+            var args = "${properties.key(vars.defaultGallery)}"
         } 
         else {
             askForInput(prompt: "${properties.key(vars.galleryCRPrompt)}", type: Text, default: "1-10") >> custRange
-            var args = "-g ${custRange} ${gAuth}"
+            var args = "-g ${custRange}"
         }
     }
 

@@ -33,20 +33,41 @@ class Consts:
     UNK_EXC = '{"output_code":"exception","exc_path":"vars.unknownError"}'
 
 
-
 class SW_DLT:
 
-    def __init__(self, media_url, file_id):
-        self.media_url = media_url
-        self.file_id = file_id
-        self.date_id = datetime.datetime.today().strftime("%d-%m-%y-%H-%M-%S")
-        self.global_options = {
-            "quiet": True,
-            "no_warnings": True,
-            "noprogress": True,
-            "progress_hooks": [show_progress],
-            "postprocessor_hooks": [format_processing],
-        }
+    def __init__(self, file_id, *args):
+        # args[0]: media URL to download, or placeholder when using erase function
+        # args[1]: main process to run
+        # args[2] (dependent): resolution for video, type for playlist, or range for gallery
+        # args[3] (dependent): framerate for video
+        try:
+            self.file_id = file_id
+            self.date_id = datetime.datetime.today().strftime("%d-%m-%y-%H-%M-%S")
+            self.media_url = args[0]
+            self.ytdlp_globals = {
+                "quiet": True,
+                "no_warnings": True,
+                "noprogress": True,
+                "progress_hooks": [show_progress],
+                "postprocessor_hooks": [format_processing],
+            }
+
+            processes = {
+                "-v": self.single_video,
+                "-a": self.single_audio,
+                "-p": self.playlist_download,
+                "-g": self.gallery_download,
+                "-e": self.erase_dependencies
+            }
+            self.process = processes[args[1]]
+            if len(args) > 2:
+                self.video_res = args[2] if args[1] == "-v" else ""
+                self.gallery_range = args[2] if args[1] == "-g" else ""
+                self.playlist_type = args[2] if args[1] == "-p" else ""
+            if len(args) > 3:
+                self.video_fps = args[3]
+        except:
+            raise Exception(Consts.UNK_EXC)
 
     @staticmethod
     def validate_install():
@@ -99,23 +120,23 @@ class SW_DLT:
 
         raise Exception(Consts.ERASED_EXC)
 
-    def single_video(self, video_res, video_fps):
+    def single_video(self):
         format_priority = [
             "bestvideo[ext=mp4][height<={0}][fps<={1}]+bestaudio[ext*=4]/"
             "bestvideo[ext!*=4][height<={0}][fps<={1}]+bestaudio[ext!*=4]/".format(
-                video_res, video_fps),
+                self.video_res, self.video_fps),
             "best[ext=mp4][height<={0}][fps<={1}]"
             "best[ext!*=4][height<={0}][fps<={1}]".format(
-                video_res, video_fps)
+                self.video_res, self.video_fps)
         ]
-        if video_res == "1440" or video_res == "2160":
+        if self.video_res == "1440" or self.video_res == "2160":
             format_priority = [
                 "bestvideo[ext!*=4][height<={0}][fps<={1}]+bestaudio[ext!*=4]/"
                 "bestvideo[ext=mp4][height<={0}][fps<={1}]+bestaudio[ext*=4]/".format(
-                    video_res, video_fps),
+                    self.video_res, self.video_fps),
                 "best[ext!*=4][height<={0}][fps<={1}]"
                 "best[ext=mp4][height<={0}][fps<={1}]".format(
-                    video_res, video_fps)
+                    self.video_res, self.video_fps)
             ]
 
         default_format = "best[ext=mp4]/best/bestvideo[ext=mp4]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]"
@@ -125,14 +146,14 @@ class SW_DLT:
             "{2}"\
             "best[ext=mp4][height={0}][fps<={1}]/"\
             "best[ext!*=4][height={0}][fps<={1}]/"\
-            "{3}".format(video_res, video_fps,
+            "{3}".format(self.video_res, self.video_fps,
                          format_priority[0], format_priority[1])
 
         dl_options = {
-            "format": default_format if video_res == "-d" else custom_format,
+            "format": default_format if self.video_res == "-d" else custom_format,
             "playlist_items": "1-1",
             "outtmpl": f'{self.file_id}.%(ext)s',
-            **self.global_options
+            **self.ytdlp_globals
         }
 
         try:
@@ -148,7 +169,7 @@ class SW_DLT:
             "playlist_items": "1-1",
             "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
             "outtmpl": f'{self.file_id}.%(ext)s',
-            **self.global_options
+            **self.ytdlp_globals
         }
 
         try:
@@ -175,15 +196,13 @@ class SW_DLT:
                 return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
         raise Exception()
 
-    def gallery_download(self, gallery_range, auth_str):
+    def gallery_download(self):
         i = 1
         mnum = 1
         try:
             # Obtaining URL list to download
             gallery_urls = subprocess.getoutput(
-                "gallery-dl -G {0}{1}{2}".format(self.media_url, " " if gallery_range ==
-                                                 "-d" else f" --range '{gallery_range}' ", auth_str)
-            ).splitlines()
+                "gallery-dl -G {0} --range {1}".format(self.media_url, self.gallery_range)).splitlines()
 
             # Creating temp folder to store media
             os.makedirs(self.file_id, exist_ok=True)
@@ -240,12 +259,12 @@ class SW_DLT:
         except:
             raise Exception(Consts.DERROR_EXC)
 
-    def playlist_download(self, playlist_type):
+    def playlist_download(self):
         dl_options = {
-            "format": "best[ext=mp4]/best" if playlist_type == "-v" else "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
-            "postprocessors": [] if playlist_type == "-v" else [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
+            "format": "best[ext=mp4]/best" if self.playlist_type == "-v" else "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
+            "postprocessors": [] if self.playlist_type == "-v" else [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
             "outtmpl": f'{self.file_id}/%(title)s.%(ext)s',
-            **self.global_options
+            **self.ytdlp_globals
         }
 
         try:
@@ -297,54 +316,26 @@ def format_processing(process_stream):
     return
 
 
-def auth_prompt():
-    # General authentication prompt for password restricted content
-    username = ""
-    password = ""
-
-    while not username:
-        username = input("Enter Username/E-mail:\n>>")
-        if not username:
-            print("Username/E-mail cannot be blank!\n")
-
-    while not password:
-        password = input("Enter Password:\n>>")
-        if not password:
-            print("Password cannot be blank!\n")
-
-    return [username, password]
-
-
-def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fps_auth=None):
-    # Arg 0: self instance, not used by the script
-    # Arg 1: media URL to download OR placeholder when using erase utility
-    # Arg 2: main process to run
-    # Arg 3: resolution for video OR type for playlist OR range for gallery
-    # Arg 4: FPS for video OR authentication for gallery download
-
+def main():
     info_msgs = {
-        "video_prompt": f'{Consts.CBLUE}Video Download{Consts.ENDL}\n{Consts.CYELLOW}Custom qualities require processing{Consts.ENDL}',
-        "audio_prompt": f'{Consts.CBLUE}Audio Download{Consts.ENDL}\n{Consts.CYELLOW}Sometimes audio processing is needed{Consts.ENDL}',
-        "playlist_prompt": f'{Consts.CBLUE}Playlist Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on playlist length{Consts.ENDL}',
-        "gallery_prompt": f'{Consts.CBLUE}Gallery Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on collection length{Consts.ENDL}',
-        "gallery_auth_prompt": f'{Consts.CYELLOW}Log-in required, log-in details are NOT SAVED{Consts.ENDL}',
-        "erase_prompt": f'{Consts.CYELLOW}Deleting All Dependencies{Consts.ENDL}',
-        "dependency_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Validating Dependencies{Consts.ENDL}'
+        "-v": f'{Consts.CBLUE}Video Download{Consts.ENDL}\n{Consts.CYELLOW}Custom qualities require processing{Consts.ENDL}',
+        "-a": f'{Consts.CBLUE}Audio Download{Consts.ENDL}\n{Consts.CYELLOW}Sometimes audio processing is needed{Consts.ENDL}',
+        "-p": f'{Consts.CBLUE}Playlist Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on playlist length{Consts.ENDL}',
+        "-g": f'{Consts.CBLUE}Gallery Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on collection length{Consts.ENDL}',
+        "-e": f'{Consts.CYELLOW}Deleting All Dependencies{Consts.ENDL}',
+        "dep_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Validating Dependencies{Consts.ENDL}'
     }
+    try: 
+        # Hashes all arguments to generate unique ID
+        file_id = "SW_DLT_DL_{}".format(hashlib.md5(str(*sys.argv).encode("utf-8")).hexdigest()[0:20])
 
-    # Hashes all arguments to generate unique ID
-    file_id = "SW_DLT_DL_{}".format(hashlib.md5(str([self, media_url, process_type, res_pltype_range, fps_auth])
-                                                .encode("utf-8"))
-                                    .hexdigest()[0:20])
+        sw_dlt_inst = SW_DLT(file_id, *sys.argv[1:])
+        header = f'{Consts.SBOLD}SW-DLT{Consts.ENDL}'
 
-    sw_dlt_inst = SW_DLT(media_url, file_id)
-    header = f'{Consts.SBOLD}SW-DLT{Consts.ENDL}'
-
-    try:
         # Pre-download check and cleanup
         subprocess.run("clear")
         print(header)
-        print(info_msgs["dependency_check"])
+        print(info_msgs["dep_check"])
 
         sw_dlt_inst.validate_install()
         # If the same partial file is not found, deletes all leftovers (important)
@@ -359,35 +350,8 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
 
         subprocess.run("clear")
         print(header)
-        # Process selection
-        if process_type == "-v":
-            print(info_msgs["video_prompt"])
-            return sw_dlt_inst.single_video(res_pltype_range, fps_auth)
-
-        elif process_type == "-a":
-            print(info_msgs["audio_prompt"])
-            return sw_dlt_inst.single_audio()
-
-        elif process_type == "-p":
-            print(info_msgs["playlist_prompt"])
-            return sw_dlt_inst.playlist_download(res_pltype_range)
-
-        elif process_type == "-g":
-            auth_str = ""
-            if fps_auth == "-auth":
-                print(info_msgs["gallery_auth_prompt"])
-                auth_str = "-u {0} -p {1}".format(*auth_prompt())
-                subprocess.run("clear")
-                print("{0}\n{1}".format(header, info_msgs["gallery_prompt"]))
-
-            else:
-                print(info_msgs["gallery_prompt"])
-
-            return sw_dlt_inst.gallery_download(res_pltype_range, auth_str)
-
-        elif process_type == "-erase":
-            print(info_msgs["erase_prompt"])
-            return sw_dlt_inst.erase_dependencies()
+        print(info_msgs[sys.argv[1]])
+        return sw_dlt_inst.process()
 
     except Exception as exc_url:
         # All raised exceptions are handled here and send the user back to the shortcut with a message
@@ -397,6 +361,6 @@ def main(self=None, media_url=None, process_type=None, res_pltype_range=None, fp
 
 
 if __name__ == "__main__":
-    subprocess.run("open " + main(*sys.argv))
+    subprocess.run("open " + main())
     # Post-run cleanup
     subprocess.run("clear")

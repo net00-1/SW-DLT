@@ -4,7 +4,6 @@
         "videoResPrompt": "Select Video Quality (Closest Available)",
         "videoFPSPrompt": "Select Video Framerate (Closest Available)",
         "playlistPrompt": "Select Type of Playlist Download",
-        "galleryAuthPrompt": "Downloading private content is currently broken, see About -> Shortcut Documentation for a guide to store credentials in a-Shell.",
         "galleryRangePrompt": "Select Item Range to Download",
         "galleryCRPrompt": "Type a range of items to download. Newest item is at first position (1). Example: 1,2,3-7,10. Commas select individual items, hyphen declares a sub-range. Both can be combined.",
         "noURL": "NA, use clipboard/Share Sheet",
@@ -20,11 +19,9 @@
         "defaultAudio": "-a",
         "videoPlaylist": "-p -v",
         "audioPlaylist": "-p -a",
-        "defaultGallery": "-g -d",
+        "defaultGallery": "-g 1-",
         "urlPlaceholder": "utility",
-        "deleteAll": "-erase",
-        "galleryPrivate": "-auth",
-        "galleryContinue": "-noauth"
+        "deleteAll": "-e"
     },
     "listMap": {
         "Default": "default",
@@ -63,9 +60,6 @@
         "galleryRange": [
             "All Items",
             "Custom Range"
-        ],
-        "galleryAuth": [
-            "Continue"
         ]
     },
     "icons": {
