@@ -40,9 +40,9 @@ class SW_DLT:
         # args[1]: main process to run
         # args[2] (dependent): resolution for video, type for playlist, or range for gallery
         # args[3] (dependent): framerate for video
+        self.media_url = args[0]
         self.file_id = file_id
         self.date_id = datetime.datetime.today().strftime("%d-%m-%y-%H-%M-%S")
-        self.media_url = args[0]
         self.ytdlp_globals = {
             "quiet": True,
             "no_warnings": True,
@@ -58,11 +58,17 @@ class SW_DLT:
             "-g": self.gallery_download,
             "-e": self.erase_dependencies
         }
-        self.process = processes[args[1]]
+        self.run = processes[args[1]]
+        self.video_res = ""
+        self.video_fps = ""
+        self.playlist_type = ""
+        self.gallery_range = ""
+
         if len(args) > 2:
             self.video_res = args[2] if args[1] == "-v" else ""
-            self.gallery_range = args[2] if args[1] == "-g" else ""
             self.playlist_type = args[2] if args[1] == "-p" else ""
+            self.gallery_range = args[2] if args[1] == "-g" else ""
+
         if len(args) > 3:
             self.video_fps = args[3]
 
@@ -325,7 +331,7 @@ def main():
     try:
         # Hashes all arguments to generate unique ID
         file_id = "SW_DLT_DL_{}".format(hashlib.md5(
-            str(*sys.argv).encode("utf-8")).hexdigest()[0:20])
+            str(sys.argv).encode("utf-8")).hexdigest()[0:20])
 
         sw_dlt_inst = SW_DLT(file_id, *sys.argv[1:])
         header = f'{Consts.SBOLD}SW-DLT{Consts.ENDL}'
@@ -348,8 +354,8 @@ def main():
 
         subprocess.run("clear")
         print(header)
-        print(info_msgs[sys.argv[1]])
-        return sw_dlt_inst.process()
+        print(info_msgs[sys.argv[2]])
+        return sw_dlt_inst.run()
 
     except Exception as exc_url:
         # All raised exceptions are handled here and send the user back to the shortcut with a message
