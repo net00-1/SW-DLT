@@ -26,7 +26,7 @@ class TestSWDLT(unittest.TestCase):
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         dv_inst = SW_DLT(hash, url, "-v", "-d")
-        self.assertEqual(dv_inst.process(), expected_redirect)
+        self.assertEqual(dv_inst.run(), expected_redirect)
 
         
     # @unittest.skip
@@ -44,7 +44,7 @@ class TestSWDLT(unittest.TestCase):
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         da_inst = SW_DLT(hash, url, "-a")
-        self.assertEqual(da_inst.process(), expected_redirect)
+        self.assertEqual(da_inst.run(), expected_redirect)
         
     # @unittest.skip
     def test_custom_video(self):
@@ -61,7 +61,7 @@ class TestSWDLT(unittest.TestCase):
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         cv_inst = SW_DLT(hash, url, "-v", "1080", "60")
-        self.assertEqual(cv_inst.process(), expected_redirect)
+        self.assertEqual(cv_inst.run(), expected_redirect)
         
     # @unittest.skip
     def test_custom_video_maxq(self):
@@ -78,7 +78,7 @@ class TestSWDLT(unittest.TestCase):
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         cvmq_inst = SW_DLT(hash, url, "-v", "2160", "60")
-        self.assertEqual(cvmq_inst.process(), expected_redirect)
+        self.assertEqual(cvmq_inst.run(), expected_redirect)
         
     # @unittest.skip
     def test_video_playlist(self):
@@ -95,7 +95,7 @@ class TestSWDLT(unittest.TestCase):
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         vp_inst = SW_DLT(hash, url, "-p", "-v")
-        self.assertEqual(vp_inst.process(), expected_redirect)
+        self.assertEqual(vp_inst.run(), expected_redirect)
     
     # @unittest.skip
     def test_audio_playlist(self):
@@ -112,7 +112,7 @@ class TestSWDLT(unittest.TestCase):
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         ap_inst = SW_DLT(hash, url, "-p", "-a")
-        self.assertEqual(ap_inst.process(), expected_redirect)
+        self.assertEqual(ap_inst.run(), expected_redirect)
         
     # @unittest.skip
     def test_default_gallery(self):
@@ -130,7 +130,7 @@ class TestSWDLT(unittest.TestCase):
         
         dg_inst = SW_DLT(hash, url, "-g", "1-")
         dg_inst.date_id = "DGT_DATE_TITLE"
-        self.assertEqual(dg_inst.process(), expected_redirect)
+        self.assertEqual(dg_inst.run(), expected_redirect)
     
     # @unittest.skip
     def test_custom_gallery(self):
@@ -147,8 +147,8 @@ class TestSWDLT(unittest.TestCase):
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
         cg_inst = SW_DLT(hash, url, "-g", "3,7-10")
-        cg_inst.date_id = "DGT_DATE_TITLE"
-        self.assertEqual(cg_inst.process(), expected_redirect)
+        cg_inst.date_id = "CGT_DATE_TITLE"
+        self.assertEqual(cg_inst.run(), expected_redirect)
 
     # @unittest.skip
     def test_ytdlp_error(self):
@@ -160,7 +160,7 @@ class TestSWDLT(unittest.TestCase):
 
         ve_inst = SW_DLT(hash, url, "-v", "-d")
         with self.assertRaisesRegex(Exception, exc_msg):
-            ve_inst.process()
+            ve_inst.run()
 
     # @unittest.skip
     def test_gallery_error(self):
@@ -173,7 +173,7 @@ class TestSWDLT(unittest.TestCase):
         ge_inst = SW_DLT(hash, url, "-g", "1-")
         ge_inst.date_id = "GDL_ERROR_TEST"
         with self.assertRaisesRegex(Exception, exc_msg):
-            ge_inst.process()
+            ge_inst.run()
 
     # @unittest.skip
     def test_playlist_error(self):
@@ -185,7 +185,7 @@ class TestSWDLT(unittest.TestCase):
 
         pe_inst = SW_DLT(hash, url, "-p", "-v")
         with self.assertRaisesRegex(Exception, exc_msg):
-            pe_inst.process()
+            pe_inst.run()
             
     # @unittest.skip
     def z_test_missing_dependencies(self):
