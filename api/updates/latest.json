@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "3.17.2",
-    "url": "https://www.icloud.com/shortcuts/4f7093b6860c4f3bafa753425490728b",
-    "notes": "Fixed broken URL action on iOS 14",
-    "release": "September 26, 2022"
+    "version": "3.18",
+    "url": "https://www.icloud.com/shortcuts/9f42ceac6a574df6a03e4d1583231441",
+    "notes": "Removed deprecated authentication prompt (see documentation for recommended solutions), several code improvements",
+    "release": "October 22, 2022"
 }
