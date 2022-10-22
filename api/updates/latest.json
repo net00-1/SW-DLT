@@ -1,7 +1,7 @@
 {
     "result": "success",
     "version": "3.18.1",
-    "url": "https://www.icloud.com/shortcuts/947ba073fd7c45f49934f767c56c3727",
+    "url": "https://www.icloud.com/shortcuts/8779529dc9ac4c1eaf89bb6d2742efa7",
     "notes": "Removed deprecated authentication prompt (see documentation for recommended solutions), several code improvements (3.18.1: update issue hotfix)",
     "release": "October 22, 2022"
 }
