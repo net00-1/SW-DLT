@@ -25,8 +25,8 @@ class TestSWDLT(unittest.TestCase):
         
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
-        dv_inst = SW_DLT(url, hash)
-        self.assertEqual(dv_inst.single_video("-d", None), expected_redirect)
+        dv_inst = SW_DLT(hash, url, "-v", "-d")
+        self.assertEqual(dv_inst.run(), expected_redirect)
 
         
     # @unittest.skip
@@ -43,8 +43,8 @@ class TestSWDLT(unittest.TestCase):
         
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
-        da_inst = SW_DLT(url, hash)
-        self.assertEqual(da_inst.single_audio(), expected_redirect)
+        da_inst = SW_DLT(hash, url, "-a")
+        self.assertEqual(da_inst.run(), expected_redirect)
         
     # @unittest.skip
     def test_custom_video(self):
@@ -60,8 +60,8 @@ class TestSWDLT(unittest.TestCase):
         
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
-        cvn_inst = SW_DLT(url, hash)
-        self.assertEqual(cvn_inst.single_video("1080", "60"), expected_redirect)
+        cv_inst = SW_DLT(hash, url, "-v", "1080", "60")
+        self.assertEqual(cv_inst.run(), expected_redirect)
         
     # @unittest.skip
     def test_custom_video_maxq(self):
@@ -77,8 +77,8 @@ class TestSWDLT(unittest.TestCase):
         
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
-        cvmq_inst = SW_DLT(url, hash)
-        self.assertEqual(cvmq_inst.single_video("2160", "60"), expected_redirect)
+        cvmq_inst = SW_DLT(hash, url, "-v", "2160", "60")
+        self.assertEqual(cvmq_inst.run(), expected_redirect)
         
     # @unittest.skip
     def test_video_playlist(self):
@@ -94,8 +94,8 @@ class TestSWDLT(unittest.TestCase):
         
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
-        vp_inst = SW_DLT(url, hash)
-        self.assertEqual(vp_inst.playlist_download("-v"), expected_redirect)
+        vp_inst = SW_DLT(hash, url, "-p", "-v")
+        self.assertEqual(vp_inst.run(), expected_redirect)
     
     # @unittest.skip
     def test_audio_playlist(self):
@@ -111,8 +111,8 @@ class TestSWDLT(unittest.TestCase):
         
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
-        ap_inst = SW_DLT(url, hash)
-        self.assertEqual(ap_inst.playlist_download("-a"), expected_redirect)
+        ap_inst = SW_DLT(hash, url, "-p", "-a")
+        self.assertEqual(ap_inst.run(), expected_redirect)
         
     # @unittest.skip
     def test_default_gallery(self):
@@ -128,9 +128,9 @@ class TestSWDLT(unittest.TestCase):
         
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
-        dg_inst = SW_DLT(url, hash)
+        dg_inst = SW_DLT(hash, url, "-g", "1-")
         dg_inst.date_id = "DGT_DATE_TITLE"
-        self.assertEqual(dg_inst.gallery_download("-d", ""), expected_redirect)
+        self.assertEqual(dg_inst.run(), expected_redirect)
     
     # @unittest.skip
     def test_custom_gallery(self):
@@ -146,9 +146,9 @@ class TestSWDLT(unittest.TestCase):
         
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
-        cg_inst = SW_DLT(url, hash)
+        cg_inst = SW_DLT(hash, url, "-g", "3,7-10")
         cg_inst.date_id = "CGT_DATE_TITLE"
-        self.assertEqual(cg_inst.gallery_download("3", ""), expected_redirect)
+        self.assertEqual(cg_inst.run(), expected_redirect)
 
     # @unittest.skip
     def test_ytdlp_error(self):
@@ -158,9 +158,9 @@ class TestSWDLT(unittest.TestCase):
 
         exc_msg = '{"output_code":"exception","exc_path":"vars.downloadError"}'
 
-        dv_inst = SW_DLT(url, hash)
+        ve_inst = SW_DLT(hash, url, "-v", "-d")
         with self.assertRaisesRegex(Exception, exc_msg):
-            dv_inst.single_video("-d", None)
+            ve_inst.run()
 
     # @unittest.skip
     def test_gallery_error(self):
@@ -170,10 +170,10 @@ class TestSWDLT(unittest.TestCase):
 
         exc_msg = '{"output_code":"exception","exc_path":"vars.downloadError"}'
 
-        ge_inst = SW_DLT(url, hash)
-        ge_inst.date_id = "DGT_DATE_TITLE"
+        ge_inst = SW_DLT(hash, url, "-g", "1-")
+        ge_inst.date_id = "GDL_ERROR_TEST"
         with self.assertRaisesRegex(Exception, exc_msg):
-            ge_inst.gallery_download("-d", "")
+            ge_inst.run()
 
     # @unittest.skip
     def test_playlist_error(self):
@@ -183,10 +183,10 @@ class TestSWDLT(unittest.TestCase):
 
         exc_msg = '{"output_code":"exception","exc_path":"vars.downloadError"}'
 
-        ge_inst = SW_DLT(url, hash)
+        pe_inst = SW_DLT(hash, url, "-p", "-v")
         with self.assertRaisesRegex(Exception, exc_msg):
-            ge_inst.playlist_download("-v")
-
+            pe_inst.run()
+            
     # @unittest.skip
     def z_test_missing_dependencies(self):
         # Tests installation of dependencies, must run after all other tests
