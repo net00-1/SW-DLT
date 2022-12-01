@@ -117,7 +117,9 @@ It is recommended to have the VLC app or another universal media player app to e
 
 ## Updating Utilities
 
-In order to update the utilities used by SW-DLT, you must first use the `deleteAll` toggle inside the shortcuts editor screen. This option is used to uninstall all the utilities without having to delete the a-Shell app. The next time a download is requested after deletion, the most recent versions of all the utilities will be installed.
+In order to update the utilities used by SW-DLT, you must first use the `deleteAll` toggle inside the shortcuts editor screen. Set it to `true` and run the shortcut (& accept the warning). Once the process finishes, set the toggle back to `false`.
+
+This option is used to uninstall all the utilities without having to delete the a-Shell app. The next time a download is requested after deletion, the most recent versions of all the utilities will be installed.
 
 ## Resuming Downloads
 
