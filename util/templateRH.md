@@ -4,8 +4,6 @@
 
 **Compatibility:**
 
-* **iOS 16:** Supported
-
 * **iOS 15:** Supported
 
 * **iOS 14:** Supported
@@ -36,9 +34,9 @@
 
 ### Documentation, Source Code & Maintenance
 
-**[SW-DLT on GitHub](https://github.com/net00-1/SW-DLT)**
+**[SW-DLT on GitHub (Maintenance Mode)](https://github.com/net00-1/SW-DLT)**
 
-Planned features, Source code, bug reports, feature suggestions, and in-depth documentation are available at the GitHub repo for SW-DLT.
+Source code, bug reports, and in-depth documentation are available at the GitHub repo for SW-DLT.
 
 ### Donations
 
