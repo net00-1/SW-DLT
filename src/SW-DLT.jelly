@@ -322,7 +322,7 @@ if(args == nil) {
    exit()
 }
 
-list(items: ["cd $SHORTCUTS", "python SW_DLT.py ${mediaURL} ${args}"]) >> runScript
+list(items: ["jump shortcuts", "python SW_DLT.py ${mediaURL} ${args}"]) >> runScript
 var scriptSource = """
 
 """
