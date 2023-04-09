@@ -202,8 +202,9 @@ class SW_DLT:
         mnum = 1
         try:
             # Obtaining URL list to download
-            gallery_urls = subprocess.getoutput(
-                "gallery-dl -G {0} --range {1}".format(self.media_url, self.gallery_range)).splitlines()
+            gallery_urls = subprocess.check_output(
+                "gallery-dl -G {0} --range {1}".format(self.media_url, self.gallery_range))
+            gallery_urls.decode("utf-8").splitlines()
 
             # Creating temp folder to store media
             os.makedirs(self.file_id, exist_ok=True)
