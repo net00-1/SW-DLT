@@ -18,7 +18,7 @@ try:
     import requests
     import yt_dlp
 
-except ModuleNotFoundError:
+except ImportError:
     pass
 
 
@@ -75,19 +75,25 @@ class SW_DLT:
     @staticmethod
     def validate_install():
         reboot = False
-        show_progress("util", 0, 4)
+
+        show_progress("util", 0, 5)
+        if importlib.util.find_spec("chardet") is None:
+            subprocess.run("pip -q install chardet --disable-pip-version-check --upgrade")
+            reboot = True
+
+        show_progress("util", 1, 5)
         if importlib.util.find_spec("yt_dlp") is None:
             subprocess.run(
                 "pip -q install yt-dlp --disable-pip-version-check --upgrade --no-dependencies")
             reboot = True
 
-        show_progress("util", 1, 4)
+        show_progress("util", 2, 5)
         if importlib.util.find_spec("gallery_dl") is None:
             subprocess.run(
                 "pip -q install gallery-dl --disable-pip-version-check --upgrade")
             reboot = True
 
-        show_progress("util", 2, 4)
+        show_progress("util", 3, 5)
         if reboot:
             raise Exception(Consts.REBOOT_EXC)
 
@@ -105,13 +111,13 @@ class SW_DLT:
                 with open(f"{os.environ['HOME']}/Documents/bin/ffprobe.wasm", 'wb') as ffprobe:
                     ffprobe.write(req1.content)
 
-            show_progress("util", 3, 4)
+            show_progress("util", 4, 5)
             if not os.path.exists(f"{os.environ['HOME']}/Documents/bin/ffmpeg.wasm"):
                 req2 = requests.get(Consts.FFMPEG_URL)
                 with open(f"{os.environ['HOME']}/Documents/bin/ffmpeg.wasm", 'wb') as ffmpeg:
                     ffmpeg.write(req2.content)
 
-        show_progress("util", 4, 4)
+        show_progress("util", 5, 5)
 
     @staticmethod
     def erase_dependencies():
@@ -196,8 +202,9 @@ class SW_DLT:
         mnum = 1
         try:
             # Obtaining URL list to download
-            gallery_urls = subprocess.getoutput(
-                "gallery-dl -G {0} --range {1}".format(self.media_url, self.gallery_range)).splitlines()
+            gallery_urls = subprocess.check_output(
+                "gallery-dl -G {0} --range {1}".format(self.media_url, self.gallery_range))
+            gallery_urls = gallery_urls.decode("utf-8").splitlines()
 
             # Creating temp folder to store media
             os.makedirs(self.file_id, exist_ok=True)
