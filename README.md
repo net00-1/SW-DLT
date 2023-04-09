@@ -11,7 +11,7 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 **RoutineHub download link: [RoutineHub](https://routinehub.co/shortcut/7284)**
 
-## Planned Updates
+## Planned Features
 
 - [X] Add standard progress bar
 
@@ -26,6 +26,8 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 - [X] Migrate to `yt-dlp`
 
 - [X] Migrate shortcut code to Jellycuts
+
+- [ ] Simply initial install and dependency refresh
 
 - [ ] Allow file inputs with multiple URLs
 
