@@ -2,10 +2,6 @@
 
 SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to easily use, install and manage the popular and open source utilities [`yt-dlp`](https://github.com/yt-dlp/yt-dlp) and [`gallery-dl`](https://github.com/mikf/gallery-dl). This shortcut aims to be compatible with [`yt-dlp's`](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) & [`gallery-dl's`](https://github.com/mikf/gallery-dl/blob/master/docs/supportedsites.rst) collections of supported websites.
 
-# PSA: Maintenance Mode
-
-I cannot afford a device on iOS 16 at this time, and combined with a lack of time and motivation this project will be put on hold. Only support will be available to bugs in the shortcut affecting supported versions (iOS 14 & 15). Donations are already offered within the Shortcut's About menu and in the [RoutineHub Page](https://routinehub.co/shortcut/7284/#:~:text=for%20SW%2DDLT.-,Donations,-If%20you%20have), for those who are interested in supporting future development.
-
 ## Main Features
 - Download video at custom qualities and framerates
 - Downaload audio (audio only or extracted from video)
@@ -19,7 +15,7 @@ I cannot afford a device on iOS 16 at this time, and combined with a lack of tim
 
 - [X] Add standard progress bar
 
-- [X] Enable title grabbing for video/audio/playlists
+- [X] Enable title grabbing for video, audio and playlists
 
 - [X] Enable downloads to be resumed
 
@@ -27,11 +23,11 @@ I cannot afford a device on iOS 16 at this time, and combined with a lack of tim
 
 - [X] **Priority: enable use of native FFmpeg before a-Shell update**
 
-- [X] iOS 15 support
-
 - [X] Migrate to `yt-dlp`
 
 - [X] Migrate shortcut code to Jellycuts
+
+- [ ] Allow file inputs with multiple URLs
 
 ## Disclaimers
 - Use this shortcut for downloading media you own or are authorized to download

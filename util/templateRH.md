@@ -34,7 +34,7 @@
 
 ### Documentation, Source Code & Maintenance
 
-**[SW-DLT on GitHub (Maintenance Mode)](https://github.com/net00-1/SW-DLT)**
+**[SW-DLT on GitHub](https://github.com/net00-1/SW-DLT)**
 
 Source code, bug reports, and in-depth documentation are available at the GitHub repo for SW-DLT.
 

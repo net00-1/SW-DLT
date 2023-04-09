@@ -18,7 +18,7 @@ try:
     import requests
     import yt_dlp
 
-except (ModuleNotFoundError, ImportError):
+except ImportError:
     pass
 
 
