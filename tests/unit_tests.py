@@ -154,7 +154,7 @@ class TestSWDLT(unittest.TestCase):
         
         expected_redirect = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(expected_output))}'
         
-        cg_inst = SW_DLT(hash, url, "-g", "3")
+        cg_inst = SW_DLT(hash, url, "-g", "3,7-10")
         cg_inst.date_id = "CGT_DATE_TITLE"
         self.assertEqual(cg_inst.run(), expected_redirect)
 
