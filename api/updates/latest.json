@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "3.18.1",
-    "url": "https://www.icloud.com/shortcuts/8779529dc9ac4c1eaf89bb6d2742efa7",
-    "notes": "Removed deprecated authentication prompt (see documentation for recommended solutions), several code improvements (3.18.1: update issue hotfix)",
-    "release": "October 22, 2022"
+    "version": "3.18.2",
+    "url": "https://www.icloud.com/shortcuts/550d95f4da2c4ee6843dca538b0a6cce",
+    "notes": "iOS 16 Support. Fixed an issue that caused crashes on some installations due to missing 'chardet.' Fixed an issue where downloads with gallery-dl were stuck indefinitely. Added workaround for a-Shell actions that crashed when special characters were used.",
+    "release": "April 9, 2023"
 }
