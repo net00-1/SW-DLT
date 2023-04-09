@@ -77,7 +77,7 @@ An Update is Available (${metadata.key(version)} -> ${latestVer})
 Changelog:
 ${changelogText}
     """
-    menu("${updateMenuHeader}", ["Update Directly","Skip This Time"]) {
+    menu("${updateMenuHeader}", ["Update Now","Skip Once"]) {
         case("Update Directly"):
             replaceText(input: "${response.as(Dictionary).key(url)}", find: "^.+?(?=\/shortcut)", replace: "shortcuts:/", isRegex: true, caseSensitive: false) >> updateURL
             openURL(url: updateURL)
