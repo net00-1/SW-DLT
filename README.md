@@ -27,7 +27,11 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 - [X] Migrate shortcut code to Jellycuts
 
-- [ ] Simply initial install and dependency refresh
+- [ ] Simplify dependency management & refreshes
+
+- [ ] Add internal update management (for easier updating)
+
+- [ ] Enable persistent user settings (including default save locations)
 
 - [ ] Allow file inputs with multiple URLs
 
