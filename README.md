@@ -2,6 +2,6 @@
 
 Static API endpoints
 
-## /updates/
+## api/updates/latest
 
 Returns data for the latest update
