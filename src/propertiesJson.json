@@ -9,7 +9,6 @@
         "noURL": "NA, use clipboard/Share Sheet",
         "deleteAllTitle": "Warning: Deleting All Dependencies",
         "deleteAllPrompt": "Deletion mode is ON. Are you sure you want to delete all dependencies?",
-        "restartRequired": "Required dependencies were installed in a-Shell. This process needed a one-time restart of the shortcut.",
         "downloadError": "The download encountered an error. Try (if applicable) using the default quality, updating internal dependencies, or reviewing provided login details.",
         "erasedAll": "All the dependencies used by this shortcut have been erased. They will be reinstalled & updated if a download is requested.",
         "unknownError": "An unknown error was encountered during execution. If you see this message repeatedly please raise an issue (repository in the about page).",

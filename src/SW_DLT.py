@@ -27,7 +27,6 @@ class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
     FFMPEG_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffmpeg.wasm"
     FFPROBE_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffprobe.wasm"
-    revalidate_EXC = '{"output_code":"exception","exc_path":"vars.restartRequired"}'
     ERASED_EXC = '{"output_code":"exception","exc_path":"vars.erasedAll"}'
     DERROR_EXC = '{"output_code":"exception","exc_path":"vars.downloadError"}'
     UNK_EXC = '{"output_code":"exception","exc_path":"vars.unknownError"}'
