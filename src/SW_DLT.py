@@ -13,6 +13,13 @@ import json
 import sys
 import os
 
+# Modules not shipped with Python, expected to fail on first run
+try:
+    import requests
+    import yt_dlp
+
+except ImportError:
+    pass
 
 # Constants class
 class Consts:
