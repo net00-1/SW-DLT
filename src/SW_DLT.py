@@ -13,14 +13,6 @@ import json
 import sys
 import os
 
-# Modules not shipped with Python, expected to fail on first run
-try:
-    import requests
-    import yt_dlp
-
-except ImportError:
-    pass
-
 
 # Constants class
 class Consts:
@@ -96,6 +88,9 @@ class SW_DLT:
         show_progress("util", 3, 5)
         if revalidate:
             importlib.invalidate_caches()
+            import requests
+            import yt_dlp
+
 
         # If native FFmpeg is present, removes any web assembly version on device.
         if os.path.exists(f"{os.environ['APPDIR']}/bin/ffmpeg"):
