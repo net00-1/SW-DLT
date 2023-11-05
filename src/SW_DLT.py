@@ -100,7 +100,6 @@ class SW_DLT:
             global yt_dlp
             import yt_dlp
 
-
         # If native FFmpeg is present, removes any web assembly version on device.
         if os.path.exists(f"{os.environ['APPDIR']}/bin/ffmpeg"):
             with contextlib.suppress(FileNotFoundError):
