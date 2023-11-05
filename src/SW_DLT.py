@@ -97,6 +97,7 @@ class SW_DLT:
         if revalidate:
             importlib.invalidate_caches()
             import requests
+            global yt_dlp
             import yt_dlp
 
 
