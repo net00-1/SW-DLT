@@ -361,7 +361,7 @@ def main():
 
     except Exception as exc_url:
         # All raised exceptions are handled here and send the user back to the shortcut with a message
-        if str(exc_url.args[0]) not in [Consts.DERROR_EXC, Consts.revalidate_EXC, Consts.ERASED_EXC]:
+        if str(exc_url.args[0]) not in [Consts.DERROR_EXC, Consts.ERASED_EXC]:
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(Consts.UNK_EXC)}'
         return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(str(exc_url.args[0]))}'
 
