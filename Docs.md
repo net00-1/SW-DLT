@@ -19,7 +19,7 @@ The default quality is the most reliable way to download videos from websites th
 
 **Custom Quality**: Custom quality videos are selected based on the `height` of the video image that corresponds to the "quality" selected by the user. Videos in playable `mp4` are preferred over other formats, unless the user is searching for qualities higher than 1080p (as those are generally available on other formats like `webm`). 
 
-The priority of videos to search is as follows (in `yt-dlp` format syntax, `Z` varies if the user selects resolution > 1080p):
+The priority of videos to search is as follows (in `yt-dlp` format syntax, `Z` (the media type) varies if the user selects resolution > 1080p):
 
 1. `bestvideo[ext=mp4][height=X][fps<=Y]+bestaudio[ext*=4]`
 2. `bestvideo[ext!*=4][height=X][fps<=Y]+bestaudio[ext!*=4]`
