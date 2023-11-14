@@ -97,8 +97,8 @@ class SW_DLT:
         show_progress("util", 3, 5)
         if revalidate:
             importlib.invalidate_caches()
+            global yt_dlp, requests
             import requests
-            global yt_dlp
             import yt_dlp
 
         # If native FFmpeg is present, removes any web assembly version on device.
