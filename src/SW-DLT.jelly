@@ -56,7 +56,8 @@ if(outputCode != nil) {
         // a-Shell full: getFile(fileName: fileName)
     } >> mediaFile
 
-    setName(input: mediaFile, name: fileTitle, dontIncludeExtension: false) >> finalMedia
+    replaceText(input: fileTitle, find: ".", replace: "_", isRegex: false, caseSensitive: false) >> safeTitle
+    setName(input: mediaFile, name: safeTitle, dontIncludeExtension: false) >> finalMedia
     quicklook(input: finalMedia)
 
     list(items: ["rm -rf SW_DLT*"]) >> cleanupCmd

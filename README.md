@@ -13,6 +13,8 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 ## Planned Features
 
+**NOTE**: Compatibility for iOS 17+ and new features are paused indefinitely, until I get new test devices. Support will be offered for bug fixes. If you can, donations are welcome at the [RoutineHub page](https://routinehub.co/shortcut/7284).
+
 - [X] Add standard progress bar
 
 - [X] Enable title grabbing for video, audio and playlists
@@ -27,13 +29,13 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 - [X] Migrate shortcut code to Jellycuts
 
-- [ ] Simplify dependency management & refreshes
+- [X] Simplify dependency management & refreshes
 
-- [ ] Add internal update management (for easier updating)
+- [ ] ~~Add internal update management (for easier updating)~~
 
-- [ ] Enable persistent user settings (including default save locations)
+- [ ] ~~Enable persistent user settings (including default save locations)~~
 
-- [ ] Allow file inputs with multiple URLs
+- [ ] ~~Allow file inputs with multiple URLs~~
 
 ## Disclaimers
 - Use this shortcut for downloading media you own or are authorized to download
