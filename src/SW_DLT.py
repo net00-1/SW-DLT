@@ -78,8 +78,8 @@ class SW_DLT:
         revalidate = False
 
         show_progress("util", 0, 5)
-        if importlib.util.find_spec("chardet") is None:
-            subprocess.run("pip -q install chardet --disable-pip-version-check --upgrade")
+        if importlib.util.find_spec("chardet") is None or importlib.util.find_spec("requests") is None:
+            subprocess.run("pip -q install chardet requests --disable-pip-version-check --upgrade")
             revalidate = True
 
         show_progress("util", 1, 5)
@@ -96,8 +96,9 @@ class SW_DLT:
 
         show_progress("util", 3, 5)
         if revalidate:
-            importlib.invalidate_caches()
             global yt_dlp, requests
+            
+            importlib.invalidate_caches()
             import requests
             import yt_dlp
 
