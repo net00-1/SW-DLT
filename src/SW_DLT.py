@@ -1,6 +1,7 @@
 # SW-DLT script, check Github for documentation.
 # Official release through RoutineHub, avoid unknown sources!
 
+from importlib import util
 import urllib.parse
 import contextlib
 import subprocess
