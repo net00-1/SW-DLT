@@ -346,7 +346,7 @@ def main():
         sw_dlt_inst.validate_install()
         # If the same partial file is not found, deletes all leftovers (important)
         for file in os.listdir():
-            if file.startswith("SW-DLT_DL_") and not file.startswith(file_id):
+            if file.startswith("SW_DLT_DL_") and not file.startswith(file_id):
                 if os.path.isdir(file):
                     shutil.rmtree(file)
                     continue
