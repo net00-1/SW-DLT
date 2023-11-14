@@ -14,14 +14,6 @@ import json
 import sys
 import os
 
-# Modules not shipped with Python, expected to fail on first run
-try:
-    import requests
-    import yt_dlp
-
-except ImportError:
-    pass
-
 
 # Constants class
 class Consts:
@@ -75,32 +67,28 @@ class SW_DLT:
 
     @staticmethod
     def validate_install():
-        revalidate = False
-
         show_progress("util", 0, 5)
         if importlib.util.find_spec("chardet") is None or importlib.util.find_spec("requests") is None:
-            subprocess.run("pip -q install chardet requests --disable-pip-version-check --upgrade")
-            revalidate = True
+            subprocess.run(
+                "pip -q install chardet requests --disable-pip-version-check --upgrade")
 
         show_progress("util", 1, 5)
         if importlib.util.find_spec("yt_dlp") is None:
             subprocess.run(
                 "pip -q install yt-dlp --disable-pip-version-check --upgrade --no-dependencies")
-            revalidate = True
 
         show_progress("util", 2, 5)
         if importlib.util.find_spec("gallery_dl") is None:
             subprocess.run(
                 "pip -q install gallery-dl --disable-pip-version-check --upgrade")
-            revalidate = True
 
         show_progress("util", 3, 5)
-        if revalidate:
-            global yt_dlp, requests
+        global yt_dlp, chardet, requests
             
-            importlib.invalidate_caches()
-            import requests
-            import yt_dlp
+        importlib.invalidate_caches()
+        import chardet
+        import requests
+        import yt_dlp
 
         # If native FFmpeg is present, removes any web assembly version on device.
         if os.path.exists(f"{os.environ['APPDIR']}/bin/ffmpeg"):
