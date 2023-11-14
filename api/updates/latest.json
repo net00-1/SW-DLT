@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "3.19",
-    "url": "https://www.icloud.com/shortcuts/6f74416ee39843b9a108b7eadb3f43f8",
-    "notes": "Removed need to restart the shortcut after updating or installing dependencies. Fixed an issue where video titles with periods '.' were not shown as media. Fixed console coloring being overridden by yt-dlp.",
+    "version": "3.19.1",
+    "url": "https://www.icloud.com/shortcuts/8d4d05d8f2d142938dd2b03b3688bdfc",
+    "notes": "Removed need to restart the shortcut after updating or installing dependencies. Fixed an issue where video titles with periods '.' were not shown as media. Fixed console coloring being overridden by yt-dlp. Fix for remainder files not being removed.",
     "release": "2023-11-13"
 }
