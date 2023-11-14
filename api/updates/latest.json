@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "3.18.2",
-    "url": "https://www.icloud.com/shortcuts/550d95f4da2c4ee6843dca538b0a6cce",
-    "notes": "iOS 16 Support. Fixed an issue that caused crashes on some installations due to missing 'chardet.' Fixed an issue where downloads with gallery-dl were stuck indefinitely. Added workaround for a-Shell actions that crashed when special characters were used.",
-    "release": "April 9, 2023"
+    "version": "3.19",
+    "url": "https://www.icloud.com/shortcuts/6f74416ee39843b9a108b7eadb3f43f8",
+    "notes": "Removed need to restart the shortcut after updating or installing dependencies. Fixed an issue where video titles with periods '.' were not shown as media. Fixed console coloring being overridden by yt-dlp.",
+    "release": "2023-11-13"
 }
