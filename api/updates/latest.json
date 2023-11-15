@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "3.19.1",
-    "url": "https://www.icloud.com/shortcuts/e4f0f211eb804551928ebe613fa86fb0",
-    "notes": "Removed need to restart the shortcut after updating or installing dependencies. Fixed an issue where video titles with periods '.' were not shown as media. Fixed console coloring being overridden by yt-dlp. Fix for remainder files not being removed.",
-    "release": "2023-11-13"
+    "version": "3.19.2",
+    "url": "https://www.icloud.com/shortcuts/3cf4c9f00c064e07af3942affc564a9c",
+    "notes": "Restored the reboot mechanic from pre-3.19 due to a special case issue.",
+    "release": "2023-11-14"
 }
