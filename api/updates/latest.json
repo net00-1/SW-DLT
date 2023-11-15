@@ -1,7 +1,7 @@
 {
     "result": "success",
     "version": "3.19.2",
-    "url": "https://www.icloud.com/shortcuts/0bdb7c5adc704d539e629f63d29dcc45",
+    "url": "https://www.icloud.com/shortcuts/4eb9da730fd443e1837708d59cb63fa8",
     "notes": "Restored the reboot mechanic from pre-3.19 due to a special case issue.",
     "release": "2023-11-14"
 }
