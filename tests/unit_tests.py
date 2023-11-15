@@ -198,6 +198,29 @@ class TestSWDLT(unittest.TestCase):
         with self.assertRaisesRegex(Exception, exc_msg):
             pe_inst.run()
 
+        # @unittest.skip
+    def z_test_missing_dependencies(self):
+        # Tests installation of dependencies, must run after all other tests
+        print("TEST_MISSING_DEPENDENCIES")
+        url = "https://url.placeholder.com"
+        hash = "SW_DLT_MISSING_DEPS_ERROR_TEST"
+
+        subprocess.run("pip uninstall -y chardet")
+        subprocess.run("pip uninstall -y requests")
+        subprocess.run("pip uninstall -y yt-dlp")
+        subprocess.run("pip uninstall -y gallery-dl")
+
+        exc_msg = '{"output_code":"exception","exc_path":"vars.restartRequired"}'
+
+        md_inst = SW_DLT(url, hash)
+        with self.subTest():
+            with self.assertRaisesRegex(Exception, exc_msg):
+                md_inst.validate_install()
+        with self.subTest():
+            self.assertEqual(True, importlib.util.find_spec("gallery_dl") is not None)
+        with self.subTest():
+            self.assertEqual(True, importlib.util.find_spec("yt_dlp") is not None)
+
     @classmethod
     def tearDownClass(cls):
         subprocess.run("rm -rf SW_DLT*")

@@ -1,12 +1,11 @@
 # SW-DLT script, check Github for documentation.
 # Official release through RoutineHub, avoid unknown sources!
 
-from importlib import util
+import importlib.util
 import urllib.parse
 import contextlib
 import subprocess
 import mimetypes
-import importlib
 import datetime
 import hashlib
 import shutil
@@ -14,12 +13,20 @@ import json
 import sys
 import os
 
+# Below imports might fail on new installations or during dependency updates
+try:
+    import requests
+    import yt_dlp
+    
+except ImportError:
+    pass
 
 # Constants class
 class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
     FFMPEG_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffmpeg.wasm"
     FFPROBE_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffprobe.wasm"
+    REBOOT_EXC = '{"output_code":"exception","exc_path":"vars.restartRequired"}'
     ERASED_EXC = '{"output_code":"exception","exc_path":"vars.erasedAll"}'
     DERROR_EXC = '{"output_code":"exception","exc_path":"vars.downloadError"}'
     UNK_EXC = '{"output_code":"exception","exc_path":"vars.unknownError"}'
@@ -67,28 +74,29 @@ class SW_DLT:
 
     @staticmethod
     def validate_install():
+        reboot = False
         show_progress("util", 0, 5)
         if importlib.util.find_spec("chardet") is None or importlib.util.find_spec("requests") is None:
             subprocess.run(
                 "pip -q install chardet requests --disable-pip-version-check --upgrade")
+            reboot = True
 
         show_progress("util", 1, 5)
         if importlib.util.find_spec("yt_dlp") is None:
             subprocess.run(
                 "pip -q install yt-dlp --disable-pip-version-check --upgrade --no-dependencies")
+            reboot = True
 
         show_progress("util", 2, 5)
         if importlib.util.find_spec("gallery_dl") is None:
             subprocess.run(
                 "pip -q install gallery-dl --disable-pip-version-check --upgrade")
+            reboot = True
+        
+        if reboot:
+            raise Exception(Consts.REBOOT_EXC)
 
         show_progress("util", 3, 5)
-        global yt_dlp, chardet, requests
-            
-        importlib.invalidate_caches()
-        import chardet
-        import requests
-        import yt_dlp
 
         # If native FFmpeg is present, removes any web assembly version on device.
         if os.path.exists(f"{os.environ['APPDIR']}/bin/ffmpeg"):
@@ -351,7 +359,7 @@ def main():
 
     except Exception as exc_url:
         # All raised exceptions are handled here and send the user back to the shortcut with a message
-        if str(exc_url.args[0]) not in [Consts.DERROR_EXC, Consts.ERASED_EXC]:
+        if str(exc_url.args[0]) not in [Consts.DERROR_EXC, Consts.ERASED_EXC, Consts.REBOOT_EXC]:
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(Consts.UNK_EXC)}'
         return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(str(exc_url.args[0]))}'
 
