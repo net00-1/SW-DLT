@@ -76,15 +76,15 @@ SW-DLT **does NOT** handle user credentials due to lack of proper mechanisms to 
 
 A gallery-dl configuration file can be stored at `$XDG_CONFIG_HOME/gallery-dl/config.json`. Credentials for multiple supported websites can be added here in the following format:
 
-```lang-js
+```json
 {
     "extractor": {
-        "instagram": {
-            "username": "<USER>",
+        "twitter": {
+            "username": "<USER/EMAIL>",
             "password": "<PASS>"
         },
-        "other_website": {
-            ...
+        "instagram": {
+            "cookies": "path/to/cookies.txt"
         }
     }
 }
