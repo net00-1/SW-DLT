@@ -32,7 +32,8 @@ valueFor(key: "isMini", dictionary: globalSettings) >> isMini
 valueFor(key: "deleteAll", dictionary: globalSettings) >> deleteAll
 
 decodeURL(url: ShortcutInput) >> decodedProps
-valueFor(key: "output_code", dictionary: decodedProps.as(Dictionary)) >> outputCode
+getDictionaryFrom(input: decodedProps) >> dPropsDict
+valueFor(key: "output_code", dictionary: dPropsDict) >> outputCode
 
 macro exceptionCheck() {
     if(outputCode == "exception") {

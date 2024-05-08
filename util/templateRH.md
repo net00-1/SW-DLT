@@ -2,9 +2,7 @@
 
 **SW-DLT** ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to easily use, install and manage the popular and open source utilities **[`yt-dlp`](https://github.com/yt-dlp/yt-dlp)** and **[`gallery-dl`](https://github.com/mikf/gallery-dl)**.
 
-**Compatibility:** Tested on iOS/iPadOS 14-16 
-
-**NOTE**: Compatibility for iOS 17+ and new features are paused indefinitely, until I get new test devices. Support will be offered for bug fixes. If you can, donations are welcome at the link below.
+**Compatibility:** Tested on iOS/iPadOS 15/17
 
 **REQUIRED APP:**
 
