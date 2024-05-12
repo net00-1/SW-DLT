@@ -31,11 +31,11 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 - [X] Simplify dependency management & refreshes
 
-- [ ] ~~Add internal update management (for easier updating)~~
+- [ ] Add internal update management (for easier updating)
 
-- [ ] ~~Enable persistent user settings (including default save locations)~~
+- [ ] Enable persistent user settings (including default save locations)
 
-- [ ] ~~Allow file inputs with multiple URLs~~
+- [ ] Allow file inputs with multiple URLs
 
 ## Disclaimers
 - Use this shortcut for downloading media you own or are authorized to download
