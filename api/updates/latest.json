@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "3.19.2",
-    "url": "https://www.icloud.com/shortcuts/4eb9da730fd443e1837708d59cb63fa8",
-    "notes": "Restored the reboot mechanic from pre-3.19 due to a special case issue.",
-    "release": "2023-11-14"
+    "version": "3.19.3",
+    "url": "https://www.icloud.com/shortcuts/1d460dcbe3904bfda96562fdcc769796",
+    "notes": "Fixed dictionary conversion issue, fixed HTML positioning on about page",
+    "release": "2024-05-12"
 }
