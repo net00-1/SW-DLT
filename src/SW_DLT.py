@@ -252,9 +252,10 @@ class SW_DLT:
 
     def playlist_download(self):
         dl_options = {
-            "format": "best[ext=mp4]/best" if self.playlist_type == "-v" else "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
+            "format": "best" if self.playlist_type == "-v" else "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
             "postprocessors": [] if self.playlist_type == "-v" else [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
             "outtmpl": f'{self.file_id}/%(title)s.%(ext)s',
+            "format_sort": ["+codec:avc:m4a"],
             **self.ytdlp_globals
         }
 

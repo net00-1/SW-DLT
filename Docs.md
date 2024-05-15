@@ -4,29 +4,27 @@ Detailed information about all the features available on SW-DLT. This informatio
 
 ## Video Downloading
 
-The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the proper titles available from `yt-dlp`.
+The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the proper titles available from `yt-dlp`. Both options prioritize iOS natively playable formats with a priority of `+codec:avc:m4a`
 
 **Default Quality**: videos are downloaded using the following `yt-dlp` format string:
 
- `best[ext=mp4]/best/bestvideo[ext=mp4]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]` i.e:
+ `best/bestvideo+bestaudio` i.e:
 
-1. Best quality available with extension MP4 (video and audio stream)
-2. Best quality available with any extension (video and audio stream)
-3. Best quality available with extension MP4 (separate video and audio to merge with FFmpeg)
-4. Best quality available with any extension (separate video and audio to merge with FFmpeg)
+1. Best quality available (video and audio stream)
+2. Best quality available (separate video and audio to merge with FFmpeg)
 
-The default quality is the most reliable way to download videos from websites that might not return resolution data to `yt-dlp` or are not in the list of supported websites and need to be downloaded using `yt-dlp`'s generic extractor. This option also mostly avoids using FFmpeg to save battery life (FFmpeg can still be used to correct file issues).
+The default quality is the most reliable way to download videos from websites that might not return media format data to `yt-dlp` or are not in the list of supported websites and need to be downloaded using `yt-dlp`'s generic extractor. This option also mostly avoids using FFmpeg to save battery life (FFmpeg can still be used to correct file issues).
 
-**Custom Quality**: Custom quality videos are selected based on the `height` of the video image that corresponds to the "quality" selected by the user. Videos in playable `mp4` are preferred over other formats, unless the user is searching for qualities higher than 1080p (as those are generally available on other formats like `webm`). 
+**Custom Quality**: Custom quality videos are selected based on the `height` of the video image that corresponds to the "quality" selected by the user, and the `fps` chosen.
 
-The priority of videos to search is as follows (in `yt-dlp` format syntax, `Z` (the media type) varies if the user selects resolution > 1080p):
+The priority of videos to search is as follows:
 
-1. `bestvideo[ext=mp4][height=X][fps<=Y]+bestaudio[ext*=4]`
-2. `bestvideo[ext!*=4][height=X][fps<=Y]+bestaudio[ext!*=4]`
-3. `bestvideo[Z][height<=X][fps<=Y]+bestaudio[Z]`
-4. `best[ext=mp4][height=X][fps<=Y]`
-5. `best[ext!*=4][height=X][fps<=Y]`
-6. `best[Z][height<=X][fps<=Y]`
+1. `bestvideo[height=X][fps<=Y]+bestaudio`  (Exact resolution, closest FPS, unmerged)
+2. `bestvideo[height<=X][fps<=Y]+bestaudio` (Closest resolution, closest FPS, unmerged)
+3. `best[height=X][fps<=Y]`                 (Exact resolution, closest FPS, merged)
+4. `best[height<=X][fps<=Y]`                (Closest resolution, closest FPS, merged)
+
+Unmerged formats are prioritized, so what user choices are not ignored, since websites tend to offer more resolution and FPS media options on separate video and audio files.
 
 ## Audio Downloading
 
