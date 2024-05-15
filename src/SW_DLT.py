@@ -131,30 +131,18 @@ class SW_DLT:
         raise Exception(Consts.ERASED_EXC)
 
     def single_video(self):
-        priority = [
-            f'bestvideo[ext=mp4][height<={self.video_res}][fps<={self.video_fps}]+bestaudio[ext*=4]/',
-            f'bestvideo[ext!*=4][height<={self.video_res}][fps<={self.video_fps}]+bestaudio[ext!*=4]/',
-            f'best[ext=mp4][height<={self.video_res}][fps<={self.video_fps}]',
-            f'best[ext!*=4][height<={self.video_res}][fps<={self.video_fps}]'
-        ]
-        if self.video_res == "1440" or self.video_res == "2160":
-            priority = [priority[1], priority[0], priority[3], priority[2]]
-
-        default_format = "best[ext=mp4]/best/bestvideo[ext=mp4]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]"
+        default_format = "best/bestvideo+bestaudio"
         custom_format = ""\
-            "bestvideo[ext=mp4][height={0}][fps<={1}]+bestaudio[ext*=4]/"\
-            "bestvideo[ext!*=4][height={0}][fps<={1}]+bestaudio[ext!*=4]/"\
-            "{2}"\
-            "{3}"\
-            "best[ext=mp4][height={0}][fps<={1}]/"\
-            "best[ext!*=4][height={0}][fps<={1}]/"\
-            "{4}"\
-            "{5}".format(self.video_res, self.video_fps, *priority)
+            "bestvideo[height={0}][fps<={1}]+bestaudio/"\
+            "bestvideo[height<={0}][fps<={1}]+bestaudio/"\
+            "best[height={0}][fps<={1}]/"\
+            "best[height<={0}][fps<={1}]".format(self.video_res, self.video_fps)
 
         dl_options = {
             "format": default_format if self.video_res == "-d" else custom_format,
             "playlist_items": "1-1",
             "outtmpl": f'{self.file_id}.%(ext)s',
+            "format_sort": ["+codec:avc:m4a"],
             **self.ytdlp_globals
         }
 
