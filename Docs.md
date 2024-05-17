@@ -4,7 +4,7 @@ Detailed information about all the features available on SW-DLT. This informatio
 
 ## Video Downloading
 
-The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the proper titles available from `yt-dlp`. Both options prioritize iOS natively playable formats with a priority of `+codec:avc:m4a`
+The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the proper titles available from `yt-dlp`. Both options prioritize iOS natively playable codec with a priority of `+codec:avc:m4a`
 
 **Default Quality**: videos are downloaded using the following `yt-dlp` format string:
 
@@ -24,7 +24,7 @@ The priority of videos to search is as follows:
 3. `best[height=X][fps<=Y]`                 (Exact resolution, closest FPS, merged)
 4. `best[height<=X][fps<=Y]`                (Closest resolution, closest FPS, merged)
 
-Unmerged formats are prioritized, so what user choices are not ignored, since websites tend to offer more resolution and FPS media options on separate video and audio files.
+Unmerged options are prioritized, so what user choices are not ignored, since websites tend to offer more resolution and FPS media options on separate video and audio files.
 
 ## Audio Downloading
 
@@ -39,7 +39,7 @@ Audio downloads prioritize the best audio available from a website. In case ther
 
 ## Playlist Downloading
 
-Playlist downloads support both downloading all items in the playlist as videos or as audio only files. There are no quality options for video playlist downloads currently. Audio playlist downlods can use FFmpeg to correct errors and to extract audio from videos. Playlists are saved with the proper titles availale from `yt-dlp`.
+Playlist downloads support both downloading all items in the playlist as videos or as audio only files. There are no quality options for video playlist downloads currently. Audio playlist downlods can use FFmpeg to correct errors and to extract audio from videos. Playlists are saved with the proper titles availale from `yt-dlp`. Both options prioritize iOS natively playable codec with a priority of `+codec:avc:m4a`
 
 Video downloads use the formats: `best[ext=mp4]/best`
 
