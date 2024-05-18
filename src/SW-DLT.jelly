@@ -1,12 +1,11 @@
 import aShellMini
 import Shortcuts
 #Color: red, #Icon: 3DSquareStack
-
 /*
 SW-DLT
 Official release on RoutineHub, avoid unknown sources!
 */
-dictionary(json: metadataJson) >> metadata
+dictionary(json: metadata) >> metadata
 
 /*
 SETTINGS: Configure these global settings in the below dictionary
@@ -19,10 +18,10 @@ deleteAll: enables or disables dependency deletion
 True = enabled
 False = disabled
 */
-dictionary(json: globalSettingsJson) >> globalSettings
+dictionary(json: globalSettings) >> globalSettings
 //-----END OF USER SETTINGS-----
 
-dictionary(json: propertiesJson) >> properties
+dictionary(json: properties) >> properties
 
 getName(input: ShortcutInput) >> altInput
 matchText(text: altInput, regex: "^DEBUG$", caseSensitive: true) >> mode
