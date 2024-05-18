@@ -204,13 +204,13 @@ class SW_DLT:
 
             # Single item, removes temp folder and directly outputs the item
             elif len(files) < 2:
-                os.replace("{0}/{1}".format(self.file_id, files[1]),
-                           "{0}/{1}".format(os.environ["SHORTCUTS"], files[1]))
+                os.replace("{0}/{1}".format(self.file_id, files[0]),
+                           "{0}/{1}".format(os.environ["SHORTCUTS"], files[0]))
 
                 shutil.rmtree(self.file_id, True)
                 output = {
                     "output_code": "success",
-                    "file_name": self.file_id + file_ext,
+                    "file_name": files[0],
                     "file_title": self.date_id
                 }
 
