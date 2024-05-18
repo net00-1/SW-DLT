@@ -1,6 +1,7 @@
 import aShellMini
 import Shortcuts
 #Color: red, #Icon: 3DSquareStack
+
 /*
 SW-DLT
 Official release on RoutineHub, avoid unknown sources!
@@ -36,10 +37,15 @@ valueFor(key: "output_code", dictionary: dPropsDict) >> outputCode
 
 macro exceptionCheck() {
     if(outputCode == "exception") {
-        valueFor(key: "exc_path", dictionary: decodedProps.as(Dictionary)) >> excPath
-        valueFor(key: "${excPath}", dictionary: properties) >> excMsg
-
-        alert(alert: "${excMsg}", title: "Exception Alert", cancel: false)
+        valueFor(key: "exc_trace", dictionary: decodedProps.as(Dictionary)) >> excTrace
+        valueFor(key: "${excTrace}", dictionary: properties) >> excMsg
+		if(excMsg == nil) {
+			decode(input:  excTrace) >> b64_err
+			alert(alert: "${b64_err}", title: "Exception Alert", cancel: false)
+		}
+		else {
+        		alert(alert: "${excMsg}", title: "Exception Alert", cancel: false)
+		}
         exit()
     }
 }
@@ -331,9 +337,9 @@ var scriptSource = """
 setName(input: scriptSource, name: "SW_DLT.py", dontIncludeExtension: true) >> scriptFile
 if(isMini.as(Boolean)) {
     putFile(file: scriptFile, overwrite: true)
-    executeCommand(command:runScript, openWindow: close, keepGoing: false)
+    executeCommand(command:runScript, openWindow: open, keepGoing: false)
 }
 else {
     // a-Shell full: putFile(file: scriptFile, overwrite: true)
-    // a-Shell full: executeCommand(command:runScript, openWindow: close, keepGoing: false)
+    // a-Shell full: executeCommand(command:runScript, openWindow: open, keepGoing: false)
 }

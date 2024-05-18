@@ -9,6 +9,7 @@ import mimetypes
 import datetime
 import hashlib
 import shutil
+import base64
 import json
 import sys
 import os
@@ -26,11 +27,10 @@ class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
     FFMPEG_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffmpeg.wasm"
     FFPROBE_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffprobe.wasm"
-    REBOOT_EXC = '{"output_code":"exception","exc_path":"vars.restartRequired"}'
-    ERASED_EXC = '{"output_code":"exception","exc_path":"vars.erasedAll"}'
-    DERROR_EXC = '{"output_code":"exception","exc_path":"vars.downloadError"}'
-    UNK_EXC = '{"output_code":"exception","exc_path":"vars.unknownError"}'
-
+    REBOOT_EXC = '{"output_code":"exception","exc_trace":"vars.restartRequired"}'
+    ERASED_EXC = '{"output_code":"exception","exc_trace":"vars.erasedAll"}'
+    DERROR_EXC = '{"output_code":"exception","exc_trace":"vars.downloadError"}'
+    
 
 class SW_DLT:
 
@@ -150,8 +150,8 @@ class SW_DLT:
             # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
             return self.single_download(dl_options)
 
-        except:
-            raise Exception(Consts.DERROR_EXC)
+        except (yt_dlp.utils.DownloadError, Exception) as ex:
+            raise Exception(ex.args[0])
 
     def single_audio(self):
         dl_options = {
@@ -166,8 +166,8 @@ class SW_DLT:
             # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
             return self.single_download(dl_options)
 
-        except:
-            raise Exception(Consts.DERROR_EXC)
+        except (yt_dlp.utils.DownloadError, Exception) as ex:
+            raise Exception(ex.args[0])
 
     def single_download(self, dl_options):
         # Uses yt-dlp to download single video or audio items
@@ -184,7 +184,6 @@ class SW_DLT:
                     "file_title": vid_title
                 }
                 return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
-        raise Exception()
 
     def gallery_download(self):
         i = 1
@@ -192,7 +191,7 @@ class SW_DLT:
         try:
             # Obtaining URL list to download
             gallery_urls = subprocess.check_output(
-                "gallery-dl -G {0} --range {1}".format(self.media_url, self.gallery_range))
+                "gallery-dl -G {0} --range {1}".format(self.media_url, self.gallery_range), stderr=subprocess.STDOUT)
             gallery_urls = gallery_urls.decode("utf-8").splitlines()
 
             # Creating temp folder to store media
@@ -247,7 +246,10 @@ class SW_DLT:
                 }
 
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
-        except:
+        except (subprocess.CalledProcessError, Exception) as ex:    
+            if len(ex.args) > 0:
+                clean_stderr = ex.output.decode("utf-8").rstrip()
+                raise Exception(clean_stderr)
             raise Exception(Consts.DERROR_EXC)
 
     def playlist_download(self):
@@ -274,8 +276,8 @@ class SW_DLT:
             }
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
 
-        except:
-            raise Exception(Consts.DERROR_EXC)
+        except (yt_dlp.utils.DownloadError, Exception) as ex:
+            raise Exception(ex.args[0])
 
 
 def show_progress(data_stream, curr=0, total=0):
@@ -349,7 +351,9 @@ def main():
     except Exception as exc_url:
         # All raised exceptions are handled here and send the user back to the shortcut with a message
         if str(exc_url.args[0]) not in [Consts.DERROR_EXC, Consts.ERASED_EXC, Consts.REBOOT_EXC]:
-            return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(Consts.UNK_EXC)}'
+            b64_err = base64.b64encode(exc_url.args[0].encode()).decode()
+            UNK_EXC = '{{"output_code":"exception","exc_trace":"{0}"}}'.format(b64_err)
+            return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(UNK_EXC)}'
         return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(str(exc_url.args[0]))}'
 
 
