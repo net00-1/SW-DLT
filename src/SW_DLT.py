@@ -5,7 +5,6 @@ import importlib.util
 import urllib.parse
 import contextlib
 import subprocess
-import mimetypes
 import datetime
 import hashlib
 import shutil
@@ -150,7 +149,7 @@ class SW_DLT:
             # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
             return self.single_download(dl_options)
 
-        except (yt_dlp.utils.DownloadError, Exception) as ex:
+        except (yt_dlp.utils.DownloadError, OSError) as ex:
             raise Exception(ex.args[0])
 
     def single_audio(self):
@@ -166,7 +165,7 @@ class SW_DLT:
             # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
             return self.single_download(dl_options)
 
-        except (yt_dlp.utils.DownloadError, Exception) as ex:
+        except (yt_dlp.utils.DownloadError, OSError) as ex:
             raise Exception(ex.args[0])
 
     def single_download(self, dl_options):
@@ -184,49 +183,29 @@ class SW_DLT:
                     "file_title": vid_title
                 }
                 return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
+        # If for some reason the above doesn't find the downloaded file, we raise generic Exception
+        raise Exception(Consts.DERROR)
 
     def gallery_download(self):
-        i = 1
-        mnum = 1
         try:
-            # Obtaining URL list to download
-            gallery_urls = subprocess.check_output(
-                "gallery-dl -G {0} --range {1}".format(self.media_url, self.gallery_range), stderr=subprocess.STDOUT)
-            gallery_urls = gallery_urls.decode("utf-8").splitlines()
-
             # Creating temp folder to store media
             os.makedirs(self.file_id, exist_ok=True)
-            cached = str(os.listdir(self.file_id))
-
-            for url in gallery_urls:
-                if f'MEDIA_{mnum}' in cached:
-                    mnum += 1
-                    i += 1
-                    continue
-
-                if url.startswith("http"):
-                    req = requests.get(str(url))
-                    file_ext = mimetypes.guess_extension(
-                        req.headers["content-type"])
-                    with open(f'{self.file_id}/MEDIA_{mnum}{file_ext}', "wb") as media_item:
-                        media_item.write(req.content)
-
-                    show_progress("manual", i, len(gallery_urls))
-                    mnum += 1
-                    i += 1
-
-                else:
-                    i += 1
-
-            # No URLs returned, removes temp folder and raises Exception
-            if mnum < 2:
+            show_progress("manual", 0, 1)
+            
+            subprocess.check_output("gallery-dl {0} --range {1} --directory {2}".format(
+                self.media_url, self.gallery_range, self.file_id), stderr=subprocess.STDOUT)
+                
+            show_progress("manual", 1, 1)
+            files = os.listdir(self.file_id)
+            # No files returned, removes temp folder and raises Exception
+            if len(files) == 0:
                 shutil.rmtree(self.file_id, True)
-                raise Exception()
+                raise OSError()
 
             # Single item, removes temp folder and directly outputs the item
-            elif mnum < 3:
-                os.replace("{0}/{1}".format(self.file_id, "MEDIA_1" + file_ext),
-                           "{0}/{1}".format(os.environ["SHORTCUTS"], self.file_id + file_ext))
+            elif len(files) < 2:
+                os.replace("{0}/{1}".format(self.file_id, files[1]),
+                           "{0}/{1}".format(os.environ["SHORTCUTS"], files[1]))
 
                 shutil.rmtree(self.file_id, True)
                 output = {
@@ -246,12 +225,12 @@ class SW_DLT:
                 }
 
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
-        except (subprocess.CalledProcessError, Exception) as ex:    
-            if len(ex.args) > 0:
-                clean_stderr = ex.output.decode("utf-8").rstrip()
-                raise Exception(clean_stderr)
+        except subprocess.CalledProcessError as ex:
+            clean_stderr = ex.output.decode("utf-8").rstrip()
+            raise Exception(clean_stderr)
+        except (AttributeError, OSError) as ex2:
             raise Exception(Consts.DERROR_EXC)
-
+            
     def playlist_download(self):
         dl_options = {
             "format": "best" if self.playlist_type == "-v" else "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
@@ -276,7 +255,7 @@ class SW_DLT:
             }
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
 
-        except (yt_dlp.utils.DownloadError, Exception) as ex:
+        except (yt_dlp.utils.DownloadError, OSError) as ex:
             raise Exception(ex.args[0])
 
 

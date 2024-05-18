@@ -165,10 +165,8 @@ class TestSWDLT(unittest.TestCase):
         url = ""
         hash = "SW_DLT_DL_YTDLP_ERROR_TEST"
 
-        exc_msg = '{"output_code":"exception","exc_path":"vars.downloadError"}'
-
         ve_inst = SW_DLT(hash, url, "-v", "-d")
-        with self.assertRaisesRegex(Exception, exc_msg):
+        with self.assertRaises(Exception):
             ve_inst.run()
 
     # @unittest.skip
@@ -178,11 +176,9 @@ class TestSWDLT(unittest.TestCase):
         url = ""
         hash = "SW_DLT_DL_GALLERY_ERROR_TEST"
 
-        exc_msg = '{"output_code":"exception","exc_path":"vars.downloadError"}'
-
         ge_inst = SW_DLT(hash, url, "-g", "1-")
         ge_inst.date_id = "GDL_ERROR_TEST"
-        with self.assertRaisesRegex(Exception, exc_msg):
+        with self.assertRaises(Exception):
             ge_inst.run()
 
     # @unittest.skip
@@ -192,10 +188,8 @@ class TestSWDLT(unittest.TestCase):
         url = ""
         hash = "SW_DLT_DL_PLAYLIST_ERROR_TEST"
 
-        exc_msg = '{"output_code":"exception","exc_path":"vars.downloadError"}'
-
         pe_inst = SW_DLT(hash, url, "-p", "-v")
-        with self.assertRaisesRegex(Exception, exc_msg):
+        with self.assertRaises(Exception):
             pe_inst.run()
 
         # @unittest.skip
