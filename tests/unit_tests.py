@@ -5,6 +5,7 @@ import importlib.util
 import urllib.parse
 import subprocess
 import unittest
+import yt_dlp
 import json
 
 from SW_DLT_TARGET import SW_DLT
@@ -75,7 +76,7 @@ class TestSWDLT(unittest.TestCase):
         
         expected_output = {
             "output_code": "success",
-            "file_name": f'{hash}.mp4',
+            "file_name": f'{hash}.mkv',
             "file_title": ""
         }
         
@@ -148,7 +149,7 @@ class TestSWDLT(unittest.TestCase):
         
         expected_output = {
             "output_code": "success",
-            "file_name": f'{hash}.jpg',
+            "file_name": f'{hash}.zip',
             "file_title": "CGT_DATE_TITLE"
         }
         
@@ -166,7 +167,7 @@ class TestSWDLT(unittest.TestCase):
         hash = "SW_DLT_DL_YTDLP_ERROR_TEST"
 
         ve_inst = SW_DLT(hash, url, "-v", "-d")
-        with self.assertRaises(Exception):
+        with self.assertRaises(yt_dlp.utils.DownloadError):
             ve_inst.run()
 
     # @unittest.skip
@@ -178,7 +179,7 @@ class TestSWDLT(unittest.TestCase):
 
         ge_inst = SW_DLT(hash, url, "-g", "1-")
         ge_inst.date_id = "GDL_ERROR_TEST"
-        with self.assertRaises(Exception):
+        with self.assertRaises(subprocess.CalledProcessError):
             ge_inst.run()
 
     # @unittest.skip
@@ -189,7 +190,7 @@ class TestSWDLT(unittest.TestCase):
         hash = "SW_DLT_DL_PLAYLIST_ERROR_TEST"
 
         pe_inst = SW_DLT(hash, url, "-p", "-v")
-        with self.assertRaises(Exception):
+        with self.assertRaises(yt_dlp.utils.DownloadError):
             pe_inst.run()
 
         # @unittest.skip

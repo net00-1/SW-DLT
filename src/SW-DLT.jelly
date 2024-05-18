@@ -286,7 +286,7 @@ URL: ${displayURL}
         <div class='links'>
             <h3>Useful Links</h3>
             <hr />
-            <p>Donate with BCH! (Tap QR)</p>
+            <p>Donate with BCH! (Scan/Tap QR)</p>
             <a href='${properties.key(vars.bchAddress)}'>
                 <img class='qr-code' src='data:image/png;base64|${properties.key(icons.donationQR)}'>
             </a>
@@ -302,7 +302,7 @@ URL: ${displayURL}
         """
         replaceText(input: aboutTemplate, find: "|", replace: ",", isRegex: false, caseSensitive: false) >> fixedTemplate
         richTextFromHTML(html: fixedTemplate) >> aboutHTML
-        quicklook(input: aboutHTML.as(RichText))
+        showWebPage(url: "${aboutHTML}", reader: false)
     }
 }
 
