@@ -68,44 +68,17 @@ Example: `1, 2-5, 7, 9-15`
 
 ## Authentication
 
-SW-DLT **does NOT** handle user credentials due to lack of proper mechanisms to do so in Shortcuts. It's possible, however, to use built-in authentication features from gallery-dl and yt-dlp:
+With SW-DLT, `yt-dlp` and `gallery-dl` are automatically configured to use cookies for authentication. This allows for downloading of media that is restricted behind a login for whichever reason. It is only needed for you to login to the websites **through a-Shell** as follows:
 
-**Gallery-dl**
+1. Open the a-Shell or a-Shell Mini app
+2. Enter the following command `internalbrowser` followed by the website URL you want to access. For instance, for Instagram you would enter `internalbrowser https://instagram.com`. 
+3. A Web View of the website should open within the terminal. In case nothing happens, make sure to include `https://` in the above command.
+4. Navigate to the login screen of the website and login as you would usually do.
+5. Once you have logged in, swipe from the left until you are back at the terminal screen. Alternatively, you can simply go into the App Switcher and swipe a-Shell away.
 
-A gallery-dl configuration file can be stored at `$XDG_CONFIG_HOME/gallery-dl/config.json`. Credentials for multiple supported websites can be added here in the following format:
+After following these steps, the cookies that grant access to the website will be stored within a-Shell, and usable by `yt-dlp` and `gallery-dl`. The shortcut itself does not handle in any way your credentials.
 
-```json
-{
-    "extractor": {
-        "twitter": {
-            "username": "<USER/EMAIL>",
-            "password": "<PASS>"
-        },
-        "instagram": {
-            "cookies": "path/to/cookies.txt"
-        }
-    }
-}
-```
-For more information, visit the gallery-dl [documentation](https://github.com/mikf/gallery-dl#username--password).
-
-**yt-dlp**
-
-A yt-dlp [configuration file](https://github.com/yt-dlp/yt-dlp#configuration) can be stored at `$XDG_CONFIG_HOME/yt-dlp/config`. Within this file you can store global yt-dlp options. For authentication, add the `--netrc` flag to this file:
-
-```
-# Enabling netrc
---netrc
-
-# Optional: specify location of .netrc file
---netrc-location <PATH>
-```
-
-Next, create a [`.netrc` file](https://github.com/yt-dlp/yt-dlp#configuration) in your home directory, or the directory specified in `--netrc-location` containing the credentials per website:
-
-```
-machine <website> login <username> password <password>
-```
+**NOTE:** for some websites, using a specific URL that takes you to the login screen might be needed. For instance, Twitch.tv would require use of this URL: https://twitch.tv/login
 
 ## Saving Downloaded Media
 

@@ -48,6 +48,7 @@ class SW_DLT:
             "noprogress": True,
             "progress_hooks": [show_progress],
             "postprocessor_hooks": [format_processing],
+            "cookiesfrombrowser": "safari"
         }
 
         processes = {
@@ -192,7 +193,7 @@ class SW_DLT:
             os.makedirs(self.file_id, exist_ok=True)
             show_progress("manual", 0, 1)
             
-            subprocess.check_output("gallery-dl {0} --range {1} --directory {2}".format(
+            subprocess.check_output("gallery-dl {0} --range {1} --directory {2} --cookies-from-browser safari".format(
                 self.media_url, self.gallery_range, self.file_id), stderr=subprocess.STDOUT)
                 
             show_progress("manual", 1, 1)
@@ -204,13 +205,10 @@ class SW_DLT:
 
             # Single item, removes temp folder and directly outputs the item
             elif len(files) < 2:
-                os.replace("{0}/{1}".format(self.file_id, files[0]),
-                           "{0}/{1}".format(os.environ["SHORTCUTS"], files[0]))
-
-                shutil.rmtree(self.file_id, True)
+                file = "{0}/{1}".format(self.file_id, files[0])
                 output = {
                     "output_code": "success",
-                    "file_name": files[0],
+                    "file_name": file,
                     "file_title": self.date_id
                 }
 
