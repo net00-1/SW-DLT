@@ -1,7 +1,7 @@
 {
     "result": "success",
     "version": "3.20",
-    "url": "https://www.icloud.com/shortcuts/b84c26222bac494795d44e427dcc0fb7",
+    "url": "https://www.icloud.com/shortcuts/1b56963a8beb4e80bea8776a68ced0a0",
     "notes": "Initial support for cookie-based authentication (check docs), error message propagation from yt-dlp and gallery-dl, yt-dlp codec sorting used to improve natively playable media, gallery-dl directly makes image downloads, general fixes",
     "release": "2024-05-18"
 }
