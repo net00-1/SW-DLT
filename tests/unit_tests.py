@@ -5,6 +5,7 @@ import importlib.util
 import urllib.parse
 import subprocess
 import unittest
+import yt_dlp
 import json
 
 from SW_DLT_TARGET import SW_DLT
@@ -75,7 +76,7 @@ class TestSWDLT(unittest.TestCase):
         
         expected_output = {
             "output_code": "success",
-            "file_name": f'{hash}.mp4',
+            "file_name": f'{hash}.mkv',
             "file_title": ""
         }
         
@@ -148,7 +149,7 @@ class TestSWDLT(unittest.TestCase):
         
         expected_output = {
             "output_code": "success",
-            "file_name": f'{hash}.jpg',
+            "file_name": f'{hash}.zip',
             "file_title": "CGT_DATE_TITLE"
         }
         
@@ -165,10 +166,8 @@ class TestSWDLT(unittest.TestCase):
         url = ""
         hash = "SW_DLT_DL_YTDLP_ERROR_TEST"
 
-        exc_msg = '{"output_code":"exception","exc_path":"vars.downloadError"}'
-
         ve_inst = SW_DLT(hash, url, "-v", "-d")
-        with self.assertRaisesRegex(Exception, exc_msg):
+        with self.assertRaises(yt_dlp.utils.DownloadError):
             ve_inst.run()
 
     # @unittest.skip
@@ -178,11 +177,9 @@ class TestSWDLT(unittest.TestCase):
         url = ""
         hash = "SW_DLT_DL_GALLERY_ERROR_TEST"
 
-        exc_msg = '{"output_code":"exception","exc_path":"vars.downloadError"}'
-
         ge_inst = SW_DLT(hash, url, "-g", "1-")
         ge_inst.date_id = "GDL_ERROR_TEST"
-        with self.assertRaisesRegex(Exception, exc_msg):
+        with self.assertRaises(subprocess.CalledProcessError):
             ge_inst.run()
 
     # @unittest.skip
@@ -192,10 +189,8 @@ class TestSWDLT(unittest.TestCase):
         url = ""
         hash = "SW_DLT_DL_PLAYLIST_ERROR_TEST"
 
-        exc_msg = '{"output_code":"exception","exc_path":"vars.downloadError"}'
-
         pe_inst = SW_DLT(hash, url, "-p", "-v")
-        with self.assertRaisesRegex(Exception, exc_msg):
+        with self.assertRaises(yt_dlp.utils.DownloadError):
             pe_inst.run()
 
         # @unittest.skip

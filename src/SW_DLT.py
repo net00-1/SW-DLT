@@ -5,10 +5,10 @@ import importlib.util
 import urllib.parse
 import contextlib
 import subprocess
-import mimetypes
 import datetime
 import hashlib
 import shutil
+import base64
 import json
 import sys
 import os
@@ -26,11 +26,10 @@ class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
     FFMPEG_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffmpeg.wasm"
     FFPROBE_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffprobe.wasm"
-    REBOOT_EXC = '{"output_code":"exception","exc_path":"vars.restartRequired"}'
-    ERASED_EXC = '{"output_code":"exception","exc_path":"vars.erasedAll"}'
-    DERROR_EXC = '{"output_code":"exception","exc_path":"vars.downloadError"}'
-    UNK_EXC = '{"output_code":"exception","exc_path":"vars.unknownError"}'
-
+    REBOOT_EXC = '{"output_code":"exception","exc_trace":"vars.restartRequired"}'
+    ERASED_EXC = '{"output_code":"exception","exc_trace":"vars.erasedAll"}'
+    DERROR_EXC = '{"output_code":"exception","exc_trace":"vars.downloadError"}'
+    
 
 class SW_DLT:
 
@@ -49,6 +48,7 @@ class SW_DLT:
             "noprogress": True,
             "progress_hooks": [show_progress],
             "postprocessor_hooks": [format_processing],
+            "cookiesfrombrowser": "safari"
         }
 
         processes = {
@@ -131,30 +131,18 @@ class SW_DLT:
         raise Exception(Consts.ERASED_EXC)
 
     def single_video(self):
-        priority = [
-            f'bestvideo[ext=mp4][height<={self.video_res}][fps<={self.video_fps}]+bestaudio[ext*=4]/',
-            f'bestvideo[ext!*=4][height<={self.video_res}][fps<={self.video_fps}]+bestaudio[ext!*=4]/',
-            f'best[ext=mp4][height<={self.video_res}][fps<={self.video_fps}]',
-            f'best[ext!*=4][height<={self.video_res}][fps<={self.video_fps}]'
-        ]
-        if self.video_res == "1440" or self.video_res == "2160":
-            priority = [priority[1], priority[0], priority[3], priority[2]]
-
-        default_format = "best[ext=mp4]/best/bestvideo[ext=mp4]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]"
+        default_format = "best/bestvideo+bestaudio"
         custom_format = ""\
-            "bestvideo[ext=mp4][height={0}][fps<={1}]+bestaudio[ext*=4]/"\
-            "bestvideo[ext!*=4][height={0}][fps<={1}]+bestaudio[ext!*=4]/"\
-            "{2}"\
-            "{3}"\
-            "best[ext=mp4][height={0}][fps<={1}]/"\
-            "best[ext!*=4][height={0}][fps<={1}]/"\
-            "{4}"\
-            "{5}".format(self.video_res, self.video_fps, *priority)
+            "bestvideo[height={0}][fps<={1}]+bestaudio/"\
+            "bestvideo[height<={0}][fps<={1}]+bestaudio/"\
+            "best[height={0}][fps<={1}]/"\
+            "best[height<={0}][fps<={1}]".format(self.video_res, self.video_fps)
 
         dl_options = {
             "format": default_format if self.video_res == "-d" else custom_format,
             "playlist_items": "1-1",
             "outtmpl": f'{self.file_id}.%(ext)s',
+            "format_sort": ["+codec:avc:m4a"],
             **self.ytdlp_globals
         }
 
@@ -162,8 +150,8 @@ class SW_DLT:
             # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
             return self.single_download(dl_options)
 
-        except:
-            raise Exception(Consts.DERROR_EXC)
+        except (yt_dlp.utils.DownloadError, OSError) as ex:
+            raise Exception(ex.args[0])
 
     def single_audio(self):
         dl_options = {
@@ -178,8 +166,8 @@ class SW_DLT:
             # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
             return self.single_download(dl_options)
 
-        except:
-            raise Exception(Consts.DERROR_EXC)
+        except (yt_dlp.utils.DownloadError, OSError) as ex:
+            raise Exception(ex.args[0])
 
     def single_download(self, dl_options):
         # Uses yt-dlp to download single video or audio items
@@ -196,55 +184,31 @@ class SW_DLT:
                     "file_title": vid_title
                 }
                 return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
-        raise Exception()
+        # If for some reason the above doesn't find the downloaded file, we raise generic Exception
+        raise Exception(Consts.DERROR)
 
     def gallery_download(self):
-        i = 1
-        mnum = 1
         try:
-            # Obtaining URL list to download
-            gallery_urls = subprocess.check_output(
-                "gallery-dl -G {0} --range {1}".format(self.media_url, self.gallery_range))
-            gallery_urls = gallery_urls.decode("utf-8").splitlines()
-
             # Creating temp folder to store media
             os.makedirs(self.file_id, exist_ok=True)
-            cached = str(os.listdir(self.file_id))
-
-            for url in gallery_urls:
-                if f'MEDIA_{mnum}' in cached:
-                    mnum += 1
-                    i += 1
-                    continue
-
-                if url.startswith("http"):
-                    req = requests.get(str(url))
-                    file_ext = mimetypes.guess_extension(
-                        req.headers["content-type"])
-                    with open(f'{self.file_id}/MEDIA_{mnum}{file_ext}', "wb") as media_item:
-                        media_item.write(req.content)
-
-                    show_progress("manual", i, len(gallery_urls))
-                    mnum += 1
-                    i += 1
-
-                else:
-                    i += 1
-
-            # No URLs returned, removes temp folder and raises Exception
-            if mnum < 2:
+            show_progress("manual", 0, 1)
+            
+            subprocess.check_output("gallery-dl {0} --range {1} --directory {2} --cookies-from-browser safari".format(
+                self.media_url, self.gallery_range, self.file_id), stderr=subprocess.STDOUT)
+                
+            show_progress("manual", 1, 1)
+            files = os.listdir(self.file_id)
+            # No files returned, removes temp folder and raises Exception
+            if len(files) == 0:
                 shutil.rmtree(self.file_id, True)
-                raise Exception()
+                raise OSError()
 
             # Single item, removes temp folder and directly outputs the item
-            elif mnum < 3:
-                os.replace("{0}/{1}".format(self.file_id, "MEDIA_1" + file_ext),
-                           "{0}/{1}".format(os.environ["SHORTCUTS"], self.file_id + file_ext))
-
-                shutil.rmtree(self.file_id, True)
+            elif len(files) < 2:
+                file = "{0}/{1}".format(self.file_id, files[0])
                 output = {
                     "output_code": "success",
-                    "file_name": self.file_id + file_ext,
+                    "file_name": file,
                     "file_title": self.date_id
                 }
 
@@ -259,14 +223,18 @@ class SW_DLT:
                 }
 
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
-        except:
+        except subprocess.CalledProcessError as ex:
+            clean_stderr = ex.output.decode("utf-8").rstrip()
+            raise Exception(clean_stderr)
+        except (AttributeError, OSError) as ex2:
             raise Exception(Consts.DERROR_EXC)
-
+            
     def playlist_download(self):
         dl_options = {
-            "format": "best[ext=mp4]/best" if self.playlist_type == "-v" else "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
+            "format": "best" if self.playlist_type == "-v" else "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
             "postprocessors": [] if self.playlist_type == "-v" else [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
             "outtmpl": f'{self.file_id}/%(title)s.%(ext)s',
+            "format_sort": ["+codec:avc:m4a"],
             **self.ytdlp_globals
         }
 
@@ -285,8 +253,8 @@ class SW_DLT:
             }
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
 
-        except:
-            raise Exception(Consts.DERROR_EXC)
+        except (yt_dlp.utils.DownloadError, OSError) as ex:
+            raise Exception(ex.args[0])
 
 
 def show_progress(data_stream, curr=0, total=0):
@@ -360,7 +328,9 @@ def main():
     except Exception as exc_url:
         # All raised exceptions are handled here and send the user back to the shortcut with a message
         if str(exc_url.args[0]) not in [Consts.DERROR_EXC, Consts.ERASED_EXC, Consts.REBOOT_EXC]:
-            return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(Consts.UNK_EXC)}'
+            b64_err = base64.b64encode(exc_url.args[0].encode()).decode()
+            UNK_EXC = '{{"output_code":"exception","exc_trace":"{0}"}}'.format(b64_err)
+            return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(UNK_EXC)}'
         return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(str(exc_url.args[0]))}'
 
 

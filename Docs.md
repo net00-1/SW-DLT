@@ -4,29 +4,27 @@ Detailed information about all the features available on SW-DLT. This informatio
 
 ## Video Downloading
 
-The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the proper titles available from `yt-dlp`.
+The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the proper titles available from `yt-dlp`. Both options prioritize iOS natively playable codec with a priority of `+codec:avc:m4a`
 
 **Default Quality**: videos are downloaded using the following `yt-dlp` format string:
 
- `best[ext=mp4]/best/bestvideo[ext=mp4]+bestaudio[ext*=4]/bestvideo[ext!*=4]+bestaudio[ext!*=4]` i.e:
+ `best/bestvideo+bestaudio` i.e:
 
-1. Best quality available with extension MP4 (video and audio stream)
-2. Best quality available with any extension (video and audio stream)
-3. Best quality available with extension MP4 (separate video and audio to merge with FFmpeg)
-4. Best quality available with any extension (separate video and audio to merge with FFmpeg)
+1. Best quality available (video and audio stream)
+2. Best quality available (separate video and audio to merge with FFmpeg)
 
-The default quality is the most reliable way to download videos from websites that might not return resolution data to `yt-dlp` or are not in the list of supported websites and need to be downloaded using `yt-dlp`'s generic extractor. This option also mostly avoids using FFmpeg to save battery life (FFmpeg can still be used to correct file issues).
+The default quality is the most reliable way to download videos from websites that might not return media format data to `yt-dlp` or are not in the list of supported websites and need to be downloaded using `yt-dlp`'s generic extractor. This option also mostly avoids using FFmpeg to save battery life (FFmpeg can still be used to correct file issues).
 
-**Custom Quality**: Custom quality videos are selected based on the `height` of the video image that corresponds to the "quality" selected by the user. Videos in playable `mp4` are preferred over other formats, unless the user is searching for qualities higher than 1080p (as those are generally available on other formats like `webm`). 
+**Custom Quality**: Custom quality videos are selected based on the `height` of the video image that corresponds to the "quality" selected by the user, and the `fps` chosen.
 
-The priority of videos to search is as follows (in `yt-dlp` format syntax, `Z` (the media type) varies if the user selects resolution > 1080p):
+The priority of videos to search is as follows:
 
-1. `bestvideo[ext=mp4][height=X][fps<=Y]+bestaudio[ext*=4]`
-2. `bestvideo[ext!*=4][height=X][fps<=Y]+bestaudio[ext!*=4]`
-3. `bestvideo[Z][height<=X][fps<=Y]+bestaudio[Z]`
-4. `best[ext=mp4][height=X][fps<=Y]`
-5. `best[ext!*=4][height=X][fps<=Y]`
-6. `best[Z][height<=X][fps<=Y]`
+1. `bestvideo[height=X][fps<=Y]+bestaudio`  (Exact resolution, closest FPS, unmerged)
+2. `bestvideo[height<=X][fps<=Y]+bestaudio` (Closest resolution, closest FPS, unmerged)
+3. `best[height=X][fps<=Y]`                 (Exact resolution, closest FPS, merged)
+4. `best[height<=X][fps<=Y]`                (Closest resolution, closest FPS, merged)
+
+Unmerged options are prioritized, so what user choices are not ignored, since websites tend to offer more resolution and FPS media options on separate video and audio files.
 
 ## Audio Downloading
 
@@ -41,7 +39,7 @@ Audio downloads prioritize the best audio available from a website. In case ther
 
 ## Playlist Downloading
 
-Playlist downloads support both downloading all items in the playlist as videos or as audio only files. There are no quality options for video playlist downloads currently. Audio playlist downlods can use FFmpeg to correct errors and to extract audio from videos. Playlists are saved with the proper titles availale from `yt-dlp`.
+Playlist downloads support both downloading all items in the playlist as videos or as audio only files. There are no quality options for video playlist downloads currently. Audio playlist downlods can use FFmpeg to correct errors and to extract audio from videos. Playlists are saved with the proper titles availale from `yt-dlp`. Both options prioritize iOS natively playable codec with a priority of `+codec:avc:m4a`
 
 Video downloads use the formats: `best[ext=mp4]/best`
 
@@ -70,44 +68,17 @@ Example: `1, 2-5, 7, 9-15`
 
 ## Authentication
 
-SW-DLT **does NOT** handle user credentials due to lack of proper mechanisms to do so in Shortcuts. It's possible, however, to use built-in authentication features from gallery-dl and yt-dlp:
+With SW-DLT, `yt-dlp` and `gallery-dl` are automatically configured to use cookies for authentication. This allows for downloading of media that is restricted behind a login for whichever reason. It is only needed for you to login to the websites **through a-Shell** as follows:
 
-**Gallery-dl**
+1. Open the a-Shell or a-Shell Mini app
+2. Enter the following command `internalbrowser` followed by the website URL you want to access. For instance, for Instagram you would enter `internalbrowser https://instagram.com`. 
+3. A Web View of the website should open within the terminal. In case nothing happens, make sure to include `https://` in the above command.
+4. Navigate to the login screen of the website and login as you would usually do.
+5. Once you have logged in, swipe from the left until you are back at the terminal screen. Alternatively, you can simply go into the App Switcher and swipe a-Shell away.
 
-A gallery-dl configuration file can be stored at `$XDG_CONFIG_HOME/gallery-dl/config.json`. Credentials for multiple supported websites can be added here in the following format:
+After following these steps, the cookies that grant access to the website will be stored within a-Shell, and usable by `yt-dlp` and `gallery-dl`. The shortcut itself does not handle in any way your credentials.
 
-```json
-{
-    "extractor": {
-        "twitter": {
-            "username": "<USER/EMAIL>",
-            "password": "<PASS>"
-        },
-        "instagram": {
-            "cookies": "path/to/cookies.txt"
-        }
-    }
-}
-```
-For more information, visit the gallery-dl [documentation](https://github.com/mikf/gallery-dl#username--password).
-
-**yt-dlp**
-
-A yt-dlp [configuration file](https://github.com/yt-dlp/yt-dlp#configuration) can be stored at `$XDG_CONFIG_HOME/yt-dlp/config`. Within this file you can store global yt-dlp options. For authentication, add the `--netrc` flag to this file:
-
-```
-# Enabling netrc
---netrc
-
-# Optional: specify location of .netrc file
---netrc-location <PATH>
-```
-
-Next, create a [`.netrc` file](https://github.com/yt-dlp/yt-dlp#configuration) in your home directory, or the directory specified in `--netrc-location` containing the credentials per website:
-
-```
-machine <website> login <username> password <password>
-```
+**NOTE:** for some websites, using a specific URL that takes you to the login screen might be needed. For instance, Twitch.tv would require use of this URL: https://twitch.tv/login
 
 ## Saving Downloaded Media
 
