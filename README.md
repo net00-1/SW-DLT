@@ -17,7 +17,7 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 - [ ] Re-implement progress bar on gallery-dl downloads
 
-= [ ] Add quality options for video playlists
+- [ ] Add quality options for video playlists
 
 - [ ] Implement persistent user settings
 
