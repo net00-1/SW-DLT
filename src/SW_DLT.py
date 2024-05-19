@@ -24,6 +24,7 @@ except ImportError:
 # Constants class
 class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
+    SET_COOKIE = "echo 'document.cookie = \"installed=1; expires=Thu, 1 Jan 2025 12:00:00 UTC; sameSite=Lax\";' | jsi"
     FFMPEG_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffmpeg.wasm"
     FFPROBE_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffprobe.wasm"
     REBOOT_EXC = '{"output_code":"exception","exc_trace":"vars.restartRequired"}'
@@ -93,6 +94,10 @@ class SW_DLT:
                 "pip -q install gallery-dl --disable-pip-version-check --upgrade")
             reboot = True
         
+        if not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
+            subprocess.run(Consts.SET_COOKIE)
+            reboot = True
+        
         if reboot:
             raise Exception(Consts.REBOOT_EXC)
 
@@ -117,7 +122,7 @@ class SW_DLT:
                 req2 = requests.get(Consts.FFMPEG_URL)
                 with open(f"{os.environ['HOME']}/Documents/bin/ffmpeg.wasm", 'wb') as ffmpeg:
                     ffmpeg.write(req2.content)
-
+                                  
         show_progress("util", 5, 5)
 
     @staticmethod
