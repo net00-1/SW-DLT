@@ -48,7 +48,7 @@ class SW_DLT:
             "noprogress": True,
             "progress_hooks": [show_progress],
             "postprocessor_hooks": [format_processing],
-            "cookiesfrombrowser": "safari"
+            "cookiesfrombrowser": ("safari",)
         }
 
         processes = {
