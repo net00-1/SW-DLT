@@ -15,25 +15,13 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 ## Planned Features
 
-- [X] Add standard progress bar
+- [ ] Re-implement progress bar on gallery-dl downloads
 
-- [X] Enable title grabbing for video, audio and playlists
+= [ ] Add quality options for video playlists
 
-- [X] Enable downloads to be resumed
+- [ ] Implement persistent user settings
 
-- [X] Add authentication prompts for gallery downloads
-
-- [X] **Priority: enable use of native FFmpeg before a-Shell update**
-
-- [X] Migrate to `yt-dlp`
-
-- [X] Migrate shortcut code to Jellycuts
-
-- [X] Simplify dependency management & refreshes
-
-- [ ] Add internal update management (for easier updating)
-
-- [ ] Enable persistent user settings (including default save locations)
+- [ ] Improve dependency management
 
 - [ ] Allow file inputs with multiple URLs
 
