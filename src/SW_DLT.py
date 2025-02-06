@@ -28,7 +28,7 @@ class Consts:
     FFMPEG_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffmpeg.wasm"
     FFPROBE_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffprobe.wasm"
     REBOOT_EXC = '{"output_code":"exception","exc_trace":"vars.restartRequired"}'
-    ERASED_EXC = '{"output_code":"exception","exc_trace":"vars.erasedAll"}'
+    ERASED_EXC = '{"output_code":"exception","exc_trace":"vars.uninstalled"}'
     DERROR_EXC = '{"output_code":"exception","exc_trace":"vars.downloadError"}'
     
 
@@ -84,14 +84,12 @@ class SW_DLT:
 
         show_progress("util", 1, 5)
         if importlib.util.find_spec("yt_dlp") is None:
-            subprocess.run(
-                "pip -q install yt-dlp --disable-pip-version-check --upgrade --no-dependencies")
+            subprocess.run("pip -q install yt-dlp --disable-pip-version-check --upgrade")
             reboot = True
 
         show_progress("util", 2, 5)
         if importlib.util.find_spec("gallery_dl") is None:
-            subprocess.run(
-                "pip -q install gallery-dl --disable-pip-version-check --upgrade")
+            subprocess.run("pip -q install gallery-dl --disable-pip-version-check --upgrade")
             reboot = True
         
         if not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
@@ -100,9 +98,18 @@ class SW_DLT:
         
         if reboot:
             raise Exception(Consts.REBOOT_EXC)
+        
+        current_time = int((datetime.datetime.now() - datetime.datetime(1970, 1, 1)).total_seconds())
+
+        with open(f"{os.environ['HOME']}/Documents/SW-DLT/shortcut_update_ts.txt", 'r') as ts_file:
+            last_check = int(ts_file.read())
+
+        if current_time - last_check < 600:
+            subprocess.run("pip -q install yt-dlp --disable-pip-version-check --upgrade")
+            subprocess.run("pip -q install gallery-dl --disable-pip-version-check --upgrade")
+        
 
         show_progress("util", 3, 5)
-
         # If native FFmpeg is present, removes any web assembly version on device.
         if os.path.exists(f"{os.environ['APPDIR']}/bin/ffmpeg"):
             with contextlib.suppress(FileNotFoundError):
@@ -185,7 +192,7 @@ class SW_DLT:
             if file.startswith(self.file_id):
                 output = {
                     "output_code": "success",
-                    "file_name": file,
+                    "file_name": os.path.abspath(file),
                     "file_title": vid_title
                 }
                 return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
@@ -213,7 +220,7 @@ class SW_DLT:
                 file = "{0}/{1}".format(self.file_id, files[0])
                 output = {
                     "output_code": "success",
-                    "file_name": file,
+                    "file_name": os.path.abspath(file),
                     "file_title": self.date_id
                 }
 
@@ -223,7 +230,7 @@ class SW_DLT:
                 shutil.rmtree(self.file_id, True)
                 output = {
                     "output_code": "success",
-                    "file_name": self.file_id + ".zip",
+                    "file_name": os.path.abspath(self.file_id + ".zip"),
                     "file_title": self.date_id
                 }
 
@@ -253,7 +260,7 @@ class SW_DLT:
             shutil.rmtree(self.file_id, True)
             output = {
                 "output_code": "success",
-                "file_name": self.file_id + ".zip",
+                "file_name": os.path.abspath(self.file_id + ".zip"),
                 "file_title": pl_title
             }
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
@@ -311,10 +318,11 @@ def main():
 
         # Pre-download check and cleanup
         subprocess.run("clear")
+        
         print(header)
-        print(info_msgs["dep_check"])
-
+        print(info_msgs["dep_check"])            
         sw_dlt_inst.validate_install()
+        
         # If the same partial file is not found, deletes all leftovers (important)
         for file in os.listdir():
             if file.startswith("SW_DLT_DL_") and not file.startswith(file_id):
@@ -342,4 +350,5 @@ def main():
 if __name__ == "__main__":
     subprocess.run("open " + main())
     # Post-run cleanup
+    subprocess.run("deactivate")
     subprocess.run("clear")
