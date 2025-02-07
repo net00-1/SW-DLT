@@ -25,17 +25,14 @@ except ImportError:
 class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
     SET_COOKIE = "echo 'document.cookie = \"installed=1; expires=Thu, 1 Jan 2026 12:00:00 UTC; sameSite=Lax\";' | jsi"
-    FFMPEG_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffmpeg.wasm"
-    FFPROBE_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffprobe.wasm"
     REBOOT_EXC = '{"output_code":"exception","exc_trace":"vars.restartRequired"}'
-    ERASED_EXC = '{"output_code":"exception","exc_trace":"vars.uninstalled"}'
     DERROR_EXC = '{"output_code":"exception","exc_trace":"vars.downloadError"}'
     
 
 class SW_DLT:
 
     def __init__(self, file_id, *args):
-        # args[0]: media URL to download, or placeholder when using erase function
+        # args[0]: media URL to download
         # args[1]: main process to run
         # args[2] (dependent): resolution for video, type for playlist, or range for gallery
         # args[3] (dependent): framerate for video
@@ -56,8 +53,7 @@ class SW_DLT:
             "-v": self.single_video,
             "-a": self.single_audio,
             "-p": self.playlist_download,
-            "-g": self.gallery_download,
-            "-e": self.erase_dependencies
+            "-g": self.gallery_download
         }
         self.run = processes[args[1]]
         self.video_res = ""
@@ -76,18 +72,18 @@ class SW_DLT:
     @staticmethod
     def validate_install():
         reboot = False
-        show_progress("util", 0, 5)
+        show_progress("util", 0, 4)
         if importlib.util.find_spec("chardet") is None or importlib.util.find_spec("requests") is None:
             subprocess.run(
                 "pip -q install chardet requests --disable-pip-version-check --upgrade")
             reboot = True
 
-        show_progress("util", 1, 5)
+        show_progress("util", 1, 4)
         if importlib.util.find_spec("yt_dlp") is None:
             subprocess.run("pip -q install yt-dlp --disable-pip-version-check --upgrade")
             reboot = True
 
-        show_progress("util", 2, 5)
+        show_progress("util", 2, 4)
         if importlib.util.find_spec("gallery_dl") is None:
             subprocess.run("pip -q install gallery-dl --disable-pip-version-check --upgrade")
             reboot = True
@@ -101,46 +97,15 @@ class SW_DLT:
         
         current_time = int((datetime.datetime.now() - datetime.datetime(1970, 1, 1)).total_seconds())
 
+        show_progress("util", 3, 4)
         with open(f"{os.environ['HOME']}/Documents/SW-DLT/shortcut_update_ts.txt", 'r') as ts_file:
             last_check = int(ts_file.read())
-
+    
         if current_time - last_check < 600:
             subprocess.run("pip -q install yt-dlp --disable-pip-version-check --upgrade")
             subprocess.run("pip -q install gallery-dl --disable-pip-version-check --upgrade")
         
-
-        show_progress("util", 3, 5)
-        # If native FFmpeg is present, removes any web assembly version on device.
-        if os.path.exists(f"{os.environ['APPDIR']}/bin/ffmpeg"):
-            with contextlib.suppress(FileNotFoundError):
-                os.remove(f"{os.environ['HOME']}/Documents/bin/ffmpeg.wasm")
-                os.remove(f"{os.environ['HOME']}/Documents/bin/ffprobe.wasm")
-
-        # Otherwise, installs any required web assembly files
-        else:
-            os.makedirs(f"{os.environ['HOME']}/Documents/bin", exist_ok=True)
-            if not os.path.exists(f"{os.environ['HOME']}/Documents/bin/ffprobe.wasm"):
-                req1 = requests.get(Consts.FFPROBE_URL)
-                with open(f"{os.environ['HOME']}/Documents/bin/ffprobe.wasm", 'wb') as ffprobe:
-                    ffprobe.write(req1.content)
-
-            show_progress("util", 4, 5)
-            if not os.path.exists(f"{os.environ['HOME']}/Documents/bin/ffmpeg.wasm"):
-                req2 = requests.get(Consts.FFMPEG_URL)
-                with open(f"{os.environ['HOME']}/Documents/bin/ffmpeg.wasm", 'wb') as ffmpeg:
-                    ffmpeg.write(req2.content)
-                                  
-        show_progress("util", 5, 5)
-
-    @staticmethod
-    def erase_dependencies():
-        cleanup_cmds = ("pip uninstall -q -y yt-dlp", "pip uninstall -q -y gallery-dl", f"rm -rf {os.environ['HOME']}/Documents/bin/ffmpeg.wasm",
-                        f"rm -rf {os.environ['HOME']}/Documents/bin/ffprobe.wasm")
-        for i in range(len(cleanup_cmds)):
-            subprocess.run(cleanup_cmds[i])
-            show_progress("util", i + 1, len(cleanup_cmds))
-
-        raise Exception(Consts.ERASED_EXC)
+        show_progress("util", 4, 4)
 
     def single_video(self):
         default_format = "best/bestvideo+bestaudio"
@@ -340,7 +305,7 @@ def main():
 
     except Exception as exc_url:
         # All raised exceptions are handled here and send the user back to the shortcut with a message
-        if str(exc_url.args[0]) not in [Consts.DERROR_EXC, Consts.ERASED_EXC, Consts.REBOOT_EXC]:
+        if str(exc_url.args[0]) not in [Consts.DERROR_EXC, Consts.REBOOT_EXC]:
             b64_err = base64.b64encode(exc_url.args[0].encode()).decode()
             UNK_EXC = '{{"output_code":"exception","exc_trace":"{0}"}}'.format(b64_err)
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(UNK_EXC)}'
