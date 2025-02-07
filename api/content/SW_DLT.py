@@ -17,7 +17,6 @@ import os
 # Constants class
 class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
-    SET_COOKIE = "echo 'document.cookie = \"installed=1; expires=Thu, 1 Jan 2026 12:00:00 UTC; sameSite=Lax\";' | jsi"
     DERROR_EXC = '{"output_code":"exception","exc_trace":"vars.downloadError"}'
     
 
