@@ -18,6 +18,7 @@ import os
 class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
     DERROR_EXC = '{"output_code":"exception","exc_trace":"vars.downloadError"}'
+    SET_COOKIE = "echo 'document.cookie = \"installed=1; expires=Thu, 1 Jan 2026 12:00:00 UTC; sameSite=Lax\";' | jsi"
     
 
 class SW_DLT:
@@ -62,6 +63,10 @@ class SW_DLT:
 
     @staticmethod
     def update_check():
+        show_progress("util", 0, 2)
+        if not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
+            subprocess.run(Consts.SET_COOKIE)
+            
         show_progress("util", 1, 2)
         current_time = int(datetime.datetime.today().timestamp())
 
