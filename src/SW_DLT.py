@@ -1,24 +1,32 @@
 # SW-DLT script, check Github for documentation.
 # Official release through RoutineHub, avoid unknown sources!
 
+import importlib.util
 import urllib.parse
 import contextlib
 import subprocess
 import datetime
-import requests
 import hashlib
 import shutil
 import base64
-import yt_dlp
 import json
 import sys
 import os
 
+# Below imports might fail on new installations or during dependency updates
+try:
+    import requests
+    import yt_dlp
+    
+except ImportError:
+    pass
+
 # Constants class
 class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
-    DERROR_EXC = '{"output_code":"exception","exc_trace":"vars.downloadError"}'
     SET_COOKIE = "echo 'document.cookie = \"installed=1; expires=Thu, 1 Jan 2026 12:00:00 UTC; sameSite=Lax\";' | jsi"
+    REBOOT_EXC = '{"output_code":"exception","exc_trace":"vars.restartRequired"}'
+    DERROR_EXC = '{"output_code":"exception","exc_trace":"vars.downloadError"}'
     
 
 class SW_DLT:
@@ -62,21 +70,42 @@ class SW_DLT:
             self.video_fps = args[3]
 
     @staticmethod
-    def update_check():
-        show_progress("util", 0, 2)
+    def validate_install():
+        reboot = False
+        show_progress("util", 0, 4)
+        if importlib.util.find_spec("chardet") is None or importlib.util.find_spec("requests") is None:
+            subprocess.run(
+                "pip -q install chardet requests --disable-pip-version-check --upgrade")
+            reboot = True
+
+        show_progress("util", 1, 4)
+        if importlib.util.find_spec("yt_dlp") is None:
+            subprocess.run("pip -q install yt-dlp --disable-pip-version-check --upgrade")
+            reboot = True
+
+        show_progress("util", 2, 4)
+        if importlib.util.find_spec("gallery_dl") is None:
+            subprocess.run("pip -q install gallery-dl --disable-pip-version-check --upgrade")
+            reboot = True
+        
         if not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
             subprocess.run(Consts.SET_COOKIE)
-            
-        show_progress("util", 1, 2)
+            reboot = True
+        
+        if reboot:
+            raise Exception(Consts.REBOOT_EXC)
+        
         current_time = int(datetime.datetime.today().timestamp())
 
+        show_progress("util", 3, 4)
         with open(f"{os.environ['HOME']}/Documents/SW-DLT/shortcut_update_ts.txt", 'r') as ts_file:
             last_check = int(ts_file.read())
     
         if current_time - last_check < 600:
-            subprocess.run("pip -q install gallery-dl yt-dlp --disable-pip-version-check --upgrade")
+            subprocess.run("pip -q install yt-dlp --disable-pip-version-check --upgrade")
+            subprocess.run("pip -q install gallery-dl --disable-pip-version-check --upgrade")
         
-        show_progress("util", 2, 2)
+        show_progress("util", 4, 4)
 
     def single_video(self):
         default_format = "best/bestvideo+bestaudio"
@@ -242,7 +271,7 @@ def main():
         "-p": f'{Consts.CBLUE}Playlist Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on playlist length{Consts.ENDL}',
         "-g": f'{Consts.CBLUE}Gallery Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on collection length{Consts.ENDL}',
         "-e": f'{Consts.CYELLOW}Deleting All Dependencies{Consts.ENDL}',
-        "update_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Checking for Updates{Consts.ENDL}'
+        "dep_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Validating Dependencies{Consts.ENDL}'
     }
     try:
         # Hashes all arguments to generate unique ID
@@ -256,8 +285,8 @@ def main():
         subprocess.run("clear")
         
         print(header)
-        print(info_msgs["update_check"])            
-        sw_dlt_inst.update_check()
+        print(info_msgs["dep_check"])            
+        sw_dlt_inst.validate_install()
         
         # If the same partial file is not found, deletes all leftovers (important)
         for file in os.listdir():
@@ -276,7 +305,7 @@ def main():
 
     except Exception as exc_url:
         # All raised exceptions are handled here and send the user back to the shortcut with a message
-        if str(exc_url.args[0]) not in [Consts.DERROR_EXC]:
+        if str(exc_url.args[0]) not in [Consts.DERROR_EXC, Consts.REBOOT_EXC]:
             b64_err = base64.b64encode(exc_url.args[0].encode()).decode()
             UNK_EXC = '{{"output_code":"exception","exc_trace":"{0}"}}'.format(b64_err)
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(UNK_EXC)}'
