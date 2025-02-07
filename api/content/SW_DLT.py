@@ -95,7 +95,7 @@ class SW_DLT:
         if reboot:
             raise Exception(Consts.REBOOT_EXC)
         
-        current_time = int((datetime.datetime.now() - datetime.datetime(1970, 1, 1)).total_seconds())
+        current_time = int(datetime.datetime.today().timestamp())
 
         show_progress("util", 3, 4)
         with open(f"{os.environ['HOME']}/Documents/SW-DLT/shortcut_update_ts.txt", 'r') as ts_file:
