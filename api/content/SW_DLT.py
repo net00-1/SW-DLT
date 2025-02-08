@@ -5,7 +5,6 @@ import urllib.parse
 import contextlib
 import subprocess
 import datetime
-import requests
 import hashlib
 import shutil
 import base64
@@ -59,7 +58,7 @@ class SW_DLT:
             self.gallery_range = args[2] if args[1] == "-g" else ""
 
         if len(args) > 3:
-            self.video_fps = args[3]
+            self.video_fps = args[3]  
 
     @staticmethod
     def update_check():
@@ -85,7 +84,8 @@ class SW_DLT:
             "bestvideo[height={0}][fps<={1}]+bestaudio/"\
             "bestvideo[height<={0}][fps<={1}]+bestaudio/"\
             "best[height={0}][fps<={1}]/"\
-            "best[height<={0}][fps<={1}]".format(self.video_res, self.video_fps)
+            "best[height<={0}][fps<={1}]"\
+            "best[height={0}]".format(self.video_res, self.video_fps)
 
         dl_options = {
             "format": default_format if self.video_res == "-d" else custom_format,
@@ -242,7 +242,6 @@ def main():
         "-a": f'{Consts.CBLUE}Audio Download{Consts.ENDL}\n{Consts.CYELLOW}Sometimes audio processing is needed{Consts.ENDL}',
         "-p": f'{Consts.CBLUE}Playlist Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on playlist length{Consts.ENDL}',
         "-g": f'{Consts.CBLUE}Gallery Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on collection length{Consts.ENDL}',
-        "-e": f'{Consts.CYELLOW}Deleting All Dependencies{Consts.ENDL}',
         "update_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Checking for Updates{Consts.ENDL}'
     }
     try:
@@ -273,6 +272,11 @@ def main():
         subprocess.run("clear")
         print(header)
         print(info_msgs[sys.argv[2]])
+        
+        with open('SW_DLT_DL_metadata.json', 'w') as metadata:
+            args = ', '.join(map(str, sys.argv[1:]))
+            json.dump({f"{sys.argv[1]}": args}, metadata)
+        
         return sw_dlt_inst.run()
 
     except Exception as exc_url:
