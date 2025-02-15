@@ -8,10 +8,9 @@ jobs:
       - uses: actions/checkout@v2
         with:
           token: ${{secrets.GITHUB_TOKEN}}
-          path: SW-DLT
           
       - run: |
-          cd /SW-DLT/src
+          cd ./src
           cp SW-DLT.plist SW-DLT.shortcut
           shortcuts sign --mode anyone --input "SW-DLT.shortcut" --output "SW-DLT-signed.shortcut"
 
