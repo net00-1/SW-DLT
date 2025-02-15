@@ -93,3 +93,11 @@ Example:
 - If you attempted to download video X but interrupted the download, and then you attempt to download video X again, it will be resumed (if the same parameters are used).
 - If you attempted to download video X but interrupted the download, **but then you attempt to download video Y**, the files for video X will be cleaned (at this point
 video Y will take the place as the video that can be resumed if it's interrupted).
+
+## Uninstall the Shortcut
+The following steps will allow you to uninstall all files used by SW-DLT, without deleting a-Shell. All files are located in `$HOME/Documents/SW-DLT`
+
+1. Tap on the edit Shortcut button
+2. Switch the 'uninstall' toggle from 'False' to 'True' as instructed by comments
+3. Run the Shortcut and accept the prompt
+4. Do not run the shortcut again or else it will be reinstalled.
