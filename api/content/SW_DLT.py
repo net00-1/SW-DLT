@@ -9,6 +9,7 @@ import hashlib
 import shutil
 import base64
 import yt_dlp
+import time
 import json
 import sys
 import os
@@ -65,7 +66,7 @@ class SW_DLT:
         show_progress("util", 0, 2)
         while not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
             subprocess.run(Consts.SET_COOKIE)
-            subprocess.run("sleep 1")
+            time.sleep(1)
         
         show_progress("util", 1, 2)
         current_time = int(datetime.datetime.today().timestamp())
