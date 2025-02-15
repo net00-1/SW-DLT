@@ -65,7 +65,10 @@ class SW_DLT:
         show_progress("util", 0, 2)
         if not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
             subprocess.run(Consts.SET_COOKIE)
-            subprocess.run("sleep 2")
+
+        #We need to wait for delay in jsi command
+        while not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
+            subprocess.run("sleep 1")
         
         show_progress("util", 1, 2)
         current_time = int(datetime.datetime.today().timestamp())
