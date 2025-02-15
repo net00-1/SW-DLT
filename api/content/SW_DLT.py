@@ -1,5 +1,5 @@
 # SW-DLT script, check Github for documentation.
-# Official release through RoutineHub, avoid unknown sources!
+# Official release on GitHub, avoid unknown sources
 
 import urllib.parse
 import contextlib
@@ -64,8 +64,8 @@ class SW_DLT:
     def update_check():
         show_progress("util", 0, 2)
         if not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
-            subprocess.run(Consts.SET_COOKIE)
-            subprocess.run("sleep 2")
+            cookie_create = subprocess.popen(Consts.SET_COOKIE.split())
+            cookie_create.wait()
         
         show_progress("util", 1, 2)
         current_time = int(datetime.datetime.today().timestamp())
