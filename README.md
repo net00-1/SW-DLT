@@ -13,6 +13,18 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 **RoutineHub download link: [RoutineHub](https://routinehub.co/shortcut/7284)**
 
+## Build the Shortcut
+1. Download the shortcut plist source code from src/SW-DLT.plist
+2. Change the extension from '.plist' to '.shortcut'
+3. Sign the shortcut with Apple (see "Ways to sign shortcuts" section below)
+4. Import the signed .shortcut file to the Shortcuts app
+
+**Ways to sign shortcuts**
+- From a Mac: follow [Apple documentation](https://support.apple.com/guide/shortcuts-mac/run-shortcuts-from-the-command-line-apd455c82f02/mac)
+- From iPad/iPhone: use a tool to connect remotely to a Mac, such as [Shortcuts Source Helper](https://routinehub.co/shortcut/10060/). Credits to [@gluebyte](https://routinehub.co/user/gluebyte). If using this tool, pass the **unmodified plist (without extension change)** as input. 
+
+**NOTE**: if you do not want to use a remote service to sign the shortcut, nor have access to a Mac, you can still preview the source code as Shortcuts actions. Follow the first two steps of build instructions, then from the iPhone/iPad Files app hold on the .shortcut file, then press on the QuickLook option.
+
 ## Roadmap Features
 
 - [ ] Re-implement progress bar on gallery-dl downloads
