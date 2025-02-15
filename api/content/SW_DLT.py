@@ -63,9 +63,9 @@ class SW_DLT:
     @staticmethod
     def update_check():
         show_progress("util", 0, 2)
-        if not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
-            cookie_create = subprocess.Popen(Consts.SET_COOKIE.split())
-            cookie_create.wait()
+        while not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
+            subprocess.run(Consts.SET_COOKIE, shell=True)
+            subprocess.run("sleep 1")
         
         show_progress("util", 1, 2)
         current_time = int(datetime.datetime.today().timestamp())
