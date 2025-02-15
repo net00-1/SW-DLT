@@ -8,7 +8,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           token: ${{secrets.GITHUB_TOKEN}}
-          path: /SW-DLT
+          path: SW-DLT
           
       - run: |
           cd /SW-DLT/src
@@ -18,5 +18,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: iOS.ipa
-          path: /SW-DLT/src/SW-DLT-signed.shortcut
+          name: SW-DLT.shortcut
+          path: ./src/SW-DLT-signed.shortcut
