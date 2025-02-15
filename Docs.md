@@ -1,6 +1,6 @@
 # SW-DLT: Documentation
 
-Detailed information about all the features available on SW-DLT. This information is not included in the RoutineHub page for sake of simplicity.
+Detailed information about all the features available on SW-DLT.
 
 ## Single Video Download
 

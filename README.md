@@ -2,6 +2,8 @@
 
 SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to easily use, install and manage the popular and open source utilities [`yt-dlp`](https://github.com/yt-dlp/yt-dlp) and [`gallery-dl`](https://github.com/mikf/gallery-dl). This shortcut aims to be compatible with [`yt-dlp's`](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) & [`gallery-dl's`](https://github.com/mikf/gallery-dl/blob/master/docs/supportedsites.rst) collections of supported websites.
 
+**Download link: [Releases](https://github.com/net00-1/SW-DLT/releases)**
+
 ## Main Features
 **Please check the full [documentation page](https://github.com/net00-1/SW-DLT/blob/master/Docs.md) to see a complete description of the available features**
 
@@ -10,8 +12,6 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 - Download playlists (video or audio choices available)
 - Download images/clips/GIFs (from single items to massive albums)
 - Support for both a-Shell and a-Shell Mini apps
-
-**RoutineHub download link: [RoutineHub](https://routinehub.co/shortcut/7284)**
 
 ## Build the Shortcut
 1. Download the shortcut plist source code from src/SW-DLT.plist
