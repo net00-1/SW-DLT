@@ -1,0 +1,22 @@
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  shortcut_build:
+    name: Shortcut Build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+          path: /SW-DLT
+          
+      - run: |
+          cd /SW-DLT/src
+          cp SW-DLT.plist SW-DLT.shortcut
+          shortcuts sign --mode anyone --input "SW-DLT.shortcut" --output "SW-DLT-signed.shortcut"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: iOS.ipa
+          path: /SW-DLT/src/SW-DLT-signed.shortcut
