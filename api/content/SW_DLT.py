@@ -64,7 +64,7 @@ class SW_DLT:
     def update_check():
         show_progress("util", 0, 2)
         if not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
-            cookie_create = subprocess.popen(Consts.SET_COOKIE.split())
+            cookie_create = subprocess.Popen(Consts.SET_COOKIE.split())
             cookie_create.wait()
         
         show_progress("util", 1, 2)
