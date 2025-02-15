@@ -55,7 +55,7 @@ class SW_DLT:
         if len(args) > 2:
             self.video_res = args[2] if args[1] == "-v" else ""
             self.playlist_type = args[2] if args[1] == "-p" else ""
-            self.gallery_range = args[2] if args[1] == "-g" else ""
+            self.gallery_range = args[2].replace('"','').replace("'","") if args[1] == "-g" else ""
 
         if len(args) > 3:
             self.video_fps = args[3]  
@@ -140,12 +140,13 @@ class SW_DLT:
         try:
             # Creating temp folder to store media
             os.makedirs(self.file_id, exist_ok=True)
-            show_progress("manual", 0, 1)
-            
-            subprocess.check_output("gallery-dl {0} --range {1} --directory {2} --cookies-from-browser safari".format(
-                self.media_url, self.gallery_range, self.file_id), stderr=subprocess.STDOUT)
+            dl_cmd = "gallery-dl {0} --range \"{1}\" --directory {2} --cookies-from-browser safari".format(
+                self.media_url, self.gallery_range, self.file_id)
                 
-            show_progress("manual", 1, 1)
+            with subprocess.Popen(dl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as gdl:
+                for entry in gdl.stdout:
+                    show_progress("manual", 1, 1)        
+                
             files = os.listdir(self.file_id)
             # No files returned, removes temp folder and raises Exception
             if len(files) == 0:
@@ -242,6 +243,7 @@ def main():
         "-a": f'{Consts.CBLUE}Audio Download{Consts.ENDL}\n{Consts.CYELLOW}Sometimes audio processing is needed{Consts.ENDL}',
         "-p": f'{Consts.CBLUE}Playlist Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on playlist length{Consts.ENDL}',
         "-g": f'{Consts.CBLUE}Gallery Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on collection length{Consts.ENDL}',
+        "-e": f'{Consts.CYELLOW}Deleting All Dependencies{Consts.ENDL}',
         "update_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Checking for Updates{Consts.ENDL}'
     }
     try:
@@ -274,7 +276,7 @@ def main():
         print(info_msgs[sys.argv[2]])
         
         with open('SW_DLT_DL_metadata.json', 'w') as metadata:
-            args = ', '.join(map(str, sys.argv[1:]))
+            args = ' '.join(map(str, sys.argv[2:]))
             json.dump({f"{sys.argv[1]}": args}, metadata)
         
         return sw_dlt_inst.run()

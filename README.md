@@ -13,15 +13,13 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 **RoutineHub download link: [RoutineHub](https://routinehub.co/shortcut/7284)**
 
-## Planned Features
+## Roadmap Features
 
 - [ ] Re-implement progress bar on gallery-dl downloads
 
 - [ ] Add quality options for video playlists
 
 - [ ] Implement persistent user settings
-
-- [ ] Improve dependency management
 
 - [ ] Allow file inputs with multiple URLs
 

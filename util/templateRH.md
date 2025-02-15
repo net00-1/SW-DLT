@@ -2,25 +2,25 @@
 
 **SW-DLT** ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to easily use, install and manage the popular and open source utilities **[`yt-dlp`](https://github.com/yt-dlp/yt-dlp)** and **[`gallery-dl`](https://github.com/mikf/gallery-dl)**.
 
-**Compatibility:** Tested on iOS/iPadOS 15/17
+**Compatibility:** Tested on iOS/iPadOS 16,17,18
 
 **REQUIRED APP:**
 
-* **[a-Shell Mini Terminal (~350MB)](https://apps.apple.com/us/app/a-shell-mini/id1543537943)**
+* **[a-Shell Mini Terminal](https://apps.apple.com/us/app/a-shell-mini/id1543537943)**
 
 **OR**
 
-* **[a-Shell Terminal (~1.2GB)](https://apps.apple.com/us/app/a-shell/id1473805438)**
+* **[a-Shell Terminal](https://apps.apple.com/us/app/a-shell/id1473805438)**
 
 ### Download media from a massive collection of websites ([1](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) & [2](https://github.com/mikf/gallery-dl/blob/master/docs/supportedsites.md)).
 - Videos with quality & framerate selector
 - Audio only files (or audio extraction from video)
 - Video or audio playlists
-- GIFs, clips, images (From single items to massive albums or entire webpages/profiles)
+- GIFs, clips, images (From single items to massive albums or entire webpages/feeds)
 
-<img src="https://images2.imgbox.com/99/24/s3b4891P_o.png" alt="showcase"/>
+<img src="" alt="showcase"/>
 
-**[Video Demonstration](https://sendvid.com/yllwo8to)**
+**[Video Demonstration]()**
 
 ### Additional Features
 
