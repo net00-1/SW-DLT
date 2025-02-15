@@ -1,5 +1,5 @@
 # SW-DLT script, check Github for documentation.
-# Official release through RoutineHub, avoid unknown sources!
+# Official release on GitHub, avoid unknown sources
 
 import urllib.parse
 import contextlib
