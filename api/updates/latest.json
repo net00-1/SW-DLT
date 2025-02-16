@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "3.20.2",
-    "url": "https://www.icloud.com/shortcuts/2107490c1b9f476c86b0f7a56d2a2d2b",
-    "notes": "3.20.2: Extended expiry date for placeholder cookie that enables authentication features. Automatic utility updates coming in next version.",
-    "release": "2025-01-30"
+    "version": "4.0",
+    "url": "https://www.icloud.com/shortcuts/5599bee85ef7468a9e8a7c1815c80178",
+    "notes": "4.0: Revamped installation and update processes, major optimizations, several QoL improvements, jellycuts & routinehub deprecation",
+    "release": "2025-02-16"
 }
