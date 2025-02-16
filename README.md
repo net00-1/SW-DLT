@@ -4,7 +4,7 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 **Download link: [Releases](https://github.com/net00-1/SW-DLT/releases)**
 
-![showcase](images/all_stages.png)
+<img src="images/all_stages.png" width="200" />
 
 ## Main Features
 **Please check the full [documentation page](https://github.com/net00-1/SW-DLT/blob/master/Docs.md) to see a complete description of the available features**
