@@ -8,7 +8,7 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 </div>
 
 ## How to Use
-1. **Download either the [a-Shell](https://apps.apple.com/us/app/a-shell/id1473805438) or [a-Shell Mini](https://apps.apple.com/us/app/a-shell-mini/id1543537943)**
+1. **Download either the [a-Shell](https://apps.apple.com/us/app/a-shell/id1473805438) or [a-Shell Mini](https://apps.apple.com/us/app/a-shell-mini/id1543537943) app**
 2. Copy a link to the clipboard (or use the share button if applicable)
 3. Run the shortcut from either the Shortcuts app (if using a copied link) or from the Share Sheet
 4. Select the option you need
