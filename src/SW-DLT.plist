@@ -487,6 +487,30 @@ GLOBAL SETTINGS INITIALIZATION</string>
 														<key>Value</key>
 														<dict>
 															<key>string</key>
+															<string>issuesURL</string>
+														</dict>
+														<key>WFSerializationType</key>
+														<string>WFTextTokenString</string>
+													</dict>
+													<key>WFValue</key>
+													<dict>
+														<key>Value</key>
+														<dict>
+															<key>string</key>
+															<string>https://github.com/net00-1/SW-DLT/issues</string>
+														</dict>
+														<key>WFSerializationType</key>
+														<string>WFTextTokenString</string>
+													</dict>
+												</dict>
+												<dict>
+													<key>WFItemType</key>
+													<integer>0</integer>
+													<key>WFKey</key>
+													<dict>
+														<key>Value</key>
+														<dict>
+															<key>string</key>
 															<string>ytdlpURL</string>
 														</dict>
 														<key>WFSerializationType</key>
@@ -4564,7 +4588,7 @@ END:VCARD</string>
 BEGIN:VCARD
 N:About;;;;
 PHOTO;ENCODING=b:￼
-ORG:Helpful links &amp; Donations;
+ORG:Donate, helpful links, report issues;
 END:VCARD</string>
 					</dict>
 					<key>WFSerializationType</key>
@@ -6155,6 +6179,24 @@ URL: ￼</string>
 								<array>
 									<dict>
 										<key>DictionaryKey</key>
+										<string>vars.issuesURL</string>
+										<key>Type</key>
+										<string>WFDictionaryValueVariableAggrandizement</string>
+									</dict>
+								</array>
+								<key>OutputName</key>
+								<string>properties</string>
+								<key>OutputUUID</key>
+								<string>C1532E11-A796-4092-8EBD-3571D584EBFF</string>
+								<key>Type</key>
+								<string>ActionOutput</string>
+							</dict>
+							<key>{2688, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>DictionaryKey</key>
 										<string>vars.ytdlpURL</string>
 										<key>Type</key>
 										<string>WFDictionaryValueVariableAggrandizement</string>
@@ -6167,7 +6209,7 @@ URL: ￼</string>
 								<key>Type</key>
 								<string>ActionOutput</string>
 							</dict>
-							<key>{2684, 1}</key>
+							<key>{2733, 1}</key>
 							<dict>
 								<key>Aggrandizements</key>
 								<array>
@@ -6185,7 +6227,7 @@ URL: ￼</string>
 								<key>Type</key>
 								<string>ActionOutput</string>
 							</dict>
-							<key>{2848, 1}</key>
+							<key>{2897, 1}</key>
 							<dict>
 								<key>Aggrandizements</key>
 								<array>
@@ -6203,7 +6245,7 @@ URL: ￼</string>
 								<key>Type</key>
 								<string>ActionOutput</string>
 							</dict>
-							<key>{2884, 1}</key>
+							<key>{2933, 1}</key>
 							<dict>
 								<key>Aggrandizements</key>
 								<array>
@@ -6221,7 +6263,7 @@ URL: ￼</string>
 								<key>Type</key>
 								<string>ActionOutput</string>
 							</dict>
-							<key>{2921, 1}</key>
+							<key>{2970, 1}</key>
 							<dict>
 								<key>Aggrandizements</key>
 								<array>
@@ -6329,8 +6371,9 @@ URL: ￼</string>
             &lt;hr /&gt;
             &lt;h3&gt;Useful Links&lt;/h3&gt;
             &lt;p&gt;&lt;a href='￼'&gt;SW-DLT Documentation&lt;/a&gt;&lt;/p&gt;
-            &lt;p&gt;&lt;a href='￼'&gt;yt-dlp on GitHub&lt;/a&gt;&lt;/p&gt;
-            &lt;p&gt;&lt;a href='￼'&gt;gallery-dl on GitHub&lt;/a&gt;&lt;/p&gt;
+            &lt;p&gt;&lt;a href='￼'&gt;REPORT AN ISSUE HERE&lt;/a&gt;&lt;/p&gt;
+            &lt;p&gt;&lt;a href='￼'&gt;yt-dlp on GitHub&lt;/a&gt;
+            &lt;a href='￼'&gt;gallery-dl on GitHub&lt;/a&gt;&lt;/p&gt;
             &lt;p&gt;&lt;/p&gt;
         &lt;/div&gt;
         &lt;div class='description'&gt;
@@ -6422,7 +6465,9 @@ URL: ￼</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
-				<string>866AEA05-7444-4FC4-ACF2-1C04F77BF298</string>
+				<string>6EDD37D6-8B45-47E8-BF1D-B5B6D869B886</string>
+				<key>WFEnterSafariReader</key>
+				<true/>
 				<key>WFURL</key>
 				<dict>
 					<key>Value</key>
