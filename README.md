@@ -37,11 +37,11 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 ## Roadmap Features
 
-- [ ] Re-implement progress bar on gallery-dl downloads
+- [ ] Implement full progress bar on gallery-dl downloads
 
 - [ ] Add quality options for video playlists
 
-- [ ] Implement persistent user settings
+- [ ] Add option to customize yt-dlp and gallery-dl with persistent settings
 
 - [ ] Allow file inputs with multiple URLs
 
