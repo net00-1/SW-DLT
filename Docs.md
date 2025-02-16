@@ -1,10 +1,10 @@
 # SW-DLT: Documentation
 
-Detailed information about all the features available on SW-DLT. This information is not included in the RoutineHub page to save space and for simplicity.
+Detailed information about all the features available on SW-DLT.
 
-## Video Downloading
+## Single Video Download
 
-The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the proper titles available from `yt-dlp`. Both options prioritize iOS natively playable codec with a priority of `+codec:avc:m4a`
+The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the original titles fetched by `yt-dlp`. Both options prioritize iOS natively playable codecs with a priority of `+codec:avc:m4a`
 
 **Default Quality**: videos are downloaded using the following `yt-dlp` format string:
 
@@ -26,9 +26,9 @@ The priority of videos to search is as follows:
 
 Unmerged options are prioritized, so what user choices are not ignored, since websites tend to offer more resolution and FPS media options on separate video and audio files.
 
-## Audio Downloading
+## Single Audio Download
 
-Audio downloads prioritize the best audio available from a website. In case there is no audio only stream, the best muxed video will be used to extract audio from it. Audio downloads are also saved with the proper title from `yt-dlp`.
+Audio downloads prioritize the best audio available from a website. In case there is no audio only stream, the best muxed video will be used to extract audio from it. Audios are saved with the original titles fetched by `yt-dlp`.
 
 `bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best`
 
@@ -37,9 +37,9 @@ Audio downloads prioritize the best audio available from a website. In case ther
 3. Audio extracted from best MP4 video available
 4. Audio extracted from best video available
 
-## Playlist Downloading
+## Playlist Download
 
-Playlist downloads support both downloading all items in the playlist as videos or as audio only files. There are no quality options for video playlist downloads currently. Audio playlist downlods can use FFmpeg to correct errors and to extract audio from videos. Playlists are saved with the proper titles availale from `yt-dlp`. Both options prioritize iOS natively playable codec with a priority of `+codec:avc:m4a`
+Playlist downloads support both downloading all items in the playlist as videos or as audio only files. There are no quality options for video playlist downloads currently. Audio playlist downlods can use FFmpeg to correct errors and to extract audio from videos. Playlists are saved with the original titles fetched by `yt-dlp`. Both options prioritize iOS natively playable codec with a priority of `+codec:avc:m4a`
 
 Video downloads use the formats: `best[ext=mp4]/best`
 
@@ -53,61 +53,51 @@ Audio downloads use the formats `bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=m
 3. Audio extracted from best MP4 video available
 4. Audio extracted from best video available
 
-## Gallery Downloading
+## Gallery Download
 
-Gallery downloads are done using `gallery-dl` instead of `yt-dlp`. `gallery-dl` works primarily with images, but can be used to download GIFs and Clips from social media and other hosting websites. `gallery-dl` is able to download items in bulk up to entire websites and user profiles. 
+Gallery downloads are done using `gallery-dl` instead of `yt-dlp`. `gallery-dl` works primarily with images, but can be used to download GIFs and Clips from social media and other hosting websites. `gallery-dl` is able to download items in bulk up to entire websites and user feeds. 
 
-Single item downloads with `gallery-dl` are returned as-is, while multi item downloads are packaged in a zip archive. Since `gallery-dl` is not directly used to download items, there is no proper item naming available. Items are given generic names (with zip archives using the current date).
+Single item downloads with `gallery-dl` are returned as-is, while multi-item downloads are packaged in a zip archive. Due to lack of proper python API, items are given timestamp names.
 
 Gallery downloading supports custom download ranges (which are directly passed to `gallery-dl`). 
 
 Example: `1, 2-5, 7, 9-15`
 
 - Downloads the first item, followed by items 2 to 5, followed by item 7, followed by items 9 to 15
-- The first item is usually the newest item in a social media page
+- The first item is usually the newest item in a social media feed
 
 ## Authentication
 
-With SW-DLT, `yt-dlp` and `gallery-dl` are automatically configured to use cookies for authentication. This allows for downloading of media that is restricted behind a login for whichever reason. It is only needed for you to login to the websites **through a-Shell** as follows:
+`yt-dlp` and `gallery-dl` are automatically set to use cookies for authentication. This allows for downloading of media that is restricted behind a login page. Use the following steps per authenticated website:
 
 1. Open the a-Shell or a-Shell Mini app
-2. Enter the following command `internalbrowser` followed by the website URL you want to access. For instance, for Instagram you would enter `internalbrowser https://instagram.com`. 
-3. A Web View of the website should open within the terminal. In case nothing happens, make sure to include `https://` in the above command.
+2. Enter command `internalbrowser` followed by the website URL you want to access. For instance, `internalbrowser https://instagram.com`. 
+3. A Web View of the website should open within the terminal. In case nothing happens, make sure to include `https://` in the previous step.
 4. Navigate to the login screen of the website and login as you would usually do.
 5. Once you have logged in, swipe from the left until you are back at the terminal screen. Alternatively, you can simply go into the App Switcher and swipe a-Shell away.
 
-After following these steps, the cookies that grant access to the website will be stored within a-Shell, and usable by `yt-dlp` and `gallery-dl`. The shortcut itself does not handle in any way your credentials.
+**NOTE:** SW-DLT does not access credentials or cookie data. `yt-dlp` and `gallery-dl` use it directly.
 
-**NOTE:** for some websites, using a specific URL that takes you to the login screen might be needed. For instance, Twitch.tv would require use of this URL: https://twitch.tv/login
-
-## Saving Downloaded Media
+## Saving Downloads
 
 Downloads are NOT automatically saved by SW-DLT due to the many different file types that are supported. All downloads are shown to the user using the share sheet preview. From this preview users are able to choose where to send the downloaded item(s).
 
 It is recommended to have the VLC app or another universal media player app to enable playing media on unsupported formats for iOS/iPadOS.
 
-## Updating Utilities
-
-In order to update the utilities used by SW-DLT, you must first use the `deleteAll` toggle inside the shortcuts editor screen. Set it to `true` and run the shortcut (& accept the warning). Once the process finishes, set the toggle back to `false`.
-
-This option is used to uninstall all the utilities without having to delete the a-Shell app. The next time a download is requested after deletion, the most recent versions of all the utilities will be installed.
-
 ## Resuming Downloads
 
 Resuming a download only works if you retry the **LAST** attempted download with the **EXACT** same parameters (URL, quality, type, authentication type, etc). You can verify that a download is resuming if you see "SW-DLT (Resuming Download)" as the header in a-Shell when the program is running. You can stop and resume the same
-download as many times as needed, but **if you download something else before completing the partial download, the partial files will be removed**. This ensures no accumulation of more than one partial files in the `$SHORTCUTS` directory. Resuming downloads works with ALL functions of the shortcut.
+download as many times as needed, but **if you download something else before completing the partial download, the partial files will be removed**. This ensures no accumulation of more than one partial files in the `$HOME/Documents/SW-DLT` directory. Resuming downloads works with ALL functions of the shortcut.
 
 Example:
 - If you attempted to download video X but interrupted the download, and then you attempt to download video X again, it will be resumed (if the same parameters are used).
 - If you attempted to download video X but interrupted the download, **but then you attempt to download video Y**, the files for video X will be cleaned (at this point
 video Y will take the place as the video that can be resumed if it's interrupted).
 
-## Using Native FFmpeg
-Native FFmpeg will be automatically used if you have the latest version of the a-Shell/a-Shell Mini app that ships with it included. In this case any WebAssembly version of FFmpeg  present will be deleted to avoid using it (when both versions are installed the WebAssembly version takes precedence). For older versions of a-Shell, the WebAssembly version will  be automatically installed and used. From the user side, this will be completely automatic.
+## Uninstall the Shortcut
+The following steps will allow you to uninstall all files used by SW-DLT, without deleting a-Shell. All files are located in `$HOME/Documents/SW-DLT`
 
-## Choosing a-Shell App Version
-
-SW-DLT supports both the a-Shell and a-Shell Mini apps. The `isMini` toggle inside the shortcut editor screen allows you to choose which app to use depending on which app is installed.
-
--  True = uses a-Shell Mini
--  False = uses a-Shell (full)
+1. Tap on the edit Shortcut button
+2. Switch the 'uninstall' toggle from 'False' to 'True' as instructed by comments
+3. Run the Shortcut and accept the prompt
+4. Do not run the shortcut again or else it will be reinstalled.

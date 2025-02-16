@@ -1,7 +1,6 @@
 # SW-DLT script, check Github for documentation.
-# Official release through RoutineHub, avoid unknown sources!
+# Official release on GitHub, avoid unknown sources
 
-import importlib.util
 import urllib.parse
 import contextlib
 import subprocess
@@ -9,33 +8,22 @@ import datetime
 import hashlib
 import shutil
 import base64
+import yt_dlp
 import json
 import sys
 import os
 
-# Below imports might fail on new installations or during dependency updates
-try:
-    import requests
-    import yt_dlp
-    
-except ImportError:
-    pass
-
 # Constants class
 class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
-    SET_COOKIE = "echo 'document.cookie = \"installed=1; expires=Thu, 1 Jan 2026 12:00:00 UTC; sameSite=Lax\";' | jsi"
-    FFMPEG_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffmpeg.wasm"
-    FFPROBE_URL = "https://github.com/holzschu/a-Shell-commands/releases/download/0.1/ffprobe.wasm"
-    REBOOT_EXC = '{"output_code":"exception","exc_trace":"vars.restartRequired"}'
-    ERASED_EXC = '{"output_code":"exception","exc_trace":"vars.erasedAll"}'
     DERROR_EXC = '{"output_code":"exception","exc_trace":"vars.downloadError"}'
+    SET_COOKIE = "echo 'document.cookie = \"installed=1; expires=Thu, 1 Jan 2026 12:00:00 UTC; sameSite=Lax\";' | jsi"
     
 
 class SW_DLT:
 
     def __init__(self, file_id, *args):
-        # args[0]: media URL to download, or placeholder when using erase function
+        # args[0]: media URL to download
         # args[1]: main process to run
         # args[2] (dependent): resolution for video, type for playlist, or range for gallery
         # args[3] (dependent): framerate for video
@@ -56,8 +44,7 @@ class SW_DLT:
             "-v": self.single_video,
             "-a": self.single_audio,
             "-p": self.playlist_download,
-            "-g": self.gallery_download,
-            "-e": self.erase_dependencies
+            "-g": self.gallery_download
         }
         self.run = processes[args[1]]
         self.video_res = ""
@@ -68,72 +55,31 @@ class SW_DLT:
         if len(args) > 2:
             self.video_res = args[2] if args[1] == "-v" else ""
             self.playlist_type = args[2] if args[1] == "-p" else ""
-            self.gallery_range = args[2] if args[1] == "-g" else ""
+            self.gallery_range = args[2].replace('"','').replace("'","") if args[1] == "-g" else ""
 
         if len(args) > 3:
-            self.video_fps = args[3]
+            self.video_fps = args[3]  
 
     @staticmethod
-    def validate_install():
-        reboot = False
-        show_progress("util", 0, 5)
-        if importlib.util.find_spec("chardet") is None or importlib.util.find_spec("requests") is None:
-            subprocess.run(
-                "pip -q install chardet requests --disable-pip-version-check --upgrade")
-            reboot = True
-
-        show_progress("util", 1, 5)
-        if importlib.util.find_spec("yt_dlp") is None:
-            subprocess.run(
-                "pip -q install yt-dlp --disable-pip-version-check --upgrade --no-dependencies")
-            reboot = True
-
-        show_progress("util", 2, 5)
-        if importlib.util.find_spec("gallery_dl") is None:
-            subprocess.run(
-                "pip -q install gallery-dl --disable-pip-version-check --upgrade")
-            reboot = True
-        
+    def update_check():
+        show_progress("util", 0, 2)
         if not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
             subprocess.run(Consts.SET_COOKIE)
-            reboot = True
+
+        #We need to wait for delay in jsi command
+        while not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
+            subprocess.run("sleep 1")
         
-        if reboot:
-            raise Exception(Consts.REBOOT_EXC)
+        show_progress("util", 1, 2)
+        current_time = int(datetime.datetime.today().timestamp())
 
-        show_progress("util", 3, 5)
-
-        # If native FFmpeg is present, removes any web assembly version on device.
-        if os.path.exists(f"{os.environ['APPDIR']}/bin/ffmpeg"):
-            with contextlib.suppress(FileNotFoundError):
-                os.remove(f"{os.environ['HOME']}/Documents/bin/ffmpeg.wasm")
-                os.remove(f"{os.environ['HOME']}/Documents/bin/ffprobe.wasm")
-
-        # Otherwise, installs any required web assembly files
-        else:
-            os.makedirs(f"{os.environ['HOME']}/Documents/bin", exist_ok=True)
-            if not os.path.exists(f"{os.environ['HOME']}/Documents/bin/ffprobe.wasm"):
-                req1 = requests.get(Consts.FFPROBE_URL)
-                with open(f"{os.environ['HOME']}/Documents/bin/ffprobe.wasm", 'wb') as ffprobe:
-                    ffprobe.write(req1.content)
-
-            show_progress("util", 4, 5)
-            if not os.path.exists(f"{os.environ['HOME']}/Documents/bin/ffmpeg.wasm"):
-                req2 = requests.get(Consts.FFMPEG_URL)
-                with open(f"{os.environ['HOME']}/Documents/bin/ffmpeg.wasm", 'wb') as ffmpeg:
-                    ffmpeg.write(req2.content)
-                                  
-        show_progress("util", 5, 5)
-
-    @staticmethod
-    def erase_dependencies():
-        cleanup_cmds = ("pip uninstall -q -y yt-dlp", "pip uninstall -q -y gallery-dl", f"rm -rf {os.environ['HOME']}/Documents/bin/ffmpeg.wasm",
-                        f"rm -rf {os.environ['HOME']}/Documents/bin/ffprobe.wasm")
-        for i in range(len(cleanup_cmds)):
-            subprocess.run(cleanup_cmds[i])
-            show_progress("util", i + 1, len(cleanup_cmds))
-
-        raise Exception(Consts.ERASED_EXC)
+        with open(f"{os.environ['HOME']}/Documents/SW-DLT/shortcut_update_ts.txt", 'r') as ts_file:
+            last_check = int(ts_file.read())
+    
+        if current_time - last_check < 600:
+            subprocess.run("pip -q install gallery-dl yt-dlp --disable-pip-version-check --upgrade")
+        
+        show_progress("util", 2, 2)
 
     def single_video(self):
         default_format = "best/bestvideo+bestaudio"
@@ -141,7 +87,8 @@ class SW_DLT:
             "bestvideo[height={0}][fps<={1}]+bestaudio/"\
             "bestvideo[height<={0}][fps<={1}]+bestaudio/"\
             "best[height={0}][fps<={1}]/"\
-            "best[height<={0}][fps<={1}]".format(self.video_res, self.video_fps)
+            "best[height<={0}][fps<={1}]"\
+            "best[height={0}]".format(self.video_res, self.video_fps)
 
         dl_options = {
             "format": default_format if self.video_res == "-d" else custom_format,
@@ -185,7 +132,7 @@ class SW_DLT:
             if file.startswith(self.file_id):
                 output = {
                     "output_code": "success",
-                    "file_name": file,
+                    "file_name": os.path.abspath(file),
                     "file_title": vid_title
                 }
                 return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
@@ -196,12 +143,13 @@ class SW_DLT:
         try:
             # Creating temp folder to store media
             os.makedirs(self.file_id, exist_ok=True)
-            show_progress("manual", 0, 1)
-            
-            subprocess.check_output("gallery-dl {0} --range {1} --directory {2} --cookies-from-browser safari".format(
-                self.media_url, self.gallery_range, self.file_id), stderr=subprocess.STDOUT)
+            dl_cmd = "gallery-dl {0} --range \"{1}\" --directory {2} --cookies-from-browser safari".format(
+                self.media_url, self.gallery_range, self.file_id)
                 
-            show_progress("manual", 1, 1)
+            with subprocess.Popen(dl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as gdl:
+                for entry in gdl.stdout:
+                    show_progress("manual", 1, 1)        
+                
             files = os.listdir(self.file_id)
             # No files returned, removes temp folder and raises Exception
             if len(files) == 0:
@@ -213,7 +161,7 @@ class SW_DLT:
                 file = "{0}/{1}".format(self.file_id, files[0])
                 output = {
                     "output_code": "success",
-                    "file_name": file,
+                    "file_name": os.path.abspath(file),
                     "file_title": self.date_id
                 }
 
@@ -223,7 +171,7 @@ class SW_DLT:
                 shutil.rmtree(self.file_id, True)
                 output = {
                     "output_code": "success",
-                    "file_name": self.file_id + ".zip",
+                    "file_name": os.path.abspath(self.file_id + ".zip"),
                     "file_title": self.date_id
                 }
 
@@ -253,7 +201,7 @@ class SW_DLT:
             shutil.rmtree(self.file_id, True)
             output = {
                 "output_code": "success",
-                "file_name": self.file_id + ".zip",
+                "file_name": os.path.abspath(self.file_id + ".zip"),
                 "file_title": pl_title
             }
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
@@ -299,7 +247,7 @@ def main():
         "-p": f'{Consts.CBLUE}Playlist Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on playlist length{Consts.ENDL}',
         "-g": f'{Consts.CBLUE}Gallery Download{Consts.ENDL}\n{Consts.CYELLOW}Process time depends on collection length{Consts.ENDL}',
         "-e": f'{Consts.CYELLOW}Deleting All Dependencies{Consts.ENDL}',
-        "dep_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Validating Dependencies{Consts.ENDL}'
+        "update_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Checking for Updates{Consts.ENDL}'
     }
     try:
         # Hashes all arguments to generate unique ID
@@ -311,10 +259,11 @@ def main():
 
         # Pre-download check and cleanup
         subprocess.run("clear")
+        
         print(header)
-        print(info_msgs["dep_check"])
-
-        sw_dlt_inst.validate_install()
+        print(info_msgs["update_check"])            
+        sw_dlt_inst.update_check()
+        
         # If the same partial file is not found, deletes all leftovers (important)
         for file in os.listdir():
             if file.startswith("SW_DLT_DL_") and not file.startswith(file_id):
@@ -328,11 +277,16 @@ def main():
         subprocess.run("clear")
         print(header)
         print(info_msgs[sys.argv[2]])
+        
+        with open('SW_DLT_DL_metadata.json', 'w') as metadata:
+            args = ' '.join(map(str, sys.argv[2:]))
+            json.dump({f"{sys.argv[1]}": args}, metadata)
+        
         return sw_dlt_inst.run()
 
     except Exception as exc_url:
         # All raised exceptions are handled here and send the user back to the shortcut with a message
-        if str(exc_url.args[0]) not in [Consts.DERROR_EXC, Consts.ERASED_EXC, Consts.REBOOT_EXC]:
+        if str(exc_url.args[0]) not in [Consts.DERROR_EXC]:
             b64_err = base64.b64encode(exc_url.args[0].encode()).decode()
             UNK_EXC = '{{"output_code":"exception","exc_trace":"{0}"}}'.format(b64_err)
             return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(UNK_EXC)}'
@@ -342,4 +296,5 @@ def main():
 if __name__ == "__main__":
     subprocess.run("open " + main())
     # Post-run cleanup
+    subprocess.run("deactivate")
     subprocess.run("clear")
