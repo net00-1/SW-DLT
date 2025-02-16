@@ -7,6 +7,13 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
   <img src="images/all_stages.png" width="60%"/>
 </div>
 
+## How to Use
+1. Copy a link to the clipboard (or use the share button if applicable)
+2. Run the shortcut from either the Shortcuts app (if using a copied link) or from the Share Sheet
+3. Select the option you need
+4. Wait for the process to finish
+5. Use the Share menu to export the download to your chosen destination
+
 ## Main Features
 **Please check the full [documentation page](https://github.com/net00-1/SW-DLT/blob/master/Docs.md) to see a complete description of the available features**
 
