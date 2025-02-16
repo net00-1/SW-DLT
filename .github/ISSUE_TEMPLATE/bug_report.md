@@ -2,7 +2,7 @@
 name: Bug report
 about: Describe an issue you encountered
 title: "[Issue]"
-labels: Bug, Suggestion
+labels: Bug
 assignees: net00-1
 
 ---
