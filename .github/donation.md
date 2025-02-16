@@ -3,5 +3,5 @@
 
 <div align="center">
 
-  [![BCH](https://raw.githubusercontent.com/net00-1/SW-DLT/refs/heads/master/images/donation_qr.png)](bitcoincash:qq5l9j3cgah8s6rz3xd5aet0u8wml2ezsgst9fedzz?amount=0.0086369)
+  [![BCH](https://raw.githubusercontent.com/net00-1/SW-DLT/refs/heads/master/images/donation_qr.png)](bitcoincash//:qq5l9j3cgah8s6rz3xd5aet0u8wml2ezsgst9fedzz?amount=0.0086369)
 </div>
