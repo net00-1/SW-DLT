@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "4.0",
-    "url": "https://www.icloud.com/shortcuts/5599bee85ef7468a9e8a7c1815c80178",
-    "notes": "4.0: Revamped installation and update processes, major optimizations, several QoL improvements, jellycuts & routinehub deprecation",
+    "version": "4.0.1",
+    "url": "https://www.icloud.com/shortcuts/de4fe976a8cc492aadc6a376d32356bc",
+    "notes": "Revamped installation and update processes, major optimizations, several QoL improvements, jellycuts & routinehub deprecation",
     "release": "2025-02-16"
 }
