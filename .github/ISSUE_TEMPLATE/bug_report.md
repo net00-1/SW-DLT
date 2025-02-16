@@ -1,8 +1,8 @@
 ---
 name: Bug report
 about: Describe an issue you encountered
-title: ''
-labels: Bug
+title: "[Issue]"
+labels: Bug, Suggestion
 assignees: net00-1
 
 ---

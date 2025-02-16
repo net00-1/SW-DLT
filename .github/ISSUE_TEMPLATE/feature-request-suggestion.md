@@ -1,7 +1,7 @@
 ---
 name: Feature request/Suggestion
 about: Provide details of a feature you would like implemented
-title: ''
+title: "[Suggestion]"
 labels: Suggestion
 assignees: net00-1
 
