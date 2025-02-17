@@ -12,7 +12,7 @@
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>WFCommentActionText</key>
-				<string>SW-DLT DEV
+				<string>SW-DLT
 Official release on GitHub, avoid unknown sources!</string>
 			</dict>
 		</dict>
