@@ -142,7 +142,7 @@ GLOBAL SETTINGS INITIALIZATION</string>
 									<key>Value</key>
 									<dict>
 										<key>string</key>
-										<string>4.0.1</string>
+										<string>4.0.2</string>
 									</dict>
 									<key>WFSerializationType</key>
 									<string>WFTextTokenString</string>
@@ -425,7 +425,7 @@ GLOBAL SETTINGS INITIALIZATION</string>
 														<key>Value</key>
 														<dict>
 															<key>string</key>
-															<string>Installing resources in Files App &gt; a-Shell &gt; SW-DLT. Retry in case of error.</string>
+															<string>Adding resources in Files &gt; a-Shell &gt; SW-DLT. This happens only after install/update.</string>
 														</dict>
 														<key>WFSerializationType</key>
 														<string>WFTextTokenString</string>
@@ -2374,7 +2374,6 @@ VENV="$WORKSPACE/SW-DLT-ENV/"
 
 if [ ! -f $MAIN_SCRIPT ] || [ ! -d $VENV ]
 then mkdir -p $WORKSPACE
-     python -m venv $VENV
      echo "CONTINUE_INSTALL"
 fi</string>
 			</dict>
@@ -2493,6 +2492,57 @@ fi</string>
 		</dict>
 		<dict>
 			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.gettext</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>installDep</string>
+				<key>UUID</key>
+				<string>3A0EAB0C-6922-43B7-A24B-406F0A1C82AE</string>
+				<key>WFTextActionText</key>
+				<string>clear
+hideKeyboard
+echo "Please wait..."
+python -m venv $HOME/Documents/SW-DLT/SW-DLT-ENV/
+source $HOME/Documents/SW-DLT/SW-DLT-ENV/bin/activate
+pip install chardet requests -q --disable-pip-version-check
+pip install yt-dlp -q --disable-pip-version-check
+pip install gallery-dl -q --disable-pip-version-check
+curl -sL https://net00-1.github.io/SW-DLT/api/content/SW_DLT.py -o $HOME/Documents/SW-DLT/SW_DLT.py
+deactivate
+open shortcuts://
+clear</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>AsheKube.app.a-Shell.ExecuteCommandIntent</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>ShowWhenRun</key>
+				<false/>
+				<key>UUID</key>
+				<string>30E27F12-A399-4B68-ABA0-B9A343DA085B</string>
+				<key>command</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>installDep</string>
+						<key>OutputUUID</key>
+						<string>3A0EAB0C-6922-43B7-A24B-406F0A1C82AE</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>openWindow</key>
+				<string>open</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
 			<string>is.workflow.actions.notification</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
@@ -2535,115 +2585,9 @@ fi</string>
 		</dict>
 		<dict>
 			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.list</string>
+			<string>is.workflow.actions.waittoreturn</string>
 			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>UUID</key>
-				<string>9A3D7599-D629-4820-9BA3-21E03FC26A56</string>
-				<key>WFItems</key>
-				<array>
-					<string>pip install chardet requests -q --disable-pip-version-check --no-compile</string>
-					<string>pip install yt-dlp -q --disable-pip-version-check --no-compile</string>
-					<string>pip install gallery-dl -q --disable-pip-version-check --no-compile</string>
-					<string>curl -L https://net00-1.github.io/SW-DLT/api/content/SW_DLT.py -o $HOME/Documents/SW-DLT/SW_DLT.py</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.repeat.each</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>GroupingIdentifier</key>
-				<string>57825225-ECCC-4737-9445-79532B191E14</string>
-				<key>WFControlFlowMode</key>
-				<integer>0</integer>
-				<key>WFInput</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>OutputName</key>
-						<string>List</string>
-						<key>OutputUUID</key>
-						<string>9A3D7599-D629-4820-9BA3-21E03FC26A56</string>
-						<key>Type</key>
-						<string>ActionOutput</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.gettext</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>CustomOutputName</key>
-				<string>installDep</string>
-				<key>UUID</key>
-				<string>3A0EAB0C-6922-43B7-A24B-406F0A1C82AE</string>
-				<key>WFTextActionText</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>attachmentsByRange</key>
-						<dict>
-							<key>{54, 1}</key>
-							<dict>
-								<key>Type</key>
-								<string>Variable</string>
-								<key>VariableName</key>
-								<string>Repeat Item</string>
-							</dict>
-						</dict>
-						<key>string</key>
-						<string>source $HOME/Documents/SW-DLT/SW-DLT-ENV/bin/activate
-￼
-deactivate</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenString</string>
-				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>AsheKube.app.a-Shell-mini.ExecuteCommandIntent</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>ShowWhenRun</key>
-				<false/>
-				<key>UUID</key>
-				<string>2E047075-4B2A-456C-9EBF-494899C0CEA8</string>
-				<key>command</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>OutputName</key>
-						<string>installDep</string>
-						<key>OutputUUID</key>
-						<string>3A0EAB0C-6922-43B7-A24B-406F0A1C82AE</string>
-						<key>Type</key>
-						<string>ActionOutput</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-				<key>openWindow</key>
-				<string>close</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.repeat.each</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>GroupingIdentifier</key>
-				<string>57825225-ECCC-4737-9445-79532B191E14</string>
-				<key>WFControlFlowMode</key>
-				<integer>2</integer>
-			</dict>
+			<dict/>
 		</dict>
 		<dict>
 			<key>WFWorkflowActionIdentifier</key>
@@ -2798,72 +2742,6 @@ fi</string>
 				</dict>
 				<key>openWindow</key>
 				<string>close</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.conditional</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>GroupingIdentifier</key>
-				<string>87031ECB-AAF2-4CC9-946C-E87BD7A94CE7</string>
-				<key>WFCondition</key>
-				<integer>4</integer>
-				<key>WFConditionalActionString</key>
-				<string>DEBUG</string>
-				<key>WFControlFlowMode</key>
-				<integer>0</integer>
-				<key>WFInput</key>
-				<dict>
-					<key>Type</key>
-					<string>Variable</string>
-					<key>Variable</key>
-					<dict>
-						<key>Value</key>
-						<dict>
-							<key>OutputName</key>
-							<string>RUN_MODE</string>
-							<key>OutputUUID</key>
-							<string>04837342-1555-48DF-9305-57DC4ECFB2D3</string>
-							<key>Type</key>
-							<string>ActionOutput</string>
-						</dict>
-						<key>WFSerializationType</key>
-						<string>WFTextTokenAttachment</string>
-					</dict>
-				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.previewdocument</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>WFInput</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>OutputName</key>
-						<string>output</string>
-						<key>OutputUUID</key>
-						<string>F2529AAA-51F4-4072-9060-0CC509E63FF1</string>
-						<key>Type</key>
-						<string>ActionOutput</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.conditional</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>GroupingIdentifier</key>
-				<string>87031ECB-AAF2-4CC9-946C-E87BD7A94CE7</string>
-				<key>WFControlFlowMode</key>
-				<integer>2</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -6795,14 +6673,14 @@ URL: ￼</string>
 					<dict>
 						<key>attachmentsByRange</key>
 						<dict>
-							<key>{74, 1}</key>
+							<key>{87, 1}</key>
 							<dict>
 								<key>Type</key>
 								<string>Variable</string>
 								<key>VariableName</key>
 								<string>mediaURL</string>
 							</dict>
-							<key>{76, 1}</key>
+							<key>{89, 1}</key>
 							<dict>
 								<key>Type</key>
 								<string>Variable</string>
@@ -6811,7 +6689,8 @@ URL: ￼</string>
 							</dict>
 						</dict>
 						<key>string</key>
-						<string>cd $HOME/Documents/SW-DLT
+						<string>hideKeyboard
+cd $HOME/Documents/SW-DLT
 source SW-DLT-ENV/bin/activate
 python SW_DLT.py ￼ ￼</string>
 					</dict>
@@ -6877,7 +6756,6 @@ python SW_DLT.py ￼ ￼</string>
 	<array/>
 	<key>WFWorkflowTypes</key>
 	<array>
-		<string>Watch</string>
 		<string>ActionExtension</string>
 		<string>NCWidget</string>
 	</array>
