@@ -4,7 +4,7 @@ Detailed information about all the features available on SW-DLT.
 
 ## Single Video Download
 
-The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the original titles fetched by `yt-dlp`. Both options prioritize iOS natively playable codecs with a priority of `+codec:avc:m4a`
+The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the original titles fetched by `yt-dlp`. Both options sort formats with a priority of `res,ext:mp4:m4a,codec:avc:m4a`
 
 **Default Quality**: videos are downloaded using the following `yt-dlp` format string:
 
@@ -20,11 +20,13 @@ The default quality is the most reliable way to download videos from websites th
 The priority of videos to search is as follows:
 
 1. `bestvideo[height=X][fps<=Y]+bestaudio`  (Exact resolution, closest FPS, unmerged)
-2. `bestvideo[height<=X][fps<=Y]+bestaudio` (Closest resolution, closest FPS, unmerged)
-3. `best[height=X][fps<=Y]`                 (Exact resolution, closest FPS, merged)
+2. `best[height=X][fps<=Y]`                 (Exact resolution, closest FPS, merged)
+3. `bestvideo[height<=X][fps<=Y]+bestaudio` (Closest resolution, closest FPS, unmerged)
 4. `best[height<=X][fps<=Y]`                (Closest resolution, closest FPS, merged)
+5. `bestvideo[height<=X][fps<=Y]+bestaudio` (Closest resolution, closest FPS, unmerged)
+6. `best[height={0}]`                       (Exact resolution, ignore FPS, merged)
 
-Unmerged options are prioritized, so what user choices are not ignored, since websites tend to offer more resolution and FPS media options on separate video and audio files.
+**What does this all mean?** In general, it means SW-DLT will prioritize above all the resolution option you select, and then prioritize the FPS you select. Among matching results, it will then prioritize those playable natively on iOS/iPadOS 
 
 ## Single Audio Download
 
