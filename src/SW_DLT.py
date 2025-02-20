@@ -85,8 +85,8 @@ class SW_DLT:
         default_format = "best/bestvideo+bestaudio"
         custom_format = ""\
             "bestvideo[height={0}][fps<={1}]+bestaudio/"\
-            "bestvideo[height<={0}][fps<={1}]+bestaudio/"\
             "best[height={0}][fps<={1}]/"\
+            "bestvideo[height<={0}][fps<={1}]+bestaudio/"\
             "best[height<={0}][fps<={1}]"\
             "best[height={0}]".format(self.video_res, self.video_fps)
 
@@ -94,7 +94,7 @@ class SW_DLT:
             "format": default_format if self.video_res == "-d" else custom_format,
             "playlist_items": "1-1",
             "outtmpl": f'{self.file_id}.%(ext)s',
-            "format_sort": ["+codec:avc:m4a"],
+            "format_sort": ["res", "ext:mp4:m4a", "codec:avc:m4a"],
             **self.ytdlp_globals
         }
 
