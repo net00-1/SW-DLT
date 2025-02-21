@@ -7,6 +7,7 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
   <img src="images/all_stages.png" width="60%"/>
 </div>
 
+Compatible with **iOS/iPadOS 17 & 18**
 ## How to Use
 1. **Download either the [a-Shell](https://apps.apple.com/us/app/a-shell/id1473805438) or [a-Shell Mini](https://apps.apple.com/us/app/a-shell-mini/id1543537943) app**
 2. Copy a link to the clipboard (or use the share button if applicable)
