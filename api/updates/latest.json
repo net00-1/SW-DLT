@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "4.0.3",
-    "url": "https://www.icloud.com/shortcuts/3b11a9e43fe042d683f94eb396a76722",
-    "notes": "4.0.3: Fixed format filtering and sorting",
-    "release": "2025-02-20"
+    "version": "4.0.4",
+    "url": "https://www.icloud.com/shortcuts/de2154bb2c8c42d192c15b3c492c36e1",
+    "notes": "4.0.4: Fixed environment refresh issue happening on new installations",
+    "release": "2025-03-08"
 }
