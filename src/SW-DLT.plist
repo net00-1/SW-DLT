@@ -142,7 +142,7 @@ GLOBAL SETTINGS INITIALIZATION</string>
 									<key>Value</key>
 									<dict>
 										<key>string</key>
-										<string>4.0.3</string>
+										<string>4.0.4</string>
 									</dict>
 									<key>WFSerializationType</key>
 									<string>WFTextTokenString</string>
@@ -2511,7 +2511,8 @@ pip install gallery-dl -q --disable-pip-version-check
 curl -sL https://net00-1.github.io/SW-DLT/api/content/SW_DLT.py -o $HOME/Documents/SW-DLT/SW_DLT.py
 deactivate
 open shortcuts://
-clear</string>
+clear
+exit</string>
 			</dict>
 		</dict>
 		<dict>
