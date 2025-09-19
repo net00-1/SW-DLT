@@ -298,5 +298,5 @@ def main():
 if __name__ == "__main__":
     subprocess.run("open " + main())
     # Post-run cleanup
+    subprocess.run("cd && clear")
     subprocess.run("deactivate")
-    subprocess.run("clear")
