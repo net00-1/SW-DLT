@@ -2,8 +2,8 @@
 # Official release on GitHub, avoid unknown sources
 
 import urllib.parse
-import contextlib
 import subprocess
+import importlib
 import datetime
 import hashlib
 import shutil
@@ -78,6 +78,8 @@ class SW_DLT:
     
         if current_time - last_check < 600:
             subprocess.run("pip -q install gallery-dl yt-dlp --disable-pip-version-check --upgrade")
+            #yt-dlp is reloaded here to avoid issues after updates
+            importlib.reload(yt_dlp)
         
         show_progress("util", 2, 2)
 
