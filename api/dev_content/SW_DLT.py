@@ -297,7 +297,3 @@ def main():
 
 if __name__ == "__main__":
     subprocess.run("open " + main())
-    # Post-run cleanup
-    subprocess.run("cd ~/Documents")
-    subprocess.run("clear")
-    subprocess.run("deactivate")
