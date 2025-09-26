@@ -142,7 +142,7 @@ GLOBAL SETTINGS INITIALIZATION</string>
 									<key>Value</key>
 									<dict>
 										<key>string</key>
-										<string>4.0.4</string>
+										<string>4.1</string>
 									</dict>
 									<key>WFSerializationType</key>
 									<string>WFTextTokenString</string>
@@ -2511,7 +2511,7 @@ pip install gallery-dl -q --disable-pip-version-check
 curl -sL https://net00-1.github.io/SW-DLT/api/content/SW_DLT.py -o $HOME/Documents/SW-DLT/SW_DLT.py
 deactivate
 open shortcuts://
-clear
+clear &amp;&amp; cd
 exit</string>
 			</dict>
 		</dict>
@@ -6693,7 +6693,9 @@ URL: ￼</string>
 						<string>hideKeyboard
 cd $HOME/Documents/SW-DLT
 source SW-DLT-ENV/bin/activate
-python SW_DLT.py ￼ ￼</string>
+python SW_DLT.py ￼ ￼
+deactivate
+clear &amp;&amp; cd</string>
 					</dict>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenString</string>
@@ -6731,7 +6733,7 @@ python SW_DLT.py ￼ ￼</string>
 		</dict>
 	</array>
 	<key>WFWorkflowClientVersion</key>
-	<string>3303.0.5</string>
+	<string>3612.0.1.1</string>
 	<key>WFWorkflowHasOutputFallback</key>
 	<false/>
 	<key>WFWorkflowHasShortcutInputVariables</key>
