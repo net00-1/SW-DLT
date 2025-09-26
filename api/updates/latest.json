@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "4.0.4",
-    "url": "https://www.icloud.com/shortcuts/de2154bb2c8c42d192c15b3c492c36e1",
-    "notes": "4.0.4: Fixed environment refresh issue happening on new installations",
-    "release": "2025-03-08"
+    "version": "4.1",
+    "url": "https://www.icloud.com/shortcuts/abac2cfafc3a46b28c8c706a9696153d",
+    "notes": "4.1: Fixed issue with yt-dlp module loading during some background updates",
+    "release": "2025-09-25"
 }
