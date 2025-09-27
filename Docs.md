@@ -88,9 +88,9 @@ It is recommended to have the VLC app or another universal media player app to e
 
 ## Resuming Downloads
 
-SW-DLT will cache **the latest** download request (meaning the URL, download type, and options). When a download is not finished due to any reason, running SW-DLT again will present you with a quick option to resume the download. This cached details are located in Files App -> a-Shell -> SW-DLT -> SW_DLT_DL_metadata.json
+SW-DLT will cache **the latest** download request (meaning the URL, download type, and options). When a download is not finished due to any reason, running SW-DLT again will present you with a quick option to resume the download. This cached details are located in `Files App -> a-Shell -> SW-DLT -> SW_DLT_DL_metadata.json`
 
-If you press 'Dismiss', this file will be deleted and resuming the download will only be possible by using the same URL and arguments before manually. Partial media files are located in Files App -> a-Shell -> SW-DLT.
+If you press 'Dismiss', this file will be deleted and resuming the download will only be possible by using the same URL and arguments before manually. Partial media files are located in `Files App -> a-Shell -> SW-DLT.`
 
 NOTE: Only the media files of the previous download will be cached. Once a different download is started, older files get cleaned up.
 
