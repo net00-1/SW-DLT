@@ -88,13 +88,11 @@ It is recommended to have the VLC app or another universal media player app to e
 
 ## Resuming Downloads
 
-Resuming a download only works if you retry the **LAST** attempted download with the **EXACT** same parameters (URL, quality, type, authentication type, etc). You can verify that a download is resuming if you see "SW-DLT (Resuming Download)" as the header in a-Shell when the program is running. You can stop and resume the same
-download as many times as needed, but **if you download something else before completing the partial download, the partial files will be removed**. This ensures no accumulation of more than one partial files in the `$HOME/Documents/SW-DLT` directory. Resuming downloads works with ALL functions of the shortcut.
+SW-DLT will cache **the latest** download request (meaning the URL, download type, and options). When a download is not finished due to any reason, running SW-DLT again will present you with a quick option to resume the download. This cached details are located in Files App -> a-Shell -> SW-DLT -> SW_DLT_DL_metadata.json
 
-Example:
-- If you attempted to download video X but interrupted the download, and then you attempt to download video X again, it will be resumed (if the same parameters are used).
-- If you attempted to download video X but interrupted the download, **but then you attempt to download video Y**, the files for video X will be cleaned (at this point
-video Y will take the place as the video that can be resumed if it's interrupted).
+If you press 'Dismiss', this file will be deleted and resuming the download will only be possible by using the same URL and arguments before manually. Partial media files are located in Files App -> a-Shell -> SW-DLT.
+
+NOTE: Only the media files of the previous download will be cached. Once a different download is started, older files get cleaned up.
 
 ## Uninstall the Shortcut
 The following steps will allow you to uninstall all files used by SW-DLT, without deleting a-Shell. All files are located in `$HOME/Documents/SW-DLT`
