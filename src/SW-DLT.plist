@@ -3703,7 +3703,7 @@ fi</string>
 				<key>WFMatchTextCaseSensitive</key>
 				<false/>
 				<key>WFMatchTextPattern</key>
-				<string>^.{120}</string>
+				<string>^.{0,120}</string>
 				<key>text</key>
 				<dict>
 					<key>Value</key>
@@ -3763,7 +3763,7 @@ fi</string>
 							</dict>
 						</dict>
 						<key>string</key>
-						<string>￼...</string>
+						<string>￼ -- </string>
 					</dict>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenString</string>
@@ -3785,7 +3785,7 @@ fi</string>
 					<dict>
 						<key>attachmentsByRange</key>
 						<dict>
-							<key>{85, 1}</key>
+							<key>{65, 1}</key>
 							<dict>
 								<key>OutputName</key>
 								<string>partDisplayURL</string>
@@ -3796,9 +3796,9 @@ fi</string>
 							</dict>
 						</dict>
 						<key>string</key>
-						<string>SW-DLT: Partial/Unsaved Download
+						<string>SW-DLT: Unfinished Download!
 
-Would you like to resume or recover download from: ￼</string>
+Partial or unsaved download found: ￼ Would you like to resume it?</string>
 					</dict>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenString</string>
