@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "4.1",
-    "url": "https://www.icloud.com/shortcuts/abac2cfafc3a46b28c8c706a9696153d",
-    "notes": "4.1: Fixed issue with yt-dlp module loading during some background updates",
-    "release": "2025-09-25"
+    "version": "4.1.1",
+    "url": "https://www.icloud.com/shortcuts/5d12e97b6c704c7dad0ef3eb318f7a58",
+    "notes": "4.1.1: Fixed resume preview of long URLs",
+    "release": "2025-10-04"
 }
