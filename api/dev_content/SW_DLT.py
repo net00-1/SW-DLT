@@ -78,7 +78,8 @@ class SW_DLT:
     
         if current_time - last_check < 600:
             subprocess.run("pip -q install 'yt-dlp[default]' --disable-pip-version-check --upgrade")
-            subprocess.run("pip -q install gallery-dl yt-dlp-apple-webkit-jsi --disable-pip-version-check --upgrade")
+            subprocess.run("pip -q install gallery-dl --disable-pip-version-check --upgrade")
+            # subprocess.run("pip -q install gallery-dl yt-dlp-apple-webkit-jsi --disable-pip-version-check --upgrade")
             #yt-dlp is reloaded here to avoid issues after updates
             importlib.reload(yt_dlp)
         
