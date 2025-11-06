@@ -77,7 +77,8 @@ class SW_DLT:
             last_check = int(ts_file.read())
     
         if current_time - last_check < 600:
-            subprocess.run("pip -q install gallery-dl yt-dlp --disable-pip-version-check --upgrade")
+            subprocess.run("pip -q install 'yt-dlp[default]' --disable-pip-version-check --upgrade")
+            subprocess.run("pip -q install gallery-dl yt-dlp-apple-webkit-jsi --disable-pip-version-check --upgrade")
             #yt-dlp is reloaded here to avoid issues after updates
             importlib.reload(yt_dlp)
         
@@ -260,7 +261,9 @@ def main():
         header = f'{Consts.SBOLD}SW-DLT{Consts.ENDL}'
 
         # Pre-download check and cleanup
-        subprocess.run("clear")
+        subprocess.run("clear && hideKeyboard", shell=True)
+        # Temporary solution for 'unsupported platform' error, requires issue for yt-dlp
+        sys.platform = "darwin"
         
         print(header)
         print(info_msgs["update_check"])            
