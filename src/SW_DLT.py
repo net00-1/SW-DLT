@@ -37,7 +37,6 @@ class SW_DLT:
             "noprogress": True,
             "progress_hooks": [show_progress],
             "postprocessor_hooks": [format_processing],
-            "cookiesfrombrowser": ("safari",)
         }
 
         processes = {
@@ -145,7 +144,7 @@ class SW_DLT:
         try:
             # Creating temp folder to store media
             os.makedirs(self.file_id, exist_ok=True)
-            dl_cmd = "gallery-dl {0} --range \"{1}\" --directory {2} --cookies-from-browser safari".format(
+            dl_cmd = "gallery-dl {0} --range \"{1}\" --directory {2}".format(
                 self.media_url, self.gallery_range, self.file_id)
                 
             with subprocess.Popen(dl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as gdl:
