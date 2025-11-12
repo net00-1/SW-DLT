@@ -142,7 +142,7 @@ GLOBAL SETTINGS INITIALIZATION</string>
 									<key>Value</key>
 									<dict>
 										<key>string</key>
-										<string>4.1.1</string>
+										<string>4.2</string>
 									</dict>
 									<key>WFSerializationType</key>
 									<string>WFTextTokenString</string>
@@ -2505,9 +2505,8 @@ hideKeyboard
 echo "Please wait..."
 python -m venv $HOME/Documents/SW-DLT/SW-DLT-ENV/
 source $HOME/Documents/SW-DLT/SW-DLT-ENV/bin/activate
-pip install chardet requests -q --disable-pip-version-check
-pip install yt-dlp -q --disable-pip-version-check
-pip install gallery-dl -q --disable-pip-version-check
+pip install chardet requests certifi mutagen -q --disable-pip-version-check --upgrade
+pip install yt-dlp yt-dlp-ejs yt-dlp-apple-webkit-jsi gallery-dl -q --disable-pip-version-check --upgrade
 curl -sL https://net00-1.github.io/SW-DLT/api/content/SW_DLT.py -o $HOME/Documents/SW-DLT/SW_DLT.py
 deactivate
 open shortcuts://
@@ -6715,9 +6714,9 @@ URL: ￼</string>
 				<key>WFSelectedApp</key>
 				<dict>
 					<key>BundleIdentifier</key>
-					<string>AsheKube.app.a-Shell</string>
+					<string>AsheKube.app.a-Shell-mini</string>
 					<key>Name</key>
-					<string>a-Shell</string>
+					<string>a-Shell mini</string>
 					<key>TeamIdentifier</key>
 					<string>VG8Z23C8YL</string>
 				</dict>
@@ -6744,14 +6743,14 @@ URL: ￼</string>
 					<dict>
 						<key>attachmentsByRange</key>
 						<dict>
-							<key>{87, 1}</key>
+							<key>{74, 1}</key>
 							<dict>
 								<key>Type</key>
 								<string>Variable</string>
 								<key>VariableName</key>
 								<string>mediaURL</string>
 							</dict>
-							<key>{89, 1}</key>
+							<key>{76, 1}</key>
 							<dict>
 								<key>Type</key>
 								<string>Variable</string>
@@ -6760,8 +6759,7 @@ URL: ￼</string>
 							</dict>
 						</dict>
 						<key>string</key>
-						<string>hideKeyboard
-cd $HOME/Documents/SW-DLT
+						<string>cd $HOME/Documents/SW-DLT
 source SW-DLT-ENV/bin/activate
 python SW_DLT.py ￼ ￼
 deactivate
