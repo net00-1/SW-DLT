@@ -49,5 +49,5 @@ Compatible with **iOS/iPadOS 18, 26**
 
 ## Disclaimers
 - Use this shortcut for downloading media you own or are authorized to download
-- All software used (`yt-dlp`, `gallery-dl`, SW-DLT, a-Shell) is open source and free
+- All software used (`yt-dlp`, `gallery-dl`, `yt-dlp-apple-webkit-jsi`, SW-DLT, a-Shell) is open source and free
 - It is recommended to have the VLC app or another universal media player app to play unsupported media formats in iOS/iPadOS.
