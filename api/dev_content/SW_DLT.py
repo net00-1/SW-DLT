@@ -252,7 +252,7 @@ def main():
         "update_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Checking for Updates{Consts.ENDL}'
     }
     try:
-        import yt_dlp
+        globals()["yt_dlp"] = __import__("yt_dlp")
         # Hashes all arguments to generate unique ID
         file_id = "SW_DLT_DL_{}".format(hashlib.md5(
             str(sys.argv).encode("utf-8")).hexdigest()[0:20])
