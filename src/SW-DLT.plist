@@ -6828,7 +6828,6 @@ clear &amp;&amp; cd</string>
 	<key>WFWorkflowTypes</key>
 	<array>
 		<string>ActionExtension</string>
-		<string>Watch</string>
 		<string>NCWidget</string>
 	</array>
 </dict>
