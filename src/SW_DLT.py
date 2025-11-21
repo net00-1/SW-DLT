@@ -8,7 +8,6 @@ import datetime
 import hashlib
 import shutil
 import base64
-import yt_dlp
 import json
 import sys
 import os
@@ -253,6 +252,7 @@ def main():
         "update_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Checking for Updates{Consts.ENDL}'
     }
     try:
+        globals()["yt_dlp"] = __import__("yt_dlp")
         # Hashes all arguments to generate unique ID
         file_id = "SW_DLT_DL_{}".format(hashlib.md5(
             str(sys.argv).encode("utf-8")).hexdigest()[0:20])
@@ -298,3 +298,4 @@ def main():
 
 if __name__ == "__main__":
     subprocess.run("open " + main())
+    
