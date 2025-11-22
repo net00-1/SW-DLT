@@ -47,7 +47,7 @@ Compatible with **iOS/iPadOS 18, 26**
 
 - [ ] Allow file inputs with multiple URLs
 
-## Disclaimers
-- Use this shortcut for downloading media you own or are authorized to download
+## Disclaimers*
+- This software is only intended to provide a way to archive and/or download content with yt-dlp & gallery-dl that you have **explicit permission to download** (for instance content owned by you). Use of this software to download copyrighted content could lead to breach of Terms of Service of hosting websites. License of this software does not include liability.
 - All software used (`yt-dlp`, `gallery-dl`, `yt-dlp-apple-webkit-jsi`, SW-DLT, a-Shell) is open source and free
 - It is recommended to have the VLC app or another universal media player app to play unsupported media formats in iOS/iPadOS.
