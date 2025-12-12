@@ -26,7 +26,9 @@ class SW_DLT:
         # args[1]: main process to run
         # args[2] (dependent): resolution for video, type for playlist, or range for gallery
         # args[3] (dependent): framerate for video
-        self.media_url = args[0]
+        # optional: --sponsorblock-remove=cat1,cat2,...
+        arg_list = list(args)
+        self.media_url = arg_list.pop(0)
         self.file_id = file_id
         self.date_id = datetime.datetime.today().strftime("%d-%m-%y-%H-%M-%S")
         self.ytdlp_globals = {
@@ -45,19 +47,51 @@ class SW_DLT:
             "-p": self.playlist_download,
             "-g": self.gallery_download
         }
-        self.run = processes[args[1]]
+        # Strip optional flags before positional parsing
+        valid_sb_categories = {
+            "sponsor",
+            "selfpromo",
+            "interaction",
+            "intro",
+            "outro",
+            "preview",
+            "filler",
+            "music_offtopic",
+            "poi_highlight"
+        }
+        self.sponsorblock_remove = []
+        cleaned_args = []
+        for token in arg_list:
+            if isinstance(token, str) and token.startswith("--sponsorblock-remove"):
+                _, _, value = token.partition("=")
+                categories = [
+                    cat.strip()
+                    for cat in value.replace(" ", "").split(",")
+                    if cat and cat.lower() != "none"
+                ]
+                self.sponsorblock_remove.extend(
+                    cat for cat in categories if cat in valid_sb_categories
+                )
+                continue
+            cleaned_args.append(token)
+
+        arg_list = cleaned_args
+        primary_action = arg_list.pop(0)
+
+        self.run = processes[primary_action]
         self.video_res = ""
         self.video_fps = ""
         self.playlist_type = ""
         self.gallery_range = ""
 
-        if len(args) > 2:
-            self.video_res = args[2] if args[1] == "-v" else ""
-            self.playlist_type = args[2] if args[1] == "-p" else ""
-            self.gallery_range = args[2].replace('"','').replace("'","") if args[1] == "-g" else ""
-
-        if len(args) > 3:
-            self.video_fps = args[3]  
+        if primary_action == "-v" and arg_list:
+            self.video_res = arg_list.pop(0)
+            if self.video_res != "-d" and arg_list:
+                self.video_fps = arg_list.pop(0)
+        elif primary_action == "-p" and arg_list:
+            self.playlist_type = arg_list.pop(0)
+        elif primary_action == "-g" and arg_list:
+            self.gallery_range = arg_list.pop(0).replace('"','').replace("'","")
 
     @staticmethod
     def update_check():
@@ -99,6 +133,9 @@ class SW_DLT:
             "format_sort": ["res", "ext:mp4:m4a", "codec:avc:m4a"],
             **self.ytdlp_globals
         }
+
+        if self.sponsorblock_remove:
+            dl_options["sponsorblock_remove"] = self.sponsorblock_remove
 
         try:
             # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
