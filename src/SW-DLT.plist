@@ -7203,7 +7203,7 @@ URL: ￼</string>
 source SW-DLT-ENV/bin/activate
 python SW_DLT.py ￼ ￼ --sbjson='￼'
 deactivate
-cd</string>
+clear &amp;&amp; cd</string>
 					</dict>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenString</string>
