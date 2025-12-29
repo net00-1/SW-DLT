@@ -63,8 +63,8 @@ class SW_DLT:
         current_time = datetime.datetime.today()
         show_progress("util", 0, 2)
         if not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
-            cookie_expiration = current_time.replace(year=current_time.year + 1)
-            set_cookie = f"echo 'document.cookie = \"installed=1; expires={cookie_expiration.strftime('%a, %#d %b %Y %H:%M:%S UTC')}; sameSite=Lax\";' | jsi"
+            cookie_expiration = current_time.replace(year=current_time.year + 1).strftime('%a, %-d %b %Y %H:%M:%S UTC')
+            set_cookie = f"echo 'document.cookie = \"installed=1; expires={cookie_expiration}; sameSite=Lax\";' | jsi"
             subprocess.run(set_cookie)
 
         #We need to wait for delay in jsi command
