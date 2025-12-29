@@ -25,8 +25,13 @@ class SW_DLT:
         # args[1]: main process to run
         # args[2] (dependent): resolution for video, type for playlist, or range for gallery
         # args[3] (dependent): framerate for video
-        self.media_url = args[0]
+        # optional: --sponsorblock-remove=cat1,cat2 or --sbjson={...} (JSON map of {category: bool})
+        if len(args) < 2:
+            raise ValueError("Missing required arguments from shortcut (media URL and mode)")
+        arg_list = list(args)
+        self.media_url = arg_list[0]
         self.file_id = file_id
+        self.primary_action = arg_list[1]
         self.date_id = datetime.datetime.today().strftime("%d-%m-%y-%H-%M-%S")
         self.ytdlp_globals = {
             "color": "never",
@@ -44,19 +49,135 @@ class SW_DLT:
             "-p": self.playlist_download,
             "-g": self.gallery_download
         }
-        self.run = processes[args[1]]
+        remaining_args = list(arg_list[2:])
+        if isinstance(self.primary_action, str) and " " in self.primary_action and self.primary_action not in processes:
+            split_tokens = self.primary_action.split()
+            self.primary_action = split_tokens[0]
+            remaining_args = split_tokens[1:] + remaining_args
+        if self.primary_action not in processes:
+            raise ValueError("Missing required arguments from shortcut (media URL and mode)")
+        self.run = processes[self.primary_action]
+        # SponsorBlock categories
+        valid_sb_categories = {
+            "sponsor",
+            "selfpromo",
+            "interaction",
+            "intro",
+            "outro",
+            "preview",
+            "filler",
+            "music_offtopic",
+            "hook"
+        }
+        self.sponsorblock_remove = []
+        self.sb_source_raw = ""
+        # Allow sponsorblock config via --sbjson or --sponsorblock-remove
+        sb_json = None
+        cleaned_args = []
+        for token in remaining_args:
+            if isinstance(token, str) and token.startswith("--sbjson="):
+                sb_json = token.split("=", 1)[1]
+                print(f"{Consts.CGREEN}Raw SB JSON arg: {sb_json}{Consts.ENDL}")
+                continue
+            elif isinstance(token, str) and token.startswith("--sponsorblock-remove="):
+                csv = token.split("=", 1)[1]
+                categories = [
+                    cat.strip().lower()
+                    for cat in csv.replace(" ", "").split(",")
+                    if cat and cat.lower() != "none"
+                ]
+                self.sponsorblock_remove.extend(
+                    cat for cat in categories if cat in valid_sb_categories
+                )
+                continue
+            cleaned_args.append(token)
+
+        remaining_args = cleaned_args
+
+        if sb_json:
+            self.sponsorblock_remove.extend(
+                self.parse_sb_json(sb_json, valid_sb_categories)
+            )
+
+
         self.video_res = ""
         self.video_fps = ""
         self.playlist_type = ""
         self.gallery_range = ""
 
-        if len(args) > 2:
-            self.video_res = args[2] if args[1] == "-v" else ""
-            self.playlist_type = args[2] if args[1] == "-p" else ""
-            self.gallery_range = args[2].replace('"','').replace("'","") if args[1] == "-g" else ""
+        if self.primary_action == "-v" and remaining_args:
+            self.video_res = remaining_args.pop(0)
+            if self.video_res != "-d" and remaining_args:
+                self.video_fps = remaining_args.pop(0)
+        elif self.primary_action == "-p" and remaining_args:
+            self.playlist_type = remaining_args.pop(0)
+        elif self.primary_action == "-g" and remaining_args:
+            self.gallery_range = remaining_args.pop(0).replace('"','').replace("'","")
 
-        if len(args) > 3:
-            self.video_fps = args[3]  
+    def _apply_sponsorblock(self, dl_options):
+        """Inject SponsorBlock settings and ensure PP ordering matches working verifier."""
+        if not self.sponsorblock_remove:
+            return dl_options
+
+        dl_options["sponsorblock_remove"] = self.sponsorblock_remove
+        existing_pps = list(dl_options.get("postprocessors", []))
+        sb_pp = {"key": "SponsorBlock", "categories": self.sponsorblock_remove}
+        mod_pp = {"key": "ModifyChapters", "remove_sponsor_segments": self.sponsorblock_remove}
+        # Run SB first, then ModifyChapters, then any existing PPs; keep remux optional
+        pp_list = [sb_pp, mod_pp] + existing_pps
+        dl_options["postprocessors"] = pp_list
+        return dl_options
+
+    @staticmethod
+    def parse_sb_json(sb_json, valid_sb_categories):
+        parsed = []
+        cleaned = sb_json.strip()
+        # Strip outer quotes the shortcut might add
+        if (cleaned.startswith('"') and cleaned.endswith('"')) or (cleaned.startswith("'") and cleaned.endswith("'")):
+            cleaned = cleaned[1:-1].strip()
+        if cleaned.startswith("(") and cleaned.endswith(")"):
+            cleaned = cleaned[1:-1]
+        replacements = {
+            "Yes": "true",
+            "yes": "true",
+            "No": "false",
+            "no": "false",
+            "True": "true",
+            "False": "false"
+        }
+        for needle, repl in replacements.items():
+            cleaned = cleaned.replace(needle, repl)
+        cleaned = cleaned.replace("'", '"')
+        if not cleaned.startswith("{"):
+            cleaned = "{" + cleaned
+        if not cleaned.endswith("}"):
+            cleaned = cleaned + "}"
+        try:
+            cfg = json.loads(cleaned)
+            for cat, enabled in cfg.items():
+                cat = str(cat).strip().lower()
+                if isinstance(enabled, str):
+                    enabled = enabled.lower() in {"true", "yes", "1", "on"}
+                if enabled is None or enabled == "":
+                    enabled = True
+                if enabled and cat in valid_sb_categories:
+                    parsed.append(cat)
+            return parsed
+        except Exception:
+            pass
+
+        cleaned = cleaned.strip("{}")
+        for part in cleaned.split(","):
+            if ":" not in part:
+                continue
+            key, val = part.split(":", 1)
+            cat = key.strip().strip('"{} ').lower()
+            flag = val.strip().strip('"{} ')
+            if flag == "":
+                flag = "true"
+            if flag.lower() in {"true", "yes", "1", "on"} and cat in valid_sb_categories:
+                parsed.append(cat)
+        return parsed
 
     @staticmethod
     def update_check():
@@ -101,6 +222,8 @@ class SW_DLT:
             **self.ytdlp_globals
         }
 
+        dl_options = self._apply_sponsorblock(dl_options)
+
         try:
             # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
             return self.single_download(dl_options)
@@ -116,6 +239,8 @@ class SW_DLT:
             "outtmpl": f'{self.file_id}.%(ext)s',
             **self.ytdlp_globals
         }
+
+        dl_options = self._apply_sponsorblock(dl_options)
 
         try:
             # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
@@ -192,6 +317,8 @@ class SW_DLT:
             **self.ytdlp_globals
         }
 
+        dl_options = self._apply_sponsorblock(dl_options)
+
         try:
             with yt_dlp.YoutubeDL(dl_options) as pl_obj:
                 meta_data = pl_obj.extract_info(self.media_url, download=False)
@@ -234,10 +361,12 @@ def show_progress(data_stream, curr=0, total=0):
 
 
 def format_processing(process_stream):
+    name = process_stream.get("postprocessor") or ""
+    label = f" ({name})" if name else ""
     if process_stream["status"] == "started":
-        print(f'\r{Consts.CYELLOW}Processing{Consts.ENDL}', end="")
+        print(f'\r{Consts.CYELLOW}Processing{label}{Consts.ENDL}', end="")
     elif process_stream["status"] == "finished":
-        print(f'\x1b[1K\r{Consts.CGREEN}Processed{Consts.ENDL}')
+        print(f'\x1b[1K\r{Consts.CGREEN}Processed{label}{Consts.ENDL}')
     return
 
 
@@ -275,10 +404,14 @@ def main():
                 os.remove(file)
             elif file.startswith(file_id):
                 header = f'{Consts.SBOLD}SW-DLT (Resuming Download){Consts.ENDL}'
-
+        
         subprocess.run("clear")
         print(header)
-        print(info_msgs[sys.argv[2]])
+        print(f"{Consts.CGREEN}yt-dlp version: {yt_dlp.version.__version__}{Consts.ENDL}")
+        print(info_msgs.get(sw_dlt_inst.primary_action, info_msgs["-v"]))
+        if sw_dlt_inst.sponsorblock_remove:
+            sb_label = ", ".join(sw_dlt_inst.sponsorblock_remove)
+            print(f"{Consts.CBLUE}SponsorBlock remove: {sb_label}{Consts.ENDL}")
         
         with open('SW_DLT_DL_metadata.json', 'w') as metadata:
             args = ' '.join(map(str, sys.argv[2:]))
@@ -297,4 +430,3 @@ def main():
 
 if __name__ == "__main__":
     subprocess.run("open " + main())
-    

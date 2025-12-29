@@ -61,6 +61,217 @@ Official release on GitHub, avoid unknown sources!</string>
 		</dict>
 		<dict>
 			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.dictionary</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>sponsorBlockSettings</string>
+				<key>UUID</key>
+				<string>E1FAE70C-4717-4028-897D-59FD5C4BCA82</string>
+				<key>WFItems</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>WFDictionaryFieldValueItems</key>
+						<array>
+							<dict>
+								<key>WFItemType</key>
+								<integer>4</integer>
+								<key>WFKey</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>sponsor</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+								<key>WFValue</key>
+								<dict>
+									<key>Value</key>
+									<false/>
+									<key>WFSerializationType</key>
+									<string>WFNumberSubstitutableState</string>
+								</dict>
+							</dict>
+							<dict>
+								<key>WFItemType</key>
+								<integer>4</integer>
+								<key>WFKey</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>selfpromo</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+								<key>WFValue</key>
+								<dict>
+									<key>Value</key>
+									<false/>
+									<key>WFSerializationType</key>
+									<string>WFNumberSubstitutableState</string>
+								</dict>
+							</dict>
+							<dict>
+								<key>WFItemType</key>
+								<integer>4</integer>
+								<key>WFKey</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>interaction</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+								<key>WFValue</key>
+								<dict>
+									<key>Value</key>
+									<false/>
+									<key>WFSerializationType</key>
+									<string>WFNumberSubstitutableState</string>
+								</dict>
+							</dict>
+							<dict>
+								<key>WFItemType</key>
+								<integer>4</integer>
+								<key>WFKey</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>intro</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+								<key>WFValue</key>
+								<dict>
+									<key>Value</key>
+									<false/>
+									<key>WFSerializationType</key>
+									<string>WFNumberSubstitutableState</string>
+								</dict>
+							</dict>
+							<dict>
+								<key>WFItemType</key>
+								<integer>4</integer>
+								<key>WFKey</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>outro</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+								<key>WFValue</key>
+								<dict>
+									<key>Value</key>
+									<false/>
+									<key>WFSerializationType</key>
+									<string>WFNumberSubstitutableState</string>
+								</dict>
+							</dict>
+							<dict>
+								<key>WFItemType</key>
+								<integer>4</integer>
+								<key>WFKey</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>preview</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+								<key>WFValue</key>
+								<dict>
+									<key>Value</key>
+									<false/>
+									<key>WFSerializationType</key>
+									<string>WFNumberSubstitutableState</string>
+								</dict>
+							</dict>
+							<dict>
+								<key>WFItemType</key>
+								<integer>4</integer>
+								<key>WFKey</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>filler</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+								<key>WFValue</key>
+								<dict>
+									<key>Value</key>
+									<false/>
+									<key>WFSerializationType</key>
+									<string>WFNumberSubstitutableState</string>
+								</dict>
+							</dict>
+							<dict>
+								<key>WFItemType</key>
+								<integer>4</integer>
+								<key>WFKey</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>music_offtopic</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+								<key>WFValue</key>
+								<dict>
+									<key>Value</key>
+									<false/>
+									<key>WFSerializationType</key>
+									<string>WFNumberSubstitutableState</string>
+								</dict>
+							</dict>
+							<dict>
+								<key>WFItemType</key>
+								<integer>4</integer>
+								<key>WFKey</key>
+								<dict>
+									<key>Value</key>
+									<dict>
+										<key>string</key>
+										<string>hook</string>
+									</dict>
+									<key>WFSerializationType</key>
+									<string>WFTextTokenString</string>
+								</dict>
+								<key>WFValue</key>
+								<dict>
+									<key>Value</key>
+									<false/>
+									<key>WFSerializationType</key>
+									<string>WFNumberSubstitutableState</string>
+								</dict>
+							</dict>
+						</array>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFDictionaryFieldValue</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
 			<string>is.workflow.actions.comment</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
@@ -70,7 +281,9 @@ Change the above settings as needed by your usage:
 
 uninstall:
  - This will uninstall all utilities used by the shortcut. Useful if the shortcut is being removed without deleting a-Shell. Default value is 'False'
-</string>
+
+
+sponsorBlockSettings: Set booleans for each SponsorBlock category; true removes that segment during video/audio/playlist downloads.</string>
 			</dict>
 		</dict>
 		<dict>
@@ -153,6 +366,215 @@ GLOBAL SETTINGS INITIALIZATION</string>
 					<key>WFSerializationType</key>
 					<string>WFDictionaryFieldValue</string>
 				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.gettext</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>CustomOutputName</key>
+				<string>sponsorBlockConfig</string>
+				<key>UUID</key>
+				<string>931C5370-E31B-4A22-B518-EABA3558BCD2</string>
+				<key>WFTextActionText</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>attachmentsByRange</key>
+						<dict>
+							<key>{103, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>DictionaryKey</key>
+										<string>music_offtopic</string>
+										<key>Type</key>
+										<string>WFDictionaryValueVariableAggrandizement</string>
+									</dict>
+								</array>
+								<key>OutputName</key>
+								<string>sponsorBlockSettings</string>
+								<key>OutputUUID</key>
+								<string>E1FAE70C-4717-4028-897D-59FD5C4BCA82</string>
+								<key>Type</key>
+								<string>ActionOutput</string>
+							</dict>
+							<key>{11, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>DictionaryKey</key>
+										<string>sponsor</string>
+										<key>Type</key>
+										<string>WFDictionaryValueVariableAggrandizement</string>
+									</dict>
+								</array>
+								<key>OutputName</key>
+								<string>sponsorBlockSettings</string>
+								<key>OutputUUID</key>
+								<string>E1FAE70C-4717-4028-897D-59FD5C4BCA82</string>
+								<key>Type</key>
+								<string>ActionOutput</string>
+							</dict>
+							<key>{112, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>DictionaryKey</key>
+										<string>hook</string>
+										<key>Type</key>
+										<string>WFDictionaryValueVariableAggrandizement</string>
+									</dict>
+								</array>
+								<key>OutputName</key>
+								<string>sponsorBlockSettings</string>
+								<key>OutputUUID</key>
+								<string>E1FAE70C-4717-4028-897D-59FD5C4BCA82</string>
+								<key>Type</key>
+								<string>ActionOutput</string>
+							</dict>
+							<key>{25, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>DictionaryKey</key>
+										<string>selfpromo</string>
+										<key>Type</key>
+										<string>WFDictionaryValueVariableAggrandizement</string>
+									</dict>
+								</array>
+								<key>OutputName</key>
+								<string>sponsorBlockSettings</string>
+								<key>OutputUUID</key>
+								<string>E1FAE70C-4717-4028-897D-59FD5C4BCA82</string>
+								<key>Type</key>
+								<string>ActionOutput</string>
+							</dict>
+							<key>{41, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>DictionaryKey</key>
+										<string>interaction</string>
+										<key>Type</key>
+										<string>WFDictionaryValueVariableAggrandizement</string>
+									</dict>
+								</array>
+								<key>OutputName</key>
+								<string>sponsorBlockSettings</string>
+								<key>OutputUUID</key>
+								<string>E1FAE70C-4717-4028-897D-59FD5C4BCA82</string>
+								<key>Type</key>
+								<string>ActionOutput</string>
+							</dict>
+							<key>{51, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>DictionaryKey</key>
+										<string>intro</string>
+										<key>Type</key>
+										<string>WFDictionaryValueVariableAggrandizement</string>
+									</dict>
+								</array>
+								<key>OutputName</key>
+								<string>sponsorBlockSettings</string>
+								<key>OutputUUID</key>
+								<string>E1FAE70C-4717-4028-897D-59FD5C4BCA82</string>
+								<key>Type</key>
+								<string>ActionOutput</string>
+							</dict>
+							<key>{61, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>DictionaryKey</key>
+										<string>outro</string>
+										<key>Type</key>
+										<string>WFDictionaryValueVariableAggrandizement</string>
+									</dict>
+								</array>
+								<key>OutputName</key>
+								<string>sponsorBlockSettings</string>
+								<key>OutputUUID</key>
+								<string>E1FAE70C-4717-4028-897D-59FD5C4BCA82</string>
+								<key>Type</key>
+								<string>ActionOutput</string>
+							</dict>
+							<key>{73, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>DictionaryKey</key>
+										<string>preview</string>
+										<key>Type</key>
+										<string>WFDictionaryValueVariableAggrandizement</string>
+									</dict>
+								</array>
+								<key>OutputName</key>
+								<string>sponsorBlockSettings</string>
+								<key>OutputUUID</key>
+								<string>E1FAE70C-4717-4028-897D-59FD5C4BCA82</string>
+								<key>Type</key>
+								<string>ActionOutput</string>
+							</dict>
+							<key>{84, 1}</key>
+							<dict>
+								<key>Aggrandizements</key>
+								<array>
+									<dict>
+										<key>DictionaryKey</key>
+										<string>filler</string>
+										<key>Type</key>
+										<string>WFDictionaryValueVariableAggrandizement</string>
+									</dict>
+								</array>
+								<key>OutputName</key>
+								<string>sponsorBlockSettings</string>
+								<key>OutputUUID</key>
+								<string>E1FAE70C-4717-4028-897D-59FD5C4BCA82</string>
+								<key>Type</key>
+								<string>ActionOutput</string>
+							</dict>
+						</dict>
+						<key>string</key>
+						<string>{"sponsor":￼,"selfpromo":￼,"interaction":￼,"intro":￼,"outro":￼,"preview":￼,"filler":￼,"music_offtopic":￼,"hook":￼}</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setvariable</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>sponsorBlockConfig</string>
+						<key>OutputUUID</key>
+						<string>931C5370-E31B-4A22-B518-EABA3558BCD2</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFVariableName</key>
+				<string>sponsorBlockConfig</string>
 			</dict>
 		</dict>
 		<dict>
@@ -6654,16 +7076,25 @@ URL: ￼</string>
 								<key>VariableName</key>
 								<string>mediaURL</string>
 							</dict>
-							<key>{18, 1}</key>
+							<key>{19, 1}</key>
 							<dict>
 								<key>Type</key>
 								<string>Variable</string>
 								<key>VariableName</key>
 								<string>args</string>
 							</dict>
+							<key>{31, 1}</key>
+							<dict>
+								<key>OutputName</key>
+								<string>sponsorBlockConfig</string>
+								<key>OutputUUID</key>
+								<string>931C5370-E31B-4A22-B518-EABA3558BCD2</string>
+								<key>Type</key>
+								<string>ActionOutput</string>
+							</dict>
 						</dict>
 						<key>string</key>
-						<string>python SW_DLT.py ￼￼</string>
+						<string>python SW_DLT.py ￼ ￼ --sbjson='￼'</string>
 					</dict>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenString</string>
@@ -6757,11 +7188,20 @@ URL: ￼</string>
 								<key>VariableName</key>
 								<string>args</string>
 							</dict>
+							<key>{88, 1}</key>
+							<dict>
+								<key>OutputName</key>
+								<string>sponsorBlockConfig</string>
+								<key>OutputUUID</key>
+								<string>931C5370-E31B-4A22-B518-EABA3558BCD2</string>
+								<key>Type</key>
+								<string>ActionOutput</string>
+							</dict>
 						</dict>
 						<key>string</key>
 						<string>cd $HOME/Documents/SW-DLT
 source SW-DLT-ENV/bin/activate
-python SW_DLT.py ￼ ￼
+python SW_DLT.py ￼ ￼ --sbjson='￼'
 deactivate
 clear &amp;&amp; cd</string>
 					</dict>
