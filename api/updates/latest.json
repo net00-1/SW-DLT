@@ -1,7 +1,7 @@
 {
     "result": "success",
-    "version": "4.2.1",
-    "url": "https://www.icloud.com/shortcuts/68b0d184a5e54f569cf9f9fe76bd4a39",
-    "notes": "4.2.1: Minor changes to improve reliability",
-    "release": "2025-11-21"
+    "version": "4.2.2",
+    "url": "https://www.icloud.com/shortcuts/695f53b649c947d998ae058d03efcc43",
+    "notes": "4.2.2: Improvements to gallery resumable downloads and placeholder cookie installation",
+    "release": "2025-12-28"
 }
