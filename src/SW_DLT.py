@@ -16,7 +16,6 @@ import os
 class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
     DERROR_EXC = '{"output_code":"exception","exc_trace":"vars.downloadError"}'
-    SET_COOKIE = "echo 'document.cookie = \"installed=1; expires=Thu, 1 Jan 2026 12:00:00 UTC; sameSite=Lax\";' | jsi"
     
 
 class SW_DLT:
@@ -61,21 +60,23 @@ class SW_DLT:
 
     @staticmethod
     def update_check():
+        current_time = datetime.datetime.today()
         show_progress("util", 0, 2)
         if not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
-            subprocess.run(Consts.SET_COOKIE)
+            cookie_expiration = current_time.replace(year=current_time.year + 1)
+            set_cookie = f"echo 'document.cookie = \"installed=1; expires={cookie_expiration.strftime('%a, %#d %b %Y %H:%M:%S UTC')}; sameSite=Lax\";' | jsi"
+            subprocess.run(set_cookie)
 
         #We need to wait for delay in jsi command
         while not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
             subprocess.run("sleep 1")
         
         show_progress("util", 1, 2)
-        current_time = int(datetime.datetime.today().timestamp())
 
         with open(f"{os.environ['HOME']}/Documents/SW-DLT/shortcut_update_ts.txt", 'r') as ts_file:
             last_check = int(ts_file.read())
     
-        if current_time - last_check < 600:
+        if int(current_time.timestamp()) - last_check < 600:
             subprocess.run("pip install chardet requests certifi mutagen -q --disable-pip-version-check --upgrade")
             subprocess.run("pip install yt-dlp yt-dlp-ejs yt-dlp-apple-webkit-jsi gallery-dl -q --disable-pip-version-check --upgrade")
             #yt-dlp is reloaded here to avoid issues after updates
@@ -153,12 +154,11 @@ class SW_DLT:
                     show_progress("manual", 1, 1)        
                 
             files = os.listdir(self.file_id)
-            # No files returned, removes temp folder and raises Exception
+            # No files returned, raises Exception
             if len(files) == 0:
-                shutil.rmtree(self.file_id, True)
                 raise OSError()
 
-            # Single item, removes temp folder and directly outputs the item
+            # Single item, directly outputs the item
             elif len(files) < 2:
                 file = "{0}/{1}".format(self.file_id, files[0])
                 output = {
@@ -167,10 +167,9 @@ class SW_DLT:
                     "file_title": self.date_id
                 }
 
-            # Mutiple items, zips temp folder and returns it, removes temp folder
+            # Mutiple items, zips temp folder and returns it
             else:
                 shutil.make_archive(self.file_id, "zip", self.file_id)
-                shutil.rmtree(self.file_id, True)
                 output = {
                     "output_code": "success",
                     "file_name": os.path.abspath(self.file_id + ".zip"),
