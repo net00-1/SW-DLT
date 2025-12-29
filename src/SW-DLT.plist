@@ -142,7 +142,7 @@ GLOBAL SETTINGS INITIALIZATION</string>
 									<key>Value</key>
 									<dict>
 										<key>string</key>
-										<string>4.2.1</string>
+										<string>4.2.2</string>
 									</dict>
 									<key>WFSerializationType</key>
 									<string>WFTextTokenString</string>
@@ -6801,7 +6801,7 @@ clear &amp;&amp; cd</string>
 		</dict>
 	</array>
 	<key>WFWorkflowClientVersion</key>
-	<string>3612.0.1.1</string>
+	<string>3612.0.1.2</string>
 	<key>WFWorkflowHasOutputFallback</key>
 	<false/>
 	<key>WFWorkflowHasShortcutInputVariables</key>
