@@ -49,7 +49,7 @@ class SW_DLT:
         self.subs_options = {
             "writesubtitles": True,
             "writeautomaticsub": True,
-            "subtitleslangs": ["en-GB", "en-US", "fr-FR"],
+            "subtitleslangs": ["en", "en-GB", "en-US", "fr", "fr-FR"],
             "embedsubtitles": True,
             "addmetadata": True,
             "merge_output_format": "mp4",
