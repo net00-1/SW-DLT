@@ -53,7 +53,15 @@ class SW_DLT:
             "embedsubtitles": True,
             "addmetadata": True,
             "merge_output_format": "mp4",
-            "postprocessor_args": {"ffmpeg": ["-c:s", "mov_text"]},
+            "postprocessors": [
+                {
+                    "key": "FFmpegEmbedSubtitle",
+                    "already_have_subtitle": False,
+                },
+            ],
+            "postprocessor_args": {
+                "FFmpegEmbedSubtitle+ffmpeg": ["-c:s", "mov_text"],
+            },
         }
 
         processes = {
