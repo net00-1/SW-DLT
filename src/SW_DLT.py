@@ -16,15 +16,16 @@ import os
 class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
     DERROR_EXC = '{"output_code":"exception","exc_trace":"vars.downloadError"}'
-    
+
 
 class SW_DLT:
 
     def __init__(self, file_id, *args):
         # args[0]: media URL to download
         # args[1]: main process to run
-        # args[2] (dependent): resolution for video, type for playlist, or range for gallery
+        # args[2] (dependent): resolution for video (or -d for default values), type for playlist, or range for gallery
         # args[3] (dependent): framerate for video
+        # args[-1]: optional "-s" flag (for -v and -p modes) to embed subtitles
         self.media_url = args[0]
         self.file_id = file_id
         self.date_id = datetime.datetime.today().strftime("%d-%m-%y-%H-%M-%S")
@@ -35,7 +36,24 @@ class SW_DLT:
             "noprogress": True,
             "progress_hooks": [show_progress],
             "postprocessor_hooks": [format_processing],
-            "cookiesfrombrowser": ("safari",)
+            "cookiesfrombrowser": ("safari",),
+            "addmetadata": True
+        }
+        # ---------------------------------------------------------------------------
+        # Subtitle options, merged into yt-dlp option dicts when self.embed_subs is True
+        # Equivalent CLI flags:
+        #   --write-subs --write-auto-subs --sub-langs "en.*,fr.*"
+        #   --embed-subs --merge-output-format mp4
+        #   --postprocessor-args "ffmpeg:-c:s mov_text"
+        # ---------------------------------------------------------------------------
+        self.subs_options = {
+            "writesubtitles": True,
+            "writeautomaticsub": True,
+            "subtitleslangs": ["en.*", "fr.*"],
+            "embedsubtitles": True,
+            "addmetadata": True,
+            "merge_output_format": "mp4",
+            "postprocessor_args": {"ffmpeg": ["-c:s", "mov_text"]},
         }
 
         processes = {
@@ -50,13 +68,20 @@ class SW_DLT:
         self.playlist_type = ""
         self.gallery_range = ""
 
-        if len(args) > 2:
-            self.video_res = args[2] if args[1] == "-v" else ""
-            self.playlist_type = args[2] if args[1] == "-p" else ""
-            self.gallery_range = args[2].replace('"','').replace("'","") if args[1] == "-g" else ""
+        # "-s" can appear as the last argument for -v and -p modes to enable subtitle embedding.
+        # Strip before processing the other positional args so nothing else breaks.
+        trailing_args = list(args[2:])
+        self.embed_subs = len(trailing_args) > 0 and trailing_args[-1] == "-s"
+        if self.embed_subs:
+            trailing_args = trailing_args[:-1]   # drop the "-s" flag
 
-        if len(args) > 3:
-            self.video_fps = args[3]  
+        if len(trailing_args) > 0:
+            self.video_res = trailing_args[0] if args[1] == "-v" else ""
+            self.playlist_type = trailing_args[0] if args[1] == "-p" else ""
+            self.gallery_range = trailing_args[0].replace('"','').replace("'","") if args[1] == "-g" else ""
+
+        if len(trailing_args) > 1:
+            self.video_fps = trailing_args[1]  # only meaningful for -v
 
     @staticmethod
     def update_check():
@@ -70,18 +95,18 @@ class SW_DLT:
         #We need to wait for delay in jsi command
         while not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
             subprocess.run("sleep 1")
-        
+
         show_progress("util", 1, 2)
 
         with open(f"{os.environ['HOME']}/Documents/SW-DLT/shortcut_update_ts.txt", 'r') as ts_file:
             last_check = int(ts_file.read())
-    
+
         if int(current_time.timestamp()) - last_check < 600:
             subprocess.run("pip install chardet requests certifi mutagen -q --disable-pip-version-check --upgrade")
             subprocess.run("pip install yt-dlp yt-dlp-ejs yt-dlp-apple-webkit-jsi gallery-dl -q --disable-pip-version-check --upgrade")
             #yt-dlp is reloaded here to avoid issues after updates
             importlib.reload(yt_dlp)
-        
+
         show_progress("util", 2, 2)
 
     def single_video(self):
@@ -98,7 +123,9 @@ class SW_DLT:
             "playlist_items": "1-1",
             "outtmpl": f'{self.file_id}.%(ext)s',
             "format_sort": ["res", "ext:mp4:m4a", "codec:avc:m4a"],
-            **self.ytdlp_globals
+            **self.ytdlp_globals,
+            # Subtitle options are merged last so they can override merge_output_format etc.
+            **(self.subs_options if self.embed_subs else {}),
         }
 
         try:
@@ -140,7 +167,7 @@ class SW_DLT:
                 }
                 return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
         # If for some reason the above doesn't find the downloaded file, we raise generic Exception
-        raise Exception(Consts.DERROR)
+        raise Exception(Consts.DERROR_EXC)
 
     def gallery_download(self):
         try:
@@ -148,11 +175,11 @@ class SW_DLT:
             os.makedirs(self.file_id, exist_ok=True)
             dl_cmd = "gallery-dl {0} --range \"{1}\" --directory {2} --cookies-from-browser safari".format(
                 self.media_url, self.gallery_range, self.file_id)
-                
+
             with subprocess.Popen(dl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as gdl:
                 for entry in gdl.stdout:
-                    show_progress("manual", 1, 1)        
-                
+                    show_progress("manual", 1, 1)
+
             files = os.listdir(self.file_id)
             # No files returned, raises Exception
             if len(files) == 0:
@@ -182,14 +209,17 @@ class SW_DLT:
             raise Exception(clean_stderr)
         except (AttributeError, OSError) as ex2:
             raise Exception(Consts.DERROR_EXC)
-            
+
     def playlist_download(self):
         dl_options = {
             "format": "best" if self.playlist_type == "-v" else "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
             "postprocessors": [] if self.playlist_type == "-v" else [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
             "outtmpl": f'{self.file_id}/%(title)s.%(ext)s',
             "format_sort": ["+codec:avc:m4a"],
-            **self.ytdlp_globals
+            **self.ytdlp_globals,
+            # Subtitle options only make sense for video playlists (-p -v).
+            # For audio playlists the subs flag is silently ignored.
+            **(self._subs_options if (self.embed_subs and self.playlist_type == "-v") else {}),
         }
 
         try:
@@ -261,11 +291,11 @@ def main():
 
         # Pre-download check and cleanup
         subprocess.run("clear && hideKeyboard", shell=True)
-        
+
         print(header)
-        print(info_msgs["update_check"])            
+        print(info_msgs["update_check"])
         sw_dlt_inst.update_check()
-        
+
         # If the same partial file is not found, deletes all leftovers (important)
         for file in os.listdir():
             if file.startswith("SW_DLT_DL_") and not file.startswith(file_id):
@@ -279,11 +309,11 @@ def main():
         subprocess.run("clear")
         print(header)
         print(info_msgs[sys.argv[2]])
-        
+
         with open('SW_DLT_DL_metadata.json', 'w') as metadata:
             args = ' '.join(map(str, sys.argv[2:]))
             json.dump({f"{sys.argv[1]}": args}, metadata)
-        
+
         return sw_dlt_inst.run()
 
     except Exception as exc_url:
@@ -297,4 +327,3 @@ def main():
 
 if __name__ == "__main__":
     subprocess.run("open " + main())
-    
