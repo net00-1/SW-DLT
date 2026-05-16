@@ -152,6 +152,7 @@ class SW_DLT:
             raise Exception(ex.args[0])
 
     def single_download(self, dl_options):
+        SUBTITLE_EXTS = ('.vtt', '.srt', '.ass', '.ssa', '.ttml', '.json3')
         # Uses yt-dlp to download single video or audio items
         with yt_dlp.YoutubeDL(dl_options) as vid_obj:
             meta_data = vid_obj.extract_info(self.media_url, download=False)
@@ -159,7 +160,7 @@ class SW_DLT:
             vid_obj.download([self.media_url])
 
         for file in os.listdir():
-            if file.startswith(self.file_id):
+            if file.startswith(self.file_id) and not file.endswith(SUBTITLE_EXTS):
                 output = {
                     "output_code": "success",
                     "file_name": os.path.abspath(file),
