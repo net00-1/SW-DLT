@@ -1,4 +1,4 @@
-# SW-DLT script, check Github for documentation.
+# SW-DLT script, check Github for documentation
 # Official release on GitHub, avoid unknown sources
 
 import urllib.parse
@@ -29,6 +29,7 @@ class SW_DLT:
         self.media_url = args[0]
         self.file_id = file_id
         self.date_id = datetime.datetime.today().strftime("%d-%m-%y-%H-%M-%S")
+        # Global options for yt-dlp
         self.ytdlp_globals = {
             "color": "never",
             "quiet": True,
@@ -39,19 +40,12 @@ class SW_DLT:
             "cookiesfrombrowser": ("safari",),
             "addmetadata": True
         }
-        # ---------------------------------------------------------------------------
-        # Subtitle options, merged into yt-dlp option dicts when self.embed_subs is True
-        # Equivalent CLI flags:
-        #   --write-subs --write-auto-subs --sub-langs "en.*,fr.*"
-        #   --embed-subs --merge-output-format mp4
-        #   --postprocessor-args "ffmpeg:-c:s mov_text"
-        # ---------------------------------------------------------------------------
+        # Subtitles options for yt-dlp, used when self.embed_subs is True
         self.subs_options = {
             "writesubtitles": True,
             "writeautomaticsub": True,
-            "subtitleslangs": ["en", "en-GB", "en-US", "fr", "fr-FR"],
+            "subtitleslangs": ["all"],
             "embedsubtitles": True,
-            "addmetadata": True,
             "merge_output_format": "mp4",
             "postprocessors": [
                 {
@@ -100,7 +94,7 @@ class SW_DLT:
             set_cookie = f"echo 'document.cookie = \"installed=1; expires={cookie_expiration}; sameSite=Lax\";' | jsi"
             subprocess.run(set_cookie)
 
-        #We need to wait for delay in jsi command
+        # We need to wait for delay in jsi command
         while not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
             subprocess.run("sleep 1")
 
@@ -112,7 +106,7 @@ class SW_DLT:
         if int(current_time.timestamp()) - last_check < 600:
             subprocess.run("pip install chardet requests certifi mutagen -q --disable-pip-version-check --upgrade")
             subprocess.run("pip install yt-dlp yt-dlp-ejs yt-dlp-apple-webkit-jsi gallery-dl -q --disable-pip-version-check --upgrade")
-            #yt-dlp is reloaded here to avoid issues after updates
+            # yt-dlp is reloaded here to avoid issues after updates
             importlib.reload(yt_dlp)
 
         show_progress("util", 2, 2)
@@ -228,7 +222,7 @@ class SW_DLT:
             **self.ytdlp_globals,
             # Subtitle options only make sense for video playlists (-p -v).
             # For audio playlists the subs flag is silently ignored.
-            **(self._subs_options if (self.embed_subs and self.playlist_type == "-v") else {}),
+            **(self.subs_options if (self.embed_subs and self.playlist_type == "-v") else {}),
         }
 
         try:
