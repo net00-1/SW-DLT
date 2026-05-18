@@ -43,7 +43,6 @@ class SW_DLT:
         # Subtitles options for yt-dlp, used when self.embed_subs is True
         self.subs_options = {
             "writesubtitles": True,
-            "writeautomaticsub": True,
             "subtitleslangs": ["all"],
             "embedsubtitles": True,
             "merge_output_format": "mp4",
