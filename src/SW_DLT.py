@@ -69,8 +69,8 @@ class SW_DLT:
         self.playlist_type = ""
         self.gallery_range = ""
 
-        # "-s" can appear as the last argument for -v and -p modes to enable subtitle embedding.
-        # Strip before processing the other positional args so nothing else breaks.
+        # "-s" can appear as the last argument for -v and -p modes to enable subtitle embedding
+        # Strip before processing the other positional args so nothing else breaks
         trailing_args = list(args[2:])
         self.embed_subs = len(trailing_args) > 0 and trailing_args[-1] == "-s"
         if self.embed_subs:
@@ -82,7 +82,7 @@ class SW_DLT:
             self.gallery_range = trailing_args[0].replace('"','').replace("'","") if args[1] == "-g" else ""
 
         if len(trailing_args) > 1:
-            self.video_fps = trailing_args[1]  # only meaningful for -v
+            self.video_fps = trailing_args[1]
 
     @staticmethod
     def update_check():
@@ -125,7 +125,6 @@ class SW_DLT:
             "outtmpl": f'{self.file_id}.%(ext)s',
             "format_sort": ["res", "ext:mp4:m4a", "codec:avc:m4a"],
             **self.ytdlp_globals,
-            # Subtitle options are merged last so they can override merge_output_format etc.
             **(self.subs_options if self.embed_subs else {}),
         }
 
