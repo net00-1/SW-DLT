@@ -69,8 +69,8 @@ Official release on GitHub, avoid unknown sources!</string>
 Change the above settings as needed by your usage:
 
 uninstall:
- - This will uninstall all utilities used by the shortcut. Useful if the shortcut is being removed without deleting a-Shell. Default value is 'False'
-</string>
+- This will uninstall all utilities used by the shortcut. Useful if the shortcut is being removed without deleting a-Shell. Default value is 'False'
+				</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2368,13 +2368,13 @@ GLOBAL SETTINGS INITIALIZATION</string>
 				<key>UUID</key>
 				<string>938E06F0-1E45-41CE-BD3A-88293CF1A171</string>
 				<key>WFTextActionText</key>
-				<string>WORKSPACE="$HOME/Documents/SW-DLT"
+			<string>WORKSPACE="$HOME/Documents/SW-DLT"
 MAIN_SCRIPT="$WORKSPACE/SW_DLT.py"
 VENV="$WORKSPACE/SW-DLT-ENV/"
 
 if [ ! -f $MAIN_SCRIPT ] || [ ! -d $VENV ]
 then mkdir -p $WORKSPACE
-     echo "CONTINUE_INSTALL"
+	echo "CONTINUE_INSTALL"
 fi</string>
 			</dict>
 		</dict>
@@ -2642,14 +2642,14 @@ exit</string>
 							</dict>
 						</dict>
 						<key>string</key>
-						<string>LATEST_VERSION="https://net00-1.github.io/SW-DLT/api/updates/latest.json"
+					<string>LATEST_VERSION="https://net00-1.github.io/SW-DLT/api/updates/latest.json"
 WORKSPACE="$HOME/Documents/SW-DLT"
 LAST_CHECK_TS="$WORKSPACE/shortcut_update_ts.txt"
 CURRENT_DATE=$(date +%s)
 CURRENT_VERSION="￼"
 
 if [ ! -f $LAST_CHECK_TS ]
-then echo 0 &gt; $LAST_CHECK_TS 
+then echo 0 &gt; $LAST_CHECK_TS
 fi
 
 TS_DATE=$(cat $LAST_CHECK_TS)
@@ -2657,10 +2657,10 @@ DATE_DIFF=$(($CURRENT_DATE - $TS_DATE))
 
 if [ $((DATE_DIFF / 86400)) -ge 1 ]
 then VER_CHECK=$(curl -sL $LATEST_VERSION)
-    date +%s &gt; $LAST_CHECK_TS
-    if [ "$CURRENT_VERSION" != $(echo $VER_CHECK | jq -r ".version") ]
-    then echo $VER_CHECK
-    fi
+date +%s &gt; $LAST_CHECK_TS
+if [ "$CURRENT_VERSION" != $(echo $VER_CHECK | jq -r ".version") ]
+then echo $VER_CHECK
+fi
 fi</string>
 					</dict>
 					<key>WFSerializationType</key>
@@ -3549,7 +3549,7 @@ Changelog:
 				<key>UUID</key>
 				<string>D35F7908-BD2B-4994-AC9E-60D765B26839</string>
 				<key>WFTextActionText</key>
-				<string>WORKSPACE="$HOME/Documents/SW-DLT"
+			<string>WORKSPACE="$HOME/Documents/SW-DLT"
 PARTIAL_DL="$WORKSPACE/SW_DLT_DL_metadata.json"
 
 if [ -f $PARTIAL_DL ]
@@ -4556,7 +4556,7 @@ END:VCARD</string>
 							</dict>
 						</dict>
 						<key>string</key>
-						<string>￼
+					<string>￼
 BEGIN:VCARD
 N:About;;;;
 PHOTO;ENCODING=b:￼
@@ -5333,6 +5333,117 @@ URL: ￼</string>
 			<dict>
 				<key>GroupingIdentifier</key>
 				<string>DAAF6593-F358-4979-A675-1B948ED95A21</string>
+				<key>UUID</key>
+				<string>C4D4EEA8-3CBF-45EE-8DDA-AABCCA57CBF9</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.choosefrommenu</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>008FA0C3-7921-4B7A-A109-F853B43A1886</string>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFMenuItems</key>
+				<array>
+					<string>Yes</string>
+					<string>No</string>
+				</array>
+				<key>WFMenuPrompt</key>
+				<string>Download with captions?</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.choosefrommenu</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>008FA0C3-7921-4B7A-A109-F853B43A1886</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+				<key>WFMenuItemTitle</key>
+				<string>Yes</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.gettext</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>B212BE60-E47B-4DE1-B255-0184C340C9B0</string>
+				<key>WFTextActionText</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>attachmentsByRange</key>
+						<dict>
+							<key>{0, 1}</key>
+							<dict>
+								<key>Type</key>
+								<string>Variable</string>
+								<key>VariableName</key>
+								<string>args</string>
+							</dict>
+						</dict>
+						<key>string</key>
+						<string>&#xFFFC; -s</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setvariable</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Text</string>
+						<key>OutputUUID</key>
+						<string>B212BE60-E47B-4DE1-B255-0184C340C9B0</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFVariableName</key>
+				<string>args</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.choosefrommenu</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>008FA0C3-7921-4B7A-A109-F853B43A1886</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+				<key>WFMenuItemTitle</key>
+				<string>No</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.choosefrommenu</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>008FA0C3-7921-4B7A-A109-F853B43A1886</string>
+				<key>UUID</key>
+				<string>E90CECBF-8B39-480E-8BE3-026F42F986A8</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -5344,6 +5455,8 @@ URL: ￼</string>
 			<dict>
 				<key>GroupingIdentifier</key>
 				<string>71EF5EA2-ADC8-4A0A-BFE5-019E40D6BF64</string>
+				<key>UUID</key>
+				<string>3F785A13-4582-4346-AF1B-C464E6D9FAFF</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -5428,6 +5541,8 @@ URL: ￼</string>
 			<dict>
 				<key>GroupingIdentifier</key>
 				<string>DB05B719-9E84-4452-8989-8E52EC7F1C82</string>
+				<key>UUID</key>
+				<string>A6DE5FFE-E62E-43FE-8175-75F2C1C53C0E</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -5625,6 +5740,115 @@ URL: ￼</string>
 		</dict>
 		<dict>
 			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.choosefrommenu</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>59486486-F9D6-4445-BCAF-19D2936C69DC</string>
+				<key>WFControlFlowMode</key>
+				<integer>0</integer>
+				<key>WFMenuItems</key>
+				<array>
+					<string>Yes</string>
+					<string>No</string>
+				</array>
+				<key>WFMenuPrompt</key>
+				<string>Download with captions?</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.choosefrommenu</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>59486486-F9D6-4445-BCAF-19D2936C69DC</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+				<key>WFMenuItemTitle</key>
+				<string>Yes</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.gettext</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>UUID</key>
+				<string>F0D660CE-9726-499E-AF2C-27AB7CC679A2</string>
+				<key>WFTextActionText</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>attachmentsByRange</key>
+						<dict>
+							<key>{0, 1}</key>
+							<dict>
+								<key>Type</key>
+								<string>Variable</string>
+								<key>VariableName</key>
+								<string>args</string>
+							</dict>
+						</dict>
+						<key>string</key>
+						<string>&#xFFFC; -s</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenString</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.setvariable</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>WFInput</key>
+				<dict>
+					<key>Value</key>
+					<dict>
+						<key>OutputName</key>
+						<string>Text</string>
+						<key>OutputUUID</key>
+						<string>F0D660CE-9726-499E-AF2C-27AB7CC679A2</string>
+						<key>Type</key>
+						<string>ActionOutput</string>
+					</dict>
+					<key>WFSerializationType</key>
+					<string>WFTextTokenAttachment</string>
+				</dict>
+				<key>WFVariableName</key>
+				<string>args</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.choosefrommenu</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>59486486-F9D6-4445-BCAF-19D2936C69DC</string>
+				<key>WFControlFlowMode</key>
+				<integer>1</integer>
+				<key>WFMenuItemTitle</key>
+				<string>No</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
+			<string>is.workflow.actions.choosefrommenu</string>
+			<key>WFWorkflowActionParameters</key>
+			<dict>
+				<key>GroupingIdentifier</key>
+				<string>59486486-F9D6-4445-BCAF-19D2936C69DC</string>
+				<key>UUID</key>
+				<string>2075F6D6-F214-4D14-BF1C-AA74703B50B7</string>
+				<key>WFControlFlowMode</key>
+				<integer>2</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>WFWorkflowActionIdentifier</key>
 			<string>is.workflow.actions.conditional</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
@@ -5673,6 +5897,8 @@ URL: ￼</string>
 			<dict>
 				<key>GroupingIdentifier</key>
 				<string>196DEEF1-88CD-4B60-8B23-60909D5F5FDD</string>
+				<key>UUID</key>
+				<string>61B09848-5A2C-4C01-BC37-22033A0D0BFB</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -5684,6 +5910,8 @@ URL: ￼</string>
 			<dict>
 				<key>GroupingIdentifier</key>
 				<string>C5C21643-AD3E-4212-A303-2368F7F580A9</string>
+				<key>UUID</key>
+				<string>009A4062-92C1-4786-9157-C7840BCD7302</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -6040,6 +6268,8 @@ URL: ￼</string>
 			<dict>
 				<key>GroupingIdentifier</key>
 				<string>AD38E031-2197-417B-A9B8-96E75767DE02</string>
+				<key>UUID</key>
+				<string>FAE40600-F153-4DAC-AC37-3F4E4C7DB7F0</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -6051,6 +6281,8 @@ URL: ￼</string>
 			<dict>
 				<key>GroupingIdentifier</key>
 				<string>E47856E3-C37D-4F6C-BC5F-5569A8FD9077</string>
+				<key>UUID</key>
+				<string>907E56F1-412E-4AA8-9025-6031B028DBC0</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -6292,109 +6524,109 @@ URL: ￼</string>
 						</dict>
 						<key>string</key>
 						<string>&lt;html&gt;
-    &lt;head&gt;
-    &lt;title&gt;SW-DLT: About&lt;/title&gt;
-    &lt;meta name='viewport' content='width=device-width, initial-scale=1.0' charset='UTF-8'/&gt;
-    &lt;style&gt;
-        body {
-            font-size: 18px;
-            font-family: helvetica, arial, sans-serif;
-            word-wrap: break-word;
-        }
-        @media(prefers-color-scheme: dark) {
-            body {
-                color: #E6E6E6;
-                background-color: #121212;
-            }
-        .footer {
-                color: #E6E6E6;
-                background-color: #121212;
-           }
-        }
-        @media(prefers-color-scheme: light) {
-            body {
-                color: #000000;
-                background-color: #FDFDFD;
-            }
-        .footer {
-                color: #000000;
-                background-color: #FDFDFD;
-           }
-        }
-        .custom-header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .custom-header h2 {
-            align-self: flex-end;
-            padding-left: 1%;
-        }    
-        .logo {
-            height: 50px;
-            width: auto;
-        }
-        .description {
-            text-align: center;
-            padding-left: 5%;
-            padding-right: 5%;
-        }
-        .description p {
-            font-size: 12pt;
-        }
-        .links {
-            padding-left: 5%;
-            padding-right: 5%;
-            text-align: center;
-        }
-        .footer {
-            color: #F28D33;
-            position: sticky;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            font-size: 10pt;
-            padding-left: 5%;
-            padding-right: 5%;
-        }
-        hr {
-            opacity: 50%;
-        }
-        &lt;/style&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;div class='custom-header'&gt;
-            &lt;img class='logo' alt='logo' src='data:image/png;base64,￼'&gt;
-            &lt;h2&gt;SW-DLT&lt;/h2&gt;
-        &lt;/div&gt;
-        &lt;div class='links'&gt;
-            &lt;hr /&gt;
-            &lt;h3&gt;Donations ❤️&lt;/h3&gt;
-            &lt;p&gt;If this shortcut has helped you, please consider leaving a small tip by scanning or holding on the QR code. Thank you!&lt;/p&gt;
-            &lt;a href='￼'&gt;&lt;img src='￼' width="40%" /&gt;&lt;/a&gt;
-            &lt;hr /&gt;
-            &lt;h3&gt;Useful Links&lt;/h3&gt;
-            &lt;p&gt;&lt;a href='￼'&gt;SW-DLT Documentation&lt;/a&gt;&lt;/p&gt;
-            &lt;p&gt;&lt;a href='￼'&gt;REPORT AN ISSUE HERE&lt;/a&gt;&lt;/p&gt;
-            &lt;p&gt;&lt;a href='￼'&gt;yt-dlp on GitHub&lt;/a&gt;
-            &lt;a href='￼'&gt;gallery-dl on GitHub&lt;/a&gt;&lt;/p&gt;
-            &lt;p&gt;&lt;/p&gt;
-        &lt;/div&gt;
-        &lt;div class='description'&gt;
-        &lt;hr /&gt;
-            &lt;h3&gt;Description&lt;/h3&gt;
-            &lt;p&gt;￼&lt;/p&gt;
-            &lt;p&gt;&lt;b&gt;Author:&lt;/b&gt; ￼&lt;/p&gt;
-            &lt;p&gt;&lt;b&gt;Version:&lt;/b&gt; ￼&lt;/p&gt;
-        &lt;/div&gt;
-        &lt;div class='footer'&gt;
-        &lt;hr /&gt;
-            &lt;p&gt;Official release on GitHub. Avoid unknown sources!&lt;/p&gt;
-        &lt;/div&gt;
-    &lt;/body&gt;
+&lt;head&gt;
+&lt;title&gt;SW-DLT: About&lt;/title&gt;
+&lt;meta name='viewport' content='width=device-width, initial-scale=1.0' charset='UTF-8'/&gt;
+&lt;style&gt;
+	body {
+		font-size: 18px;
+		font-family: helvetica, arial, sans-serif;
+		word-wrap: break-word;
+	}
+	@media(prefers-color-scheme: dark) {
+		body {
+			color: #E6E6E6;
+			background-color: #121212;
+		}
+	.footer {
+			color: #E6E6E6;
+			background-color: #121212;
+		}
+	}
+	@media(prefers-color-scheme: light) {
+		body {
+			color: #000000;
+			background-color: #FDFDFD;
+		}
+	.footer {
+			color: #000000;
+			background-color: #FDFDFD;
+		}
+	}
+	.custom-header {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.custom-header h2 {
+		align-self: flex-end;
+		padding-left: 1%;
+	}
+	.logo {
+		height: 50px;
+		width: auto;
+	}
+	.description {
+		text-align: center;
+		padding-left: 5%;
+		padding-right: 5%;
+	}
+	.description p {
+		font-size: 12pt;
+	}
+	.links {
+		padding-left: 5%;
+		padding-right: 5%;
+		text-align: center;
+	}
+	.footer {
+		color: #F28D33;
+		position: sticky;
+		margin-left: auto;
+		margin-right: auto;
+		text-align: center;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		font-size: 10pt;
+		padding-left: 5%;
+		padding-right: 5%;
+	}
+	hr {
+		opacity: 50%;
+	}
+	&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;div class='custom-header'&gt;
+		&lt;img class='logo' alt='logo' src='data:image/png;base64,￼'&gt;
+		&lt;h2&gt;SW-DLT&lt;/h2&gt;
+	&lt;/div&gt;
+	&lt;div class='links'&gt;
+		&lt;hr /&gt;
+		&lt;h3&gt;Donations ❤️&lt;/h3&gt;
+		&lt;p&gt;If this shortcut has helped you, please consider leaving a small tip by scanning or holding on the QR code. Thank you!&lt;/p&gt;
+		&lt;a href='￼'&gt;&lt;img src='￼' width="40%" /&gt;&lt;/a&gt;
+		&lt;hr /&gt;
+		&lt;h3&gt;Useful Links&lt;/h3&gt;
+		&lt;p&gt;&lt;a href='￼'&gt;SW-DLT Documentation&lt;/a&gt;&lt;/p&gt;
+		&lt;p&gt;&lt;a href='￼'&gt;REPORT AN ISSUE HERE&lt;/a&gt;&lt;/p&gt;
+		&lt;p&gt;&lt;a href='￼'&gt;yt-dlp on GitHub&lt;/a&gt;
+		&lt;a href='￼'&gt;gallery-dl on GitHub&lt;/a&gt;&lt;/p&gt;
+		&lt;p&gt;&lt;/p&gt;
+	&lt;/div&gt;
+	&lt;div class='description'&gt;
+	&lt;hr /&gt;
+		&lt;h3&gt;Description&lt;/h3&gt;
+		&lt;p&gt;￼&lt;/p&gt;
+		&lt;p&gt;&lt;b&gt;Author:&lt;/b&gt; ￼&lt;/p&gt;
+		&lt;p&gt;&lt;b&gt;Version:&lt;/b&gt; ￼&lt;/p&gt;
+	&lt;/div&gt;
+	&lt;div class='footer'&gt;
+	&lt;hr /&gt;
+		&lt;p&gt;Official release on GitHub. Avoid unknown sources!&lt;/p&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
 &lt;/html&gt;</string>
 					</dict>
 					<key>WFSerializationType</key>
@@ -6506,6 +6738,8 @@ URL: ￼</string>
 			<dict>
 				<key>GroupingIdentifier</key>
 				<string>786569B0-E22A-40A6-9699-2848BC0699BA</string>
+				<key>UUID</key>
+				<string>418CDDF2-2883-4B61-9E0C-71B8C85244D6</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -6517,6 +6751,8 @@ URL: ￼</string>
 			<dict>
 				<key>GroupingIdentifier</key>
 				<string>44F38557-57B5-40E3-B483-4A03CEA5846F</string>
+				<key>UUID</key>
+				<string>CB2480F8-1444-4D28-B5B1-B594D2C99105</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -6528,6 +6764,8 @@ URL: ￼</string>
 			<dict>
 				<key>GroupingIdentifier</key>
 				<string>5AE0E6C4-89FE-4FCF-A7B3-6FC7F62742CF</string>
+				<key>UUID</key>
+				<string>0C21D050-8035-415D-BD9D-88072D82115B</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -6596,6 +6834,8 @@ URL: ￼</string>
 			<dict>
 				<key>GroupingIdentifier</key>
 				<string>8BA5B046-82CE-4F7D-8B62-3824EEA4B745</string>
+				<key>UUID</key>
+				<string>A140F7D4-7CA9-428C-8F88-40B0D286EE01</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -6709,6 +6949,8 @@ URL: ￼</string>
 			<string>is.workflow.actions.openapp</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
+				<key>UUID</key>
+				<string>791006FC-CF63-4C8B-B08A-317774420047</string>
 				<key>WFAppIdentifier</key>
 				<string>AsheKube.app.a-Shell</string>
 				<key>WFSelectedApp</key>
