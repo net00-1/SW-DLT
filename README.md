@@ -35,19 +35,9 @@ Compatible with **iOS/iPadOS 18, 26**
 - From a Mac: follow [Apple documentation](https://support.apple.com/guide/shortcuts-mac/run-shortcuts-from-the-command-line-apd455c82f02/mac)
 - From iPad/iPhone: use a tool to connect remotely to a Mac, such as [Shortcuts Source Helper](https://routinehub.co/shortcut/10060/). Credits to [@gluebyte](https://routinehub.co/user/gluebyte). If using this tool, pass the **unmodified plist (without extension change)** as input. 
 
-**NOTE**: if you do not want to use a remote service to sign the shortcut, nor have access to a Mac, you can still preview the source code as Shortcuts actions. Follow the first two steps of build instructions, then from the iPhone/iPad Files app hold on the .shortcut file, then press on the QuickLook option.
-
-## Roadmap Features
-
-- [ ] Implement full progress bar on gallery-dl downloads
-
-- [ ] Add quality options for video playlists
-
-- [ ] Add option to customize yt-dlp and gallery-dl with persistent settings
-
-- [ ] Allow file inputs with multiple URLs
+**NOTE**: if you do not want to use a remote service to sign the shortcut, nor have access to a Mac, you can still preview the source code as Shortcuts actions. Follow the first two steps of build instructions, then from the iPhone/iPad Files app hold on the .shortcut file, then press on the 'QuickLook' option.
 
 ## Disclaimers
-- This software is only intended to provide a way to archive and/or download content with yt-dlp & gallery-dl that you have **explicit permission to download** (for instance content owned by you). Use of this software to download copyrighted content could lead to breach of Terms of Service of hosting websites. License of this software does not include liability.
-- All software used (`yt-dlp`, `gallery-dl`, `yt-dlp-apple-webkit-jsi`, SW-DLT, a-Shell) is open source and free
+- This software is only intended to provide a way to archive and/or download content with yt-dlp & gallery-dl that you are **authorized to download** (for instance content owned by you). Use of this software to download copyrighted content could lead to breach of Terms of Service of hosting websites. License of this software does not include liability.
+- All software used (`yt-dlp`, `gallery-dl`, `yt-dlp-apple-webkit-jsi`, SW-DLT, a-Shell) is open source and free.
 - It is recommended to have the VLC app or another universal media player app to play unsupported media formats in iOS/iPadOS.
