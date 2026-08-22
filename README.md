@@ -41,3 +41,4 @@ Compatible with **iOS/iPadOS 18, 26**
 - This software is only intended to provide a way to archive and/or download content with yt-dlp & gallery-dl that you are **authorized to download** (for instance content owned by you). Use of this software to download copyrighted content could lead to breach of Terms of Service of hosting websites. License of this software does not include liability.
 - All software used (`yt-dlp`, `gallery-dl`, `yt-dlp-apple-webkit-jsi`, SW-DLT, a-Shell) is open source and free.
 - It is recommended to have the VLC app or another universal media player app to play unsupported media formats in iOS/iPadOS.
+- No Generative AI (LLMs) has been used to write code or files in this repository. AI tools may be used during documentation research or concept prototypes, which are not included in this repository nor final scripts.
