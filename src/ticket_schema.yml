@@ -3,8 +3,8 @@ url: "https://example.com/album/xyz" # (Required) Main URL for remote media
 type: "gallery"                      # (Required) Allowed values: "gallery", "video", "audio", "video_playlist", "audio_playlist"
 
 video_args:                          # (Required if type is 'video', or 'video_playlist')
-  video_res: "1080"                  # (Required) Allowed values: "360", "480", "720", "1080" "1440", "2160"
-  video_fps: "60"                    # (Required) Allowed values: "30", "60"
+  res: "1080"                  # (Required) Allowed values: "360", "480", "720", "1080" "1440", "2160"
+  fps: "60"                    # (Required) Allowed values: "30", "60"
   subtitles: true                    # (Required) Allowed values: true/false
   sub_lang: "en-US"                  # (Optional) Language code is platform dependant
 

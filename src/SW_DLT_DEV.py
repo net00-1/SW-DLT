@@ -13,6 +13,7 @@ class Consts:
     INVALID_TICKET_ERROR = '{"output_code":"exception","exc_trace":"The ticket could not be parsed properly, please report this issue within the About section"}'
     NO_MODULE_ERROR = '{"output_code":"exception","exc_trace":"Could not find yt-dlp installation, please follow top comment steps (within Shortcuts) to reinstall SW-DLT"}'
 
+
 class InvalidTicketError(Exception):
     # Sends back to the Shortcuts app if the ticket cannot be parsed correctly
     def __init__(self, msg):
@@ -67,7 +68,7 @@ def update_check():
         set_cookie = f"echo 'document.cookie = \"installed=1; expires={cookie_expiration}; sameSite=Lax\";' | jsi"
         subprocess.run(set_cookie)
 
-    #Wait for delay in jsi command
+    # Wait for delay in jsi command
     while not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
         subprocess.run("sleep 1")
     
@@ -79,7 +80,7 @@ def update_check():
     if int(current_time.timestamp()) - last_check < 600:
         subprocess.run("pip install chardet requests certifi mutagen -q --disable-pip-version-check --upgrade")
         subprocess.run("pip install yt-dlp yt-dlp-ejs yt-dlp-apple-webkit-jsi gallery-dl -q --disable-pip-version-check --upgrade")
-        #yt-dlp is reloaded here to avoid issues from updates
+        # yt-dlp is reloaded here to avoid issues from updates
         importlib.reload(yt_dlp)
     
     show_progress("util", 2, 2)
@@ -121,3 +122,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
