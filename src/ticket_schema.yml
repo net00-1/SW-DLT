@@ -1,11 +1,11 @@
-run_mode: "normal"                   # (Required) Allowed values: "normal", "debug"
+run_mode: "normal"                   # (Required) Allowed values: "normal", "install", "debug"
 url: "https://example.com/album/xyz" # (Required) Main URL for remote media
-type: "gallery"                      # (Required) Allowed values: "gallery", "video", "audio", "video_playlist", "audio_playlist"
+type: "gallery"                      # (Required) Allowed values: "gallery", "video", "audio"
 
-video_args:                          # (Required if type is 'video', or 'video_playlist')
-  res: "1080"                  # (Required) Allowed values: "360", "480", "720", "1080" "1440", "2160"
-  fps: "60"                    # (Required) Allowed values: "30", "60"
-  subtitles: true                    # (Required) Allowed values: true/false
+video_args:                          # (Required if type is 'video')
+  res: "1080"                        # (Required) Allowed values: "360", "480", "720", "1080" "1440", "2160"
+  fps: "60"                          # (Required) Allowed values: "30", "60"
+  subtitles: true                    # (optional) Allowed values: true/false
   sub_lang: "en-US"                  # (Optional) Language code is platform dependant
 
 gallery_args:                        # (Required if type is 'gallery')
