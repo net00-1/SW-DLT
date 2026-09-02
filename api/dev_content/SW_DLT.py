@@ -145,7 +145,7 @@ def main():
     except InvalidTicketError as err:
         return_url = f'shortcuts://run-shortcut?name={callback_sc}&input=text&text{urllib.parse.quote(Consts.INVALID_TICKET_ERROR)}'
     finally:
-        print(f'open {return_url}')
+        subprocess.run('open ' + return_url)
 
 
 if __name__ == '__main__':
