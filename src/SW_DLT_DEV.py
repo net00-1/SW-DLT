@@ -83,15 +83,19 @@ def install_setup():
         set_cookie = f"echo 'document.cookie = \"installed=1; expires={cookie_expiration}; sameSite=Lax\";' | jsi"
         subprocess.run(set_cookie)
 
+    show_progress('util', 1, 2)
     # Wait for delay in jsi command
     while not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
         subprocess.run('sleep 1')
 
     subprocess.run('pip install chardet requests certifi mutagen yt-dlp yt-dlp-ejs yt-dlp-apple-webkit-jsi gallery-dl -q --disable-pip-version-check --upgrade')
-
+    show_progress('util', 2, 3)
     with open('.installed', 'w') as flag_file:
         pass
 
+    os.remove("SW_DLT_DL_ticket.json")
+    show_progress('util', 3, 3)
+    
 
 def update_check():
     current_time = datetime.datetime.today()
@@ -117,21 +121,20 @@ def main():
     }
 
     try:
-        # Global yt-dlp module variable which we can reload later
-        globals()['yt_dlp'] = __import__('yt_dlp')
-
         header = f'{Consts.SBOLD}SW-DLT{Consts.ENDL}'
         print(header)
 
         with open('SW_DLT_DL_ticket.json', 'r') as ticket_file:
             ticket = json.load(ticket_file)
         sw_dlt = SW_DLT(ticket)
-        callback_sc = sw_dlt.ticket.release_name
+        callback_sc = sw_dlt.ticket['release_name']
 
         if sw_dlt.ticket['run_mode'] == 'install':
             return_url = f'shortcuts://run-shortcut?name={callback_sc}'
             return
 
+        # Global yt-dlp module variable which we can reload later
+        globals()['yt_dlp'] = __import__('yt_dlp')
         print(info_msgs['update_check'])            
         update_check()
 
@@ -142,7 +145,7 @@ def main():
     except InvalidTicketError as err:
         return_url = f'shortcuts://run-shortcut?name={callback_sc}&input=text&text{urllib.parse.quote(Consts.INVALID_TICKET_ERROR)}'
     finally:
-        print(f'open {return_url}')
+        subprocess.run('open ' + return_url)
 
 
 if __name__ == '__main__':
