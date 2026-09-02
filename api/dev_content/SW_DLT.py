@@ -83,16 +83,18 @@ def install_setup():
         set_cookie = f"echo 'document.cookie = \"installed=1; expires={cookie_expiration}; sameSite=Lax\";' | jsi"
         subprocess.run(set_cookie)
 
+    show_progress('util', 1, 2)
     # Wait for delay in jsi command
     while not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
         subprocess.run('sleep 1')
 
     subprocess.run('pip install chardet requests certifi mutagen yt-dlp yt-dlp-ejs yt-dlp-apple-webkit-jsi gallery-dl -q --disable-pip-version-check --upgrade')
-
+    show_progress('util', 2, 3)
     with open('.installed', 'w') as flag_file:
         pass
 
     os.remove("SW_DLT_DL_ticket.json")
+    show_progress('util', 3, 3)
     
 
 def update_check():
