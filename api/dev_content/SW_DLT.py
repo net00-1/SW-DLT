@@ -119,9 +119,6 @@ def main():
     }
 
     try:
-        # Global yt-dlp module variable which we can reload later
-        globals()['yt_dlp'] = __import__('yt_dlp')
-
         header = f'{Consts.SBOLD}SW-DLT{Consts.ENDL}'
         print(header)
 
@@ -134,6 +131,8 @@ def main():
             return_url = f'shortcuts://run-shortcut?name={callback_sc}'
             return
 
+        # Global yt-dlp module variable which we can reload later
+        globals()['yt_dlp'] = __import__('yt_dlp')
         print(info_msgs['update_check'])            
         update_check()
 
