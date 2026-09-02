@@ -92,6 +92,8 @@ def install_setup():
     with open('.installed', 'w') as flag_file:
         pass
 
+    os.remove("SW_DLT_DL_ticket.json")
+    
 
 def update_check():
     current_time = datetime.datetime.today()
