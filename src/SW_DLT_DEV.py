@@ -24,8 +24,8 @@ class InvalidTicketError(Exception):
 
 class SW_DLT:
     def __init__(self, ticket):
-        self.verify_ticket(ticket)
         self.ticket = ticket
+        self.verify_ticket(ticket)
         if ticket['run_mode'] == 'install':
             install_setup()
             return
@@ -126,20 +126,21 @@ def main():
         with open('SW_DLT_DL_ticket.json', 'r') as ticket_file:
             ticket = json.load(ticket_file)
         sw_dlt = SW_DLT(ticket)
+        callback_sc = sw_dlt.ticket.release_name
 
         if sw_dlt.ticket['run_mode'] == 'install':
-            return_url = 'shortcuts://run-shortcut?name=SW-DLT'
+            return_url = f'shortcuts://run-shortcut?name={callback_sc}'
             return
 
         print(info_msgs['update_check'])            
         update_check()
 
     except ModuleNotFoundError as err:
-        return_url = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text{urllib.parse.quote(Consts.NO_MODULE_ERROR)}'
+        return_url = f'shortcuts://run-shortcut?name={callback_sc}&input=text&text{urllib.parse.quote(Consts.NO_MODULE_ERROR)}'
     except FileNotFoundError as err:
-        return_url = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text{urllib.parse.quote(Consts.NO_FILE_ERROR)}'
+        return_url = f'shortcuts://run-shortcut?name={callback_sc}&input=text&text{urllib.parse.quote(Consts.NO_FILE_ERROR)}'
     except InvalidTicketError as err:
-        return_url = f'shortcuts://run-shortcut?name=SW-DLT&input=text&text{urllib.parse.quote(Consts.INVALID_TICKET_ERROR)}'
+        return_url = f'shortcuts://run-shortcut?name={callback_sc}&input=text&text{urllib.parse.quote(Consts.INVALID_TICKET_ERROR)}'
     finally:
         print(f'open {return_url}')
 

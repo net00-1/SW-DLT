@@ -1,6 +1,7 @@
 run_mode: "normal"                   # (Required) Allowed values: "normal", "install", "debug"
 url: "https://example.com/album/xyz" # (Required) Main URL for remote media
 type: "gallery"                      # (Required) Allowed values: "gallery", "video", "audio"
+release_name: "SW-DLT"               # (Embedded) This is the callback shortcut
 
 video_args:                          # (Required if type is 'video')
   res: "1080"                        # (Required) Allowed values: "360", "480", "720", "1080" "1440", "2160"
