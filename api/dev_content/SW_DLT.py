@@ -127,7 +127,7 @@ def main():
         with open('SW_DLT_DL_ticket.json', 'r') as ticket_file:
             ticket = json.load(ticket_file)
         sw_dlt = SW_DLT(ticket)
-        callback_sc = sw_dlt.ticket.release_name
+        callback_sc = sw_dlt.ticket['release_name']
 
         if sw_dlt.ticket['run_mode'] == 'install':
             return_url = f'shortcuts://run-shortcut?name={callback_sc}'
