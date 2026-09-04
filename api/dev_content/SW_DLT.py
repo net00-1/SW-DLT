@@ -130,7 +130,7 @@ def main():
         callback_sc = sw_dlt.ticket['release_name']
 
         if sw_dlt.ticket['run_mode'] == 'install':
-            return_url = f'shortcuts://run-shortcut?name={callback_sc}'
+            return_url = f"shortcuts://run-shortcut?name={callback_sc}&input=text&text={sw_dlt.ticket['url']}"
             return
 
         # Global yt-dlp module variable which we can reload later
