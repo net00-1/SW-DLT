@@ -251,6 +251,14 @@ def main():
         "update_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Checking for Updates{Consts.ENDL}'
     }
     try:
+        # yt-dlp can be installed in the venv or in a-Shell's user folder, both are added to path
+        py_version = f"python{sys.version_info.major}.{sys.version_info.minor}"
+        for site_dir in [
+            f"{os.environ['HOME']}/Documents/SW-DLT/SW-DLT-ENV/lib/{py_version}/site-packages",
+            f"{os.environ['HOME']}/Library/lib/{py_version}/site-packages"
+        ]:
+            if os.path.isdir(site_dir) and site_dir not in sys.path:
+                sys.path.append(site_dir)
         globals()["yt_dlp"] = __import__("yt_dlp")
         # Hashes all arguments to generate unique ID
         file_id = "SW_DLT_DL_{}".format(hashlib.md5(
