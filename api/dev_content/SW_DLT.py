@@ -14,6 +14,7 @@ class Consts:
     NO_FILE_ERROR = '{"output_code":"exception","exc_trace":"Unable to find startup files, cannot continue. Please report this issue within the About section"}'
     INVALID_TICKET_ERROR = '{"output_code":"exception","exc_trace":"The ticket could not be verified properly, please report this issue within the About section"}'
     NO_MODULE_ERROR = '{"output_code":"exception","exc_trace":"Could not find yt-dlp installation, please follow top comment steps (within Shortcuts) to reinstall SW-DLT"}'
+    DL_FINISHED_NO_FILE = 'yt-dlp exited successfully but no media file(s) were found'
 
 
 class InvalidTicketError(Exception):
@@ -88,10 +89,70 @@ class SW_DLT:
             raise InvalidTicketError()
 
     def video(self):
-        pass
+        default_format = 'best/bestvideo+bestaudio'
+        custom_format = ''\
+            'bestvideo[height={0}][fps<={1}]+bestaudio/'\
+            'best[height={0}][fps<={1}]/'\
+            'bestvideo[height<={0}][fps<={1}]+bestaudio/'\
+            'best[height<={0}][fps<={1}]'\
+            'best[height={0}]'.format(self.ticket['video_args']['res'], self.ticket['video_args']['fps'])
+
+        dl_options = {
+            'format': default_format if self.ticket['video_args']['res'] == 'default' else custom_format,
+            'outtmpl': f'{self.download_id}.%(ext)s',
+            'format_sort': ['res', 'ext:mp4:m4a', 'codec:avc:m4a'],
+            **self.ytdlp_globals
+        }
+
+        try:
+            # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
+            with yt_dlp.YoutubeDL(dl_options) as dl_obj:
+                meta_data = dl_obj.extract_info(self.ticket['url'], download=False)
+                dl_title = meta_data.get('title', self.date_id)
+                dl_obj.download([self.ticket['url']])
+
+            for file in os.listdir():
+                if file.startswith(self.download_id):
+                    output = {
+                        'output_code': 'success',
+                        'file_name': os.path.abspath(file),
+                        'file_title': dl_title
+                    }
+                    return f'shortcuts://run-shortcut?name={self.ticket['release_name']}&input=text&text={urllib.parse.quote(json.dumps(output))}'
+
+            raise Exception(Consts.DL_FINISHED_NO_FILE)
+
+        except (yt_dlp.utils.DownloadError, OSError) as ex:
+            raise Exception(ex.args[0])
 
     def audio(self):
-        pass
+        dl_options = {
+            "format": "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
+            "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
+            "outtmpl": f'{self.download_id}.%(ext)s',
+            **self.ytdlp_globals
+        }
+
+        try:
+            # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
+            with yt_dlp.YoutubeDL(dl_options) as dl_obj:
+                meta_data = dl_obj.extract_info(self.ticket['url'], download=False)
+                dl_title = meta_data.get('title', self.date_id)
+                dl_obj.download([self.ticket['url']])
+
+            for file in os.listdir():
+                if file.startswith(self.download_id):
+                    output = {
+                        'output_code': 'success',
+                        'file_name': os.path.abspath(file),
+                        'file_title': dl_title
+                    }
+                    return f'shortcuts://run-shortcut?name={self.ticket['release_name']}&input=text&text={urllib.parse.quote(json.dumps(output))}'
+
+            raise Exception(Consts.DL_FINISHED_NO_FILE)
+
+        except (yt_dlp.utils.DownloadError, OSError) as ex:
+            raise Exception(ex.args[0])
 
     def gallery(self):
         pass
@@ -194,6 +255,7 @@ def main():
         subprocess.run("clear")
         if sw_dlt.partial_download:
             header = f'{Consts.SBOLD}SW-DLT (Continuing Download){Consts.ENDL}'
+        print(header)
         print(info_msgs[sw_dlt.ticket['type']])
 
         return_url = sw_dlt.download()
@@ -204,6 +266,15 @@ def main():
         return_url = f'shortcuts://run-shortcut?name={callback_sc}&input=text&text{urllib.parse.quote(Consts.NO_FILE_ERROR)}'
     except InvalidTicketError as err:
         return_url = f'shortcuts://run-shortcut?name={callback_sc}&input=text&text{urllib.parse.quote(Consts.INVALID_TICKET_ERROR)}'
+    except Exception as err:
+        dl_err = (
+            'The download encountered an error. Usually this is fixed by checking '
+            'internet connection, verifying the download source for selected quality, or'
+            'checking authentication. Check about page if issue perists. Internal tool message:\n'
+            f'{err.args[0]}'
+        )
+        UNK_EXC = '{{"output_code":"exception","exc_trace":"{0}"}}'.format(base64.b64encode(dl_err.encode()).decode())
+        return_url = f'shortcuts://run-shortcut?name={callback_sc}&input=text&text={urllib.parse.quote(UNK_EXC)}'
     finally:
         subprocess.run('open ' + return_url)
 
