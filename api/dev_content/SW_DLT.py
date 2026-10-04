@@ -56,8 +56,13 @@ class SW_DLT:
                 os.remove(file)
             elif file.startswith(self.download_id):
                 self.partial_download = True
-
-        self.download = ticket['type']
+                
+        processes = {
+            'video': self.video,
+            'audio': self.audio,
+            'gallery': self.gallery
+        }
+        self.download = processes[self.ticket['type']]
 
     def verify_ticket(self, ticket):
         try:
