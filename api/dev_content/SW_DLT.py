@@ -49,7 +49,7 @@ class SW_DLT:
         # Creating temp folder to store media & additional cleanup of left over downloads
         os.makedirs(self.download_id, exist_ok=True)
         for file in os.listdir():
-            if file.startswith("SW_DLT_DL_") and not file.startswith(self.download_id):
+            if file.startswith("SW_DLT_DL_") and not file.startswith(self.download_id) or file.startswith('SW_DLT_DL_ticket.json'):
                 if os.path.isdir(file):
                     shutil.rmtree(file)
                     continue
