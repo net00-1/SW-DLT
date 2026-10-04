@@ -4,6 +4,7 @@ import importlib
 import datetime
 import hashlib
 import base64
+import shutil
 import json
 import os
 
@@ -30,18 +31,70 @@ class SW_DLT:
             install_setup()
             return
 
+        # Main instance vars
         self.download_id = 'SW_DLT_DL_{}'.format(hashlib.md5(str(ticket).encode('utf-8')).hexdigest()[0:20])
+        self.date_id = datetime.datetime.today().strftime("%d-%m-%y-%H-%M-%S")
+        self.ytdlp_globals = {
+            "color": "never",
+            "quiet": True,
+            "no_warnings": True,
+            "noprogress": True,
+            "progress_hooks": [show_progress],
+            "postprocessor_hooks": [format_processing],
+            "cookiesfrombrowser": ("safari",)
+        }
+
+        self.partial_download = False
+        # Creating temp folder to store media & additional cleanup of left over downloads
+        os.makedirs(self.download_id, exist_ok=True)
+        for file in os.listdir():
+            if file.startswith("SW_DLT_DL_") and not file.startswith(self.download_id):
+                if os.path.isdir(file):
+                    shutil.rmtree(file)
+                    continue
+                os.remove(file)
+            elif file.startswith(self.download_id):
+                self.partial_download = True
+
+        self.download = ticket['type']
 
     def verify_ticket(self, ticket):
         try:
-            if ticket['run_mode'] is None:
+            if ticket['run_mode'] is None or ticket['release_name'] is None or ticket['logging'] is None:
+                # This checks basic ticket values, if it lacka any we use defaults to launch user back to shortcut
+                ticket['release_name'] = 'SW-DLT'
                 raise ValueError()
             if ticket['run_mode'] == 'install':
                 return # We stop validating here if the ticket requests installation.
 
+            if ticket['type'] not in ('gallery', 'video', 'audio') or ticket['url'] is None:
+                raise ValueError()
+
+            if ticket['type'] == 'video':
+                if ticket['video_args'] is None:
+                    raise ValueError()
+                if ticket['video_args']['res'] is None or ticket['video_args']['subtitles'] is None:
+                    raise ValueError()
+                if ticket['video_args']['res'] != 'default' and ticket['video_args']['fps'] not in ('30', '60'):
+                    raise ValueError()
+
+            if ticket['type'] == 'gallery':
+                if ticket['gallery_args'] is None:
+                    raise ValueError()
+                if ticket['gallery_args']['range'] is None:
+                    raise ValueError()
+
         except ValueError as err:
             raise InvalidTicketError()
 
+    def video(self):
+        pass
+
+    def audio(self):
+        pass
+
+    def gallery(self):
+        pass
 
 def show_progress(data_stream, curr=0, total=0):
     # data_stream is the type of data received, allowed values: manual (for gallery-dl downloads), util (for utility processes)
@@ -137,6 +190,13 @@ def main():
         globals()['yt_dlp'] = __import__('yt_dlp')
         print(info_msgs['update_check'])            
         update_check()
+
+        subprocess.run("clear")
+        if sw_dlt.partial_download:
+            header = f'{Consts.SBOLD}SW-DLT (Continuing Download){Consts.ENDL}'
+        print(info_msgs[sw_dlt.ticket['type']])
+
+        return_url = sw_dlt.download()
 
     except ModuleNotFoundError as err:
         return_url = f'shortcuts://run-shortcut?name={callback_sc}&input=text&text{urllib.parse.quote(Consts.NO_MODULE_ERROR)}'
