@@ -76,7 +76,7 @@ class SW_DLT:
                     raise ValueError()
                 if ticket['video_args']['res'] is None or ticket['video_args']['subtitles'] is None:
                     raise ValueError()
-                if ticket['video_args']['res'] != 'default' and ticket['video_args']['fps'] not in ('30', '60'):
+                if ticket['video_args']['res'] != 'Default' and ticket['video_args']['fps'] not in ('30', '60'):
                     raise ValueError()
 
             if ticket['type'] == 'gallery':
@@ -253,10 +253,9 @@ def main():
         with open('SW_DLT_DL_ticket.json', 'r') as ticket_file:
             ticket = json.load(ticket_file)
         sw_dlt = SW_DLT(ticket)
-        callback_sc = sw_dlt.ticket['release_name']
 
         if sw_dlt.ticket['run_mode'] == 'install':
-            return_url = f"shortcuts://run-shortcut?name={callback_sc}&input=text&text={sw_dlt.ticket['url']}"
+            return_url = f"shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={sw_dlt.ticket['url']}"
             return
 
         # Global yt-dlp module variable which we can reload later
@@ -273,11 +272,11 @@ def main():
         return_url = sw_dlt.download()
 
     except ModuleNotFoundError as err:
-        return_url = f'shortcuts://run-shortcut?name={callback_sc}&input=text&text{urllib.parse.quote(Consts.NO_MODULE_ERROR)}'
+        return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text{urllib.parse.quote(Consts.NO_MODULE_ERROR)}'
     except FileNotFoundError as err:
-        return_url = f'shortcuts://run-shortcut?name={callback_sc}&input=text&text{urllib.parse.quote(Consts.NO_FILE_ERROR)}'
+        return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text{urllib.parse.quote(Consts.NO_FILE_ERROR)}'
     except InvalidTicketError as err:
-        return_url = f'shortcuts://run-shortcut?name={callback_sc}&input=text&text{urllib.parse.quote(Consts.INVALID_TICKET_ERROR)}'
+        return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text{urllib.parse.quote(Consts.INVALID_TICKET_ERROR)}'
     except Exception as err:
         dl_err = (
             'The download encountered an error. Usually this is fixed by checking '
@@ -286,7 +285,7 @@ def main():
             f'{err.args[0]}'
         )
         UNK_EXC = '{{"output_code":"exception","exc_trace":"{0}"}}'.format(base64.b64encode(dl_err.encode()).decode())
-        return_url = f'shortcuts://run-shortcut?name={callback_sc}&input=text&text={urllib.parse.quote(UNK_EXC)}'
+        return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={urllib.parse.quote(UNK_EXC)}'
     finally:
         subprocess.run('open ' + return_url)
 
