@@ -121,7 +121,7 @@ class SW_DLT:
             'best[height={0}]'.format(self.ticket['video_args']['res'], self.ticket['video_args']['fps'])
 
         dl_options = {
-            'format': default_format if self.ticket['video_args']['res'] == 'default' else custom_format,
+            'format': default_format if self.ticket['video_args']['res'] == 'Default' else custom_format,
             'outtmpl': f'{self.download_id}/%(title)s.%(ext)s',
             'format_sort': ['res', 'ext:mp4:m4a', 'codec:avc:m4a'],
             **self.ytdlp_globals
