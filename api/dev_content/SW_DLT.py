@@ -7,6 +7,7 @@ import base64
 import shutil
 import json
 import os
+import time
 
 
 class Consts:
@@ -56,7 +57,7 @@ class SW_DLT:
                 os.remove(file)
             elif file.startswith(self.download_id):
                 self.partial_download = True
-                
+
         processes = {
             'video': self.video,
             'audio': self.audio,
@@ -292,6 +293,8 @@ def main():
         UNK_EXC = '{{"output_code":"exception","exc_trace":"{0}"}}'.format(base64.b64encode(dl_err.encode()).decode())
         return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={urllib.parse.quote(UNK_EXC)}'
     finally:
+        print(return_url)
+        time.sleep(4)
         subprocess.run('open ' + return_url)
 
 
