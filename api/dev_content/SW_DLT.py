@@ -7,7 +7,6 @@ import base64
 import shutil
 import json
 import os
-import time
 
 
 class Consts:
@@ -278,11 +277,11 @@ def main():
         return_url = sw_dlt.download()
 
     except ModuleNotFoundError as err:
-        return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text{urllib.parse.quote(Consts.NO_MODULE_ERROR)}'
+        return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={urllib.parse.quote(Consts.NO_MODULE_ERROR)}'
     except FileNotFoundError as err:
-        return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text{urllib.parse.quote(Consts.NO_FILE_ERROR)}'
+        return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={urllib.parse.quote(Consts.NO_FILE_ERROR)}'
     except InvalidTicketError as err:
-        return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text{urllib.parse.quote(Consts.INVALID_TICKET_ERROR)}'
+        return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={urllib.parse.quote(Consts.INVALID_TICKET_ERROR)}'
     except Exception as err:
         dl_err = (
             'The download encountered an error. Usually this is fixed by checking '
@@ -293,8 +292,6 @@ def main():
         UNK_EXC = '{{"output_code":"exception","exc_trace":"{0}"}}'.format(base64.b64encode(dl_err.encode()).decode())
         return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={urllib.parse.quote(UNK_EXC)}'
     finally:
-        print(return_url)
-        time.sleep(4)
         subprocess.run('open ' + return_url)
 
 
