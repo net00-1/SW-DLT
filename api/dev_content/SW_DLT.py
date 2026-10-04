@@ -99,12 +99,8 @@ class SW_DLT:
         if len(raw_files) == 0: 
             raise OSError(Consts.DL_FINISHED_NO_FILE)
         elif len(raw_files) < 2:
-            # We do manual overwrite of file name (even if it has title), this is due to the title insertion being done in the shortcut output handler
-            discard_name, ext = os.path.splitext(raw_files[0])
-            safe_file_name = '{0}/{1}{2}'.format(self.download_id, self.download_id, ext)
             target_file = '{0}/{1}'.format(self.download_id, raw_files[0])
-            os.rename(target_file, safe_file_name)
-            return os.path.abspath(safe_file_name)
+            return os.path.abspath(target_file)
         else:
             shutil.make_archive(self.download_id, "zip", self.download_id)
             target_file = self.download_id + '.zip'
@@ -140,7 +136,7 @@ class SW_DLT:
                 'file_name': pkg_path,
                 'file_title': dl_title
             }
-            return f'shortcuts://run-shortcut?name={self.ticket['release_name']}&input=text&text={urllib.parse.quote(json.dumps(output))}'
+            return f"shortcuts://run-shortcut?name={self.ticket['release_name']}&input=text&text={urllib.parse.quote(json.dumps(output))}"
 
         except (yt_dlp.utils.DownloadError, OSError) as ex:
             raise Exception(ex.args[0])
@@ -166,7 +162,7 @@ class SW_DLT:
                 'file_name': pkg_path,
                 'file_title': dl_title
             }
-            return f'shortcuts://run-shortcut?name={self.ticket['release_name']}&input=text&text={urllib.parse.quote(json.dumps(output))}'
+            return f"shortcuts://run-shortcut?name={self.ticket['release_name']}&input=text&text={urllib.parse.quote(json.dumps(output))}"
 
         except (yt_dlp.utils.DownloadError, OSError) as ex:
             raise Exception(ex.args[0])
@@ -277,11 +273,11 @@ def main():
         return_url = sw_dlt.download()
 
     except ModuleNotFoundError as err:
-        return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={urllib.parse.quote(Consts.NO_MODULE_ERROR)}'
+        return_url = f"shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={urllib.parse.quote(Consts.NO_MODULE_ERROR)}"
     except FileNotFoundError as err:
-        return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={urllib.parse.quote(Consts.NO_FILE_ERROR)}'
+        return_url = f"shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={urllib.parse.quote(Consts.NO_FILE_ERROR)}"
     except InvalidTicketError as err:
-        return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={urllib.parse.quote(Consts.INVALID_TICKET_ERROR)}'
+        return_url = f"shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={urllib.parse.quote(Consts.INVALID_TICKET_ERROR)}"
     except Exception as err:
         dl_err = (
             'The download encountered an error. Usually this is fixed by checking '
@@ -290,11 +286,10 @@ def main():
             f'{err.args[0]}'
         )
         UNK_EXC = '{{"output_code":"exception","exc_trace":"{0}"}}'.format(base64.b64encode(dl_err.encode()).decode())
-        return_url = f'shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={urllib.parse.quote(UNK_EXC)}'
+        return_url = f"shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={urllib.parse.quote(UNK_EXC)}"
     finally:
         subprocess.run('open ' + return_url)
 
 
 if __name__ == '__main__':
     main()
-    
