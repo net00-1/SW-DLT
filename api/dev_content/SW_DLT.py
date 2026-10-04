@@ -101,8 +101,8 @@ class SW_DLT:
         elif len(raw_files) < 2:
             # We do manual overwrite of file name (even if it has title), this is due to the title insertion being done in the shortcut output handler
             discard_name, ext = os.path.splitext(raw_files[0])
-            safe_file_name = f'{0}/{1}{2}'.format(self.download_id, self.download_id, ext)
-            target_file = f'{0}/{1}'.format(self.download_id, raw_files[0])
+            safe_file_name = '{0}/{1}{2}'.format(self.download_id, self.download_id, ext)
+            target_file = '{0}/{1}'.format(self.download_id, raw_files[0])
             os.rename(target_file, safe_file_name)
             return os.path.abspath(safe_file_name)
         else:
