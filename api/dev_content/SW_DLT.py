@@ -67,7 +67,7 @@ class SW_DLT:
     def verify_ticket(self, ticket):
         try:
             if ticket['run_mode'] is None or ticket['release_name'] is None or ticket['logging'] is None:
-                # This checks basic ticket values, if it lacka any we use defaults to launch user back to sho0rtcut
+                # This checks basic ticket values, if it lacka any we use defaults to launch user back to shortcut
                 ticket['release_name'] = 'SW-DLT'
                 raise ValueError()
             if ticket['run_mode'] == 'install':
@@ -121,8 +121,9 @@ class SW_DLT:
             'format': default_format if self.ticket['video_args']['res'] == 'Default' else custom_format,
             'outtmpl': f'{self.download_id}/%(title)s.%(ext)s',
             'format_sort': ['res', 'ext:mp4:m4a', 'codec:avc:m4a'],
+            'postprocessors': [{'key': 'FFmpegEmbedSubtitle', 'already_have_subtitle': False}],
             'subtitleslangs': [self.ticket['video_args']['sub_lang']],
-            'embedsubtitles': [self.ticket['video_args']['subtitles']],
+            'writesubtitles': [self.ticket['video_args']['subtitles']],
             **self.ytdlp_globals
         }
 
@@ -146,9 +147,9 @@ class SW_DLT:
 
     def audio(self):
         dl_options = {
-            "format": "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
-            "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
-            "outtmpl": f'{self.download_id}/%(title)s.%(ext)s',
+            'format': 'bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best',
+            'postprocessors': [{'key': 'FFmpegExtractAudio', 'preferredcodec': 'm4a'}],
+            'outtmpl': f'{self.download_id}/%(title)s.%(ext)s',
             **self.ytdlp_globals
         }
 
@@ -268,7 +269,7 @@ def main():
         update_check(sw_dlt.ticket['release_name'])
 
         subprocess.run("clear")
-        if sw_dlt.partial_download is True:
+        if sw_dlt.partial_download:
             header = f'{Consts.SBOLD}SW-DLT (Continuing Download){Consts.ENDL}'
         print(header)
         print(info_msgs[sw_dlt.ticket['type']])
