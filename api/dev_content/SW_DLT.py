@@ -88,6 +88,24 @@ class SW_DLT:
         except ValueError as err:
             raise InvalidTicketError()
 
+    def packaging(self):
+        raw_files = os.listdir(self.download_id)
+        # No files returned, raises Exception
+        if len(raw_files) == 0: 
+            raise OSError(Consts.DL_FINISHED_NO_FILE)
+        elif len(raw_files) < 2:
+            # We do manual overwrite of file name (even if it has title), this is due to the title insertion being done in the shortcut output handler
+            discard_name, ext = os.path.splitext(raw_files[0])
+            safe_file_name = f'{0}/{1}{2}'.format(self.download_id, self.download_id, ext)
+            target_file = f'{0}/{1}'.format(self.download_id, raw_files[0])
+            os.rename(target_file, safe_file_name)
+            return os.path.abspath(safe_file_name)
+        else:
+            shutil.make_archive(self.download_id, "zip", self.download_id)
+            target_file = self.download_id + '.zip'
+            return os.path.abspath(target_file)
+
+    
     def video(self):
         default_format = 'best/bestvideo+bestaudio'
         custom_format = ''\
@@ -99,7 +117,7 @@ class SW_DLT:
 
         dl_options = {
             'format': default_format if self.ticket['video_args']['res'] == 'default' else custom_format,
-            'outtmpl': f'{self.download_id}.%(ext)s',
+            'outtmpl': f'{self.download_id}/%(title)s.%(ext)s',
             'format_sort': ['res', 'ext:mp4:m4a', 'codec:avc:m4a'],
             **self.ytdlp_globals
         }
@@ -111,16 +129,13 @@ class SW_DLT:
                 dl_title = meta_data.get('title', self.date_id)
                 dl_obj.download([self.ticket['url']])
 
-            for file in os.listdir():
-                if file.startswith(self.download_id):
-                    output = {
-                        'output_code': 'success',
-                        'file_name': os.path.abspath(file),
-                        'file_title': dl_title
-                    }
-                    return f'shortcuts://run-shortcut?name={self.ticket['release_name']}&input=text&text={urllib.parse.quote(json.dumps(output))}'
-
-            raise Exception(Consts.DL_FINISHED_NO_FILE)
+            pkg_path = self.packaging()
+            output = {
+                'output_code': 'success',
+                'file_name': pkg_path,
+                'file_title': dl_title
+            }
+            return f'shortcuts://run-shortcut?name={self.ticket['release_name']}&input=text&text={urllib.parse.quote(json.dumps(output))}'
 
         except (yt_dlp.utils.DownloadError, OSError) as ex:
             raise Exception(ex.args[0])
@@ -129,7 +144,7 @@ class SW_DLT:
         dl_options = {
             "format": "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
             "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
-            "outtmpl": f'{self.download_id}.%(ext)s',
+            "outtmpl": f'{self.download_id}/%(title)s.%(ext)s',
             **self.ytdlp_globals
         }
 
@@ -140,16 +155,13 @@ class SW_DLT:
                 dl_title = meta_data.get('title', self.date_id)
                 dl_obj.download([self.ticket['url']])
 
-            for file in os.listdir():
-                if file.startswith(self.download_id):
-                    output = {
-                        'output_code': 'success',
-                        'file_name': os.path.abspath(file),
-                        'file_title': dl_title
-                    }
-                    return f'shortcuts://run-shortcut?name={self.ticket['release_name']}&input=text&text={urllib.parse.quote(json.dumps(output))}'
-
-            raise Exception(Consts.DL_FINISHED_NO_FILE)
+            pkg_path = self.packaging()
+            output = {
+                'output_code': 'success',
+                'file_name': pkg_path,
+                'file_title': dl_title
+            }
+            return f'shortcuts://run-shortcut?name={self.ticket['release_name']}&input=text&text={urllib.parse.quote(json.dumps(output))}'
 
         except (yt_dlp.utils.DownloadError, OSError) as ex:
             raise Exception(ex.args[0])
