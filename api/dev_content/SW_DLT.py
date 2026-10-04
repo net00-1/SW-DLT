@@ -11,9 +11,9 @@ import os
 
 class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
-    NO_FILE_ERROR = '{"output_code":"exception","exc_trace":"Unable to find startup files, cannot continue. Please report this issue within the About section"}'
-    INVALID_TICKET_ERROR = '{"output_code":"exception","exc_trace":"The ticket could not be verified properly, please report this issue within the About section"}'
-    NO_MODULE_ERROR = '{"output_code":"exception","exc_trace":"Could not find yt-dlp installation, please follow top comment steps (within Shortcuts) to reinstall SW-DLT"}'
+    NO_FILE_ERROR = '{"output_code":"exception","exc_trace":"VW5hYmxlIHRvIGZpbmQgc3RhcnR1cCBmaWxlcywgY2Fubm90IGNvbnRpbnVlLiBQbGVhc2UgcmVwb3J0IHRoaXMgaXNzdWUgd2l0aGluIHRoZSBBYm91dCBzZWN0aW9u"}'
+    INVALID_TICKET_ERROR = '{"output_code":"exception","exc_trace":"VGhlIHRpY2tldCBjb3VsZCBub3QgYmUgdmVyaWZpZWQgcHJvcGVybHksIHBsZWFzZSByZXBvcnQgdGhpcyBpc3N1ZSB3aXRoaW4gdGhlIEFib3V0IHNlY3Rpb24="}'
+    NO_MODULE_ERROR = '{"output_code":"exception","exc_trace":"Q291bGQgbm90IGZpbmQgeXQtZGxwIGluc3RhbGxhdGlvbiwgcGxlYXNlIGZvbGxvdyB0b3AgY29tbWVudCBzdGVwcyAod2l0aGluIFNob3J0Y3V0cykgdG8gcmVpbnN0YWxsIFNXLURMVA=="}'
     DL_FINISHED_NO_FILE = 'yt-dlp exited successfully but no media file(s) were found'
 
 
@@ -28,7 +28,7 @@ class SW_DLT:
     def __init__(self, ticket):
         self.ticket = ticket
         self.verify_ticket(ticket)
-        if ticket['run_mode'] == 'install':
+        if self.ticket['run_mode'] == 'install':
             install_setup()
             return
 
@@ -46,8 +46,7 @@ class SW_DLT:
         }
 
         self.partial_download = False
-        # Creating temp folder to store media & additional cleanup of left over downloads
-        os.makedirs(self.download_id, exist_ok=True)
+        # Additional cleanup of left over downloads
         for file in os.listdir():
             if file.startswith("SW_DLT_DL_") and not file.startswith(self.download_id) and not file.startswith('SW_DLT_DL_ticket.json'):
                 if os.path.isdir(file):
@@ -56,7 +55,8 @@ class SW_DLT:
                 os.remove(file)
             elif file.startswith(self.download_id):
                 self.partial_download = True
-
+        
+        os.makedirs(self.download_id, exist_ok=True)
         processes = {
             'video': self.video,
             'audio': self.audio,
@@ -67,7 +67,7 @@ class SW_DLT:
     def verify_ticket(self, ticket):
         try:
             if ticket['run_mode'] is None or ticket['release_name'] is None or ticket['logging'] is None:
-                # This checks basic ticket values, if it lacka any we use defaults to launch user back to shortcut
+                # This checks basic ticket values, if it lacka any we use defaults to launch user back to sho0rtcut
                 ticket['release_name'] = 'SW-DLT'
                 raise ValueError()
             if ticket['run_mode'] == 'install':
@@ -83,6 +83,7 @@ class SW_DLT:
                     raise ValueError()
                 if ticket['video_args']['res'] != 'Default' and ticket['video_args']['fps'] not in ('30', '60'):
                     raise ValueError()
+                self.ticket['video_args']['subtitles'] = True if ticket['video_args']['subtitles'] == 'true' else False
 
             if ticket['type'] == 'gallery':
                 if ticket['gallery_args'] is None:
@@ -120,6 +121,8 @@ class SW_DLT:
             'format': default_format if self.ticket['video_args']['res'] == 'Default' else custom_format,
             'outtmpl': f'{self.download_id}/%(title)s.%(ext)s',
             'format_sort': ['res', 'ext:mp4:m4a', 'codec:avc:m4a'],
+            'subtitleslangs': [self.ticket['video_args']['sub_lang']],
+            'embedsubtitles': [self.ticket['video_args']['subtitles']],
             **self.ytdlp_globals
         }
 
@@ -265,7 +268,7 @@ def main():
         update_check(sw_dlt.ticket['release_name'])
 
         subprocess.run("clear")
-        if sw_dlt.partial_download:
+        if sw_dlt.partial_download is True:
             header = f'{Consts.SBOLD}SW-DLT (Continuing Download){Consts.ENDL}'
         print(header)
         print(info_msgs[sw_dlt.ticket['type']])
