@@ -86,7 +86,7 @@ class SW_DLT:
                     raise ValueError()
 
         except ValueError as err:
-            raise InvalidTicketError()
+            raise InvalidTicketError(None)
 
     def packaging(self):
         raw_files = os.listdir(self.download_id)
