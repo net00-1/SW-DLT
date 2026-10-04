@@ -228,11 +228,11 @@ def install_setup():
     show_progress('util', 3, 3)
     
 
-def update_check():
+def update_check(callback_sc):
     current_time = datetime.datetime.today()
     show_progress('util', 0, 1)
 
-    with open(f"{os.environ['HOME']}/Documents/SW-DLT/update_last_check.txt", 'r') as file:
+    with open(f"{os.environ['HOME']}/Documents/{callback_sc}/update_last_check.txt", 'r') as file:
         last_check = int(file.read())
 
     if int(current_time.timestamp()) - last_check < 600:
@@ -266,7 +266,7 @@ def main():
         # Global yt-dlp module variable which we can reload later
         globals()['yt_dlp'] = __import__('yt_dlp')
         print(info_msgs['update_check'])            
-        update_check()
+        update_check(sw_dlt.ticket['release_name'])
 
         subprocess.run("clear")
         if sw_dlt.partial_download:
