@@ -325,8 +325,8 @@ def main():
     except Exception as err:
         dl_err = (
             'The download encountered an error. Usually this is fixed by checking '
-            'internet connection, verifying the download source for selected quality, or'
-            'checking authentication. Check about page if issue perists. Internal tool message:\n'
+            'internet connection, verifying the download page for your selected quality, or '
+            'checking authentication. Check about page if issue persists. Internal tool message:\n'
             f'{err.args[0]}'
         )
         UNK_EXC = '{{"output_code":"exception","exc_trace":"{0}"}}'.format(base64.b64encode(dl_err.encode()).decode())
