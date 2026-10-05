@@ -2,12 +2,13 @@ import urllib.parse
 import subprocess
 import importlib
 import datetime
+import logging
 import hashlib
 import base64
 import shutil
 import json
 import os
-
+logger = logging.getLogger(__name__)
 
 class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
@@ -28,6 +29,12 @@ class SW_DLT:
     def __init__(self, ticket):
         self.ticket = ticket
         self.verify_ticket(ticket)
+        if self.ticket['logging'] == 'true':
+            logging.basicConfig(filename='debug_log.txt', level=logging.INFO, format='SW-DLT.py: %(asctime)s %(levelname)s %(message)s')
+        else:
+            logging.disable(logging.CRITICAL)
+
+        logging.info(f'Received the following ticket: {self.ticket}')
         if self.ticket['run_mode'] == 'install':
             install_setup()
             return
@@ -35,20 +42,23 @@ class SW_DLT:
         # Main instance vars
         self.download_id = 'SW_DLT_DL_{}'.format(hashlib.md5(str(ticket).encode('utf-8')).hexdigest()[0:20])
         self.date_id = datetime.datetime.today().strftime("%d-%m-%y-%H-%M-%S")
+        logging.info(f'Download ID: {self.download_id}, Date ID: {self.date_id}')
         self.ytdlp_globals = {
-            "color": "never",
-            "quiet": True,
-            "no_warnings": True,
-            "noprogress": True,
-            "progress_hooks": [show_progress],
-            "postprocessor_hooks": [format_processing],
-            "cookiesfrombrowser": ("safari",)
+            'color': 'never',
+            'quiet': True,
+            'no_warnings': True,
+            'noprogress': True,
+            'logger': logger,
+            'progress_hooks': [show_progress],
+            'postprocessor_hooks': [format_processing],
+            'cookiesfrombrowser': ('safari',)
         }
 
         self.partial_download = False
         # Additional cleanup of left over downloads
         for file in os.listdir():
             if file.startswith("SW_DLT_DL_") and not file.startswith(self.download_id) and not file.startswith('SW_DLT_DL_ticket.json'):
+                logging.info(f'Extra cleanup happened for file: {file}')
                 if os.path.isdir(file):
                     shutil.rmtree(file)
                     continue
@@ -67,8 +77,8 @@ class SW_DLT:
     def verify_ticket(self, ticket):
         try:
             if ticket['run_mode'] is None or ticket['release_name'] is None or ticket['logging'] is None:
-                # This checks basic ticket values, if it lacka any we use defaults to launch user back to shortcut
-                ticket['release_name'] = 'SW-DLT'
+                # This checks basic ticket values, if it lacks any we use defaults to launch user back to shortcut
+                self.ticket['release_name'] = 'SW-DLT'
                 raise ValueError()
             if ticket['run_mode'] == 'install':
                 return # We stop validating here if the ticket requests installation.
@@ -96,6 +106,7 @@ class SW_DLT:
 
     def packaging(self):
         raw_files = os.listdir(self.download_id)
+        logging.info(f'Raw files in download ID directory: {raw_files}')
         # No files returned, raises Exception
         if len(raw_files) == 0: 
             raise OSError(Consts.DL_FINISHED_NO_FILE)
@@ -126,6 +137,7 @@ class SW_DLT:
             'writesubtitles': [self.ticket['video_args']['subtitles']],
             **self.ytdlp_globals
         }
+        logging.info(f'Video download DL options: {dl_options}')
 
         try:
             # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
@@ -140,6 +152,7 @@ class SW_DLT:
                 'file_name': pkg_path,
                 'file_title': dl_title
             }
+            logging.info(f'Output payload: {output}')
             return f"shortcuts://run-shortcut?name={self.ticket['release_name']}&input=text&text={urllib.parse.quote(json.dumps(output))}"
 
         except (yt_dlp.utils.DownloadError, OSError) as ex:
@@ -152,6 +165,7 @@ class SW_DLT:
             'outtmpl': f'{self.download_id}/%(title)s.%(ext)s',
             **self.ytdlp_globals
         }
+        logging.info(f'Audio download DL options: {dl_options}')
 
         try:
             # Returns shortcuts redirect URL with downloaded file data, any exception is re-thrown
@@ -166,6 +180,7 @@ class SW_DLT:
                 'file_name': pkg_path,
                 'file_title': dl_title
             }
+            logging.info(f'Output payload: {output}')
             return f"shortcuts://run-shortcut?name={self.ticket['release_name']}&input=text&text={urllib.parse.quote(json.dumps(output))}"
 
         except (yt_dlp.utils.DownloadError, OSError) as ex:
@@ -258,6 +273,7 @@ def main():
         with open('SW_DLT_DL_ticket.json', 'r') as ticket_file:
             ticket = json.load(ticket_file)
         sw_dlt = SW_DLT(ticket)
+        logger.info('Test')
 
         if sw_dlt.ticket['run_mode'] == 'install':
             return_url = f"shortcuts://run-shortcut?name={sw_dlt.ticket['release_name']}&input=text&text={sw_dlt.ticket['url']}"
