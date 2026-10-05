@@ -48,7 +48,6 @@ class SW_DLT:
             'quiet': True,
             'no_warnings': True,
             'noprogress': True,
-            'logger': logger,
             'progress_hooks': [show_progress],
             'postprocessor_hooks': [format_processing],
             'cookiesfrombrowser': ('safari',)
@@ -187,7 +186,30 @@ class SW_DLT:
             raise Exception(ex.args[0])
 
     def gallery(self):
-        pass
+        try:
+            cmd = "gallery-dl {0} --range \"{1}\" --directory {2} --cookies-from-browser safari".format(
+                self.ticket['url'], self.ticket['gallery_args']['range'], self.download_id)
+            logger.info(f'gallery-dl command to run: {cmd}')
+                
+            with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as gdl:
+                for entry in gdl.stdout:
+                    show_progress("manual", 1, 1)        
+                
+            pkg_path = self.packaging()
+            output = {
+                'output_code': 'success',
+                'file_name': pkg_path,
+                'file_title': self.date_id
+            }
+            logging.info(f'Output payload: {output}')
+            return f"shortcuts://run-shortcut?name={self.ticket['release_name']}&input=text&text={urllib.parse.quote(json.dumps(output))}"
+
+        except subprocess.CalledProcessError as ex:
+            clean_stderr = ex.output.decode("utf-8").rstrip()
+            raise Exception(clean_stderr)
+        except (AttributeError, OSError) as ex:
+            raise Exception(ex.args[0])
+
 
 def show_progress(data_stream, curr=0, total=0):
     # data_stream is the type of data received, allowed values: manual (for gallery-dl downloads), util (for utility processes)
