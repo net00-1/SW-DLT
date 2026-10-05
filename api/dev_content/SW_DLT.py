@@ -1,11 +1,14 @@
+# SW-DLT script, check Github for documentation.
+# Official release on GitHub, avoid unknown sources
+
 import urllib.parse
 import subprocess
 import importlib
 import datetime
 import logging
 import hashlib
-import base64
 import shutil
+import base64
 import json
 import os
 logger = logging.getLogger(__name__)
