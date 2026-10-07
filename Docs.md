@@ -2,9 +2,9 @@
 
 Detailed information about all the features available on SW-DLT.
 
-## Single Video Download
+## Video Download
 
-The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the original titles fetched by `yt-dlp`. Both options sort formats with a priority of `res,ext:mp4:m4a,codec:avc:m4a`
+The video download option offers two types of downloads: Default and Custom Quality. Videos are saved with the original titles fetched by `yt-dlp`. Both options sort formats with a priority of `res,ext:mp4:m4a,codec:avc:m4a`. Single video links or playlists can be used; for playlists all the elements will use the same settings. Subtitles will also be fetched if the option is enabled within SW-DLT shortcut settings.
 
 **Default Quality**: videos are downloaded using the following `yt-dlp` format string:
 
@@ -26,29 +26,13 @@ The priority of videos to search is as follows:
 5. `bestvideo[height<=X][fps<=Y]+bestaudio` (Closest resolution, closest FPS, unmerged)
 6. `best[height={0}]`                       (Exact resolution, ignore FPS, merged)
 
-**What does this all mean?** In general, it means SW-DLT will prioritize above all the resolution option you select, and then prioritize the FPS you select. Among matching results, it will then prioritize those playable natively on iOS/iPadOS 
+**What does this all mean?** In general, it means SW-DLT will prioritize above all the resolution option you select, and then prioritize the FPS you select. Among matching results, it will then prioritize those playable natively on iOS/iPadOS.
 
-## Single Audio Download
+## Audio Download
 
-Audio downloads prioritize the best audio available from a website. In case there is no audio only stream, the best muxed video will be used to extract audio from it. Audios are saved with the original titles fetched by `yt-dlp`.
+Audio downloads prioritize the best audio available from a website. In case there is no audio only stream, the best muxed video will be used to extract audio from it. Audios are saved with the original titles fetched by `yt-dlp`. Single audio links or playlists can be used; for playlists all the elements will use the same settings.
 
 `bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best`
-
-1. Best MP4/M4A audio available
-2. Best MP3 audio available
-3. Audio extracted from best MP4 video available
-4. Audio extracted from best video available
-
-## Playlist Download
-
-Playlist downloads support both downloading all items in the playlist as videos or as audio only files. There are no quality options for video playlist downloads currently. Audio playlist downlods can use FFmpeg to correct errors and to extract audio from videos. Playlists are saved with the original titles fetched by `yt-dlp`. Both options prioritize iOS natively playable codec with a priority of `+codec:avc:m4a`
-
-Video downloads use the formats: `best[ext=mp4]/best`
-
-1. Best MP4 video
-2. Best video of any type
-
-Audio downloads use the formats `bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best`
 
 1. Best MP4/M4A audio available
 2. Best MP3 audio available
@@ -88,9 +72,9 @@ It is recommended to have the VLC app or another universal media player app to e
 
 ## Resuming Downloads
 
-SW-DLT will cache **the latest** download request (meaning the URL, download type, and options). When a download is not finished due to any reason, running SW-DLT again will present you with a quick option to resume the download. This cached details are located in `Files App -> a-Shell -> SW-DLT -> SW_DLT_DL_metadata.json`
+SW-DLT will cache **the latest** download request (meaning the URL, download type, and options). When a download is not finished due to any reason, running SW-DLT again will present you with a quick option to resume the download. This cached details are located in `Files App -> a-Shell -> SW-DLT -> SW_DLT_DL_ticket.json`
 
-If you press 'Dismiss', this file will be deleted and resuming the download will only be possible by using the same URL and arguments before manually. Partial media files are located in `Files App -> a-Shell -> SW-DLT.`
+If you press 'Dismiss', this file will be deleted and resuming the download will only be possible by using the same URL and arguments before manually. Partial media files are located in `Files App -> a-Shell -> SW-DLT -> SW_DLT_DL_<HASH_ID>.`
 
 NOTE: Only the media files of the previous download will be cached. Once a different download is started, older files get cleaned up.
 

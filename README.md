@@ -4,12 +4,12 @@ SW-DLT ("Shortcuts Wrapper for -DL Tools") is an iOS shortcut that allows you to
 
 **Download link: [Releases](https://github.com/net00-1/SW-DLT/releases)**
 <div align="center">
-  <img src="images/all_stages.png" width="60%"/>
+  <img src="images/all_stages.png" width="50%"/>
 </div>
 
-Compatible with **iOS/iPadOS 18, 26**
+Compatible with **iOS/iPadOS 26, 27**
 ## How to Use
-1. **Download either the [a-Shell](https://apps.apple.com/us/app/a-shell/id1473805438) or [a-Shell Mini](https://apps.apple.com/us/app/a-shell-mini/id1543537943) app**
+1. **Download either the [a-Shell](https://apps.apple.com/us/app/a-shell/id1473805438) OR [a-Shell Mini](https://apps.apple.com/us/app/a-shell-mini/id1543537943) app**
 2. Copy a link to the clipboard (or use the share button if applicable)
 3. Run the shortcut from either the Shortcuts app (if using a copied link) or from the Share Sheet
 4. Select the option you need
@@ -19,9 +19,9 @@ Compatible with **iOS/iPadOS 18, 26**
 ## Main Features
 **Please check the full [documentation page](https://github.com/net00-1/SW-DLT/blob/master/Docs.md) to see a complete description of the available features**
 
-- Download video at custom qualities and framerates
+- Download video at custom qualities and framerates, with subtitle support
 - Downaload audio (audio only or extracted from video)
-- Download playlists (video or audio choices available)
+- Download playlists of videos or audios (including above features)
 - Download images/clips/GIFs (from single items to massive albums)
 - Support for both a-Shell and a-Shell Mini apps
 
