@@ -35,8 +35,12 @@ class SW_DLT:
             "noprogress": True,
             "progress_hooks": [show_progress],
             "postprocessor_hooks": [format_processing],
-            "cookiesfrombrowser": ("safari",)
+            "cookiesfrombrowser": ("safari",),
+            "writethumbnail": True,
         }
+        self.ytdlp_pps = [
+            {"key": "EmbedThumbnail"}
+        ]
 
         processes = {
             "-v": self.single_video,
@@ -96,6 +100,7 @@ class SW_DLT:
         dl_options = {
             "format": default_format if self.video_res == "-d" else custom_format,
             "playlist_items": "1-1",
+            "postprocessors": [*self.ytdlp_pps],
             "outtmpl": f'{self.file_id}.%(ext)s',
             "format_sort": ["res", "ext:mp4:m4a", "codec:avc:m4a"],
             **self.ytdlp_globals
@@ -112,7 +117,7 @@ class SW_DLT:
         dl_options = {
             "format": "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
             "playlist_items": "1-1",
-            "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
+            "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}, *self.ytdlp_pps],
             "outtmpl": f'{self.file_id}.%(ext)s',
             **self.ytdlp_globals
         }
@@ -186,7 +191,7 @@ class SW_DLT:
     def playlist_download(self):
         dl_options = {
             "format": "best" if self.playlist_type == "-v" else "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
-            "postprocessors": [] if self.playlist_type == "-v" else [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
+            "postprocessors": [*self.ytdlp_pps] if self.playlist_type == "-v" else [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}, *self.ytdlp_pps],
             "outtmpl": f'{self.file_id}/%(title)s.%(ext)s',
             "format_sort": ["+codec:avc:m4a"],
             **self.ytdlp_globals
@@ -297,4 +302,3 @@ def main():
 
 if __name__ == "__main__":
     subprocess.run("open " + main())
-    
