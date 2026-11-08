@@ -80,6 +80,8 @@ Example: `1, 2-5, 7, 9-15`
 
 **NOTE:** SW-DLT does not access credentials or cookie data. `yt-dlp` and `gallery-dl` use it directly.
 
+If a-Shell has no cookie file yet (`~/Library/Cookies/Cookies.binarycookies`), SW-DLT tries to create one and waits up to 10 seconds for it. If it still doesn't exist, the download continues without cookies and the terminal shows "No browser cookies found, continuing without login". Following the steps above (open `internalbrowser`, then close a-Shell from the App Switcher) creates the file.
+
 ## Saving Downloads
 
 Downloads are NOT automatically saved by SW-DLT due to the many different file types that are supported. All downloads are shown to the user using the share sheet preview. From this preview users are able to choose where to send the downloaded item(s).
