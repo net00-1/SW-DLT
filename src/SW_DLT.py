@@ -9,6 +9,7 @@ import hashlib
 import shutil
 import base64
 import json
+import time
 import sys
 import os
 
@@ -16,7 +17,10 @@ import os
 class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
     DERROR_EXC = '{"output_code":"exception","exc_trace":"vars.downloadError"}'
-    
+    COOKIE_FILE = f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"
+    # WebKit may not flush the cookie jar to disk until a-Shell is backgrounded, so the wait is bounded
+    COOKIE_WAIT_SECS = 10
+
 
 class SW_DLT:
 
@@ -45,6 +49,7 @@ class SW_DLT:
             "-g": self.gallery_download
         }
         self.run = processes[args[1]]
+        self.use_cookies = True
         self.video_res = ""
         self.video_fps = ""
         self.playlist_type = ""
@@ -58,19 +63,25 @@ class SW_DLT:
         if len(args) > 3:
             self.video_fps = args[3]  
 
-    @staticmethod
-    def update_check():
+    def update_check(self):
         current_time = datetime.datetime.today()
         show_progress("util", 0, 2)
-        if not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
+        if not os.path.exists(Consts.COOKIE_FILE):
             cookie_expiration = current_time.replace(year=current_time.year + 1).strftime('%a, %-d %b %Y %H:%M:%S UTC')
             set_cookie = f"echo 'document.cookie = \"installed=1; expires={cookie_expiration}; sameSite=Lax\";' | jsi"
             subprocess.run(set_cookie)
 
-        #We need to wait for delay in jsi command
-        while not os.path.exists(f"{os.environ['HOME']}/Library/Cookies/Cookies.binarycookies"):
-            subprocess.run("sleep 1")
-        
+            # We need to wait for delay in jsi command, but WebKit may not write the file until
+            # a-Shell is backgrounded. Waiting forever hangs the download at "Loading: 0.0%".
+            deadline = time.monotonic() + Consts.COOKIE_WAIT_SECS
+            while not os.path.exists(Consts.COOKIE_FILE) and time.monotonic() < deadline:
+                time.sleep(1)
+
+        if not os.path.exists(Consts.COOKIE_FILE):
+            # yt-dlp and gallery-dl fail outright if asked to read a missing Safari cookie jar
+            self.use_cookies = False
+            self.ytdlp_globals.pop("cookiesfrombrowser", None)
+
         show_progress("util", 1, 2)
 
         with open(f"{os.environ['HOME']}/Documents/SW-DLT/shortcut_update_ts.txt", 'r') as ts_file:
@@ -133,21 +144,18 @@ class SW_DLT:
 
         for file in os.listdir():
             if file.startswith(self.file_id):
-                output = {
-                    "output_code": "success",
-                    "file_name": os.path.abspath(file),
-                    "file_title": vid_title
-                }
-                return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
+                return success_url(file, vid_title)
         # If for some reason the above doesn't find the downloaded file, we raise generic Exception
-        raise Exception(Consts.DERROR)
+        raise Exception(Consts.DERROR_EXC)
 
     def gallery_download(self):
         try:
             # Creating temp folder to store media
             os.makedirs(self.file_id, exist_ok=True)
-            dl_cmd = "gallery-dl {0} --range \"{1}\" --directory {2} --cookies-from-browser safari".format(
+            dl_cmd = "gallery-dl {0} --range \"{1}\" --directory {2}".format(
                 self.media_url, self.gallery_range, self.file_id)
+            if self.use_cookies:
+                dl_cmd += " --cookies-from-browser safari"
                 
             with subprocess.Popen(dl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True) as gdl:
                 for entry in gdl.stdout:
@@ -160,23 +168,11 @@ class SW_DLT:
 
             # Single item, directly outputs the item
             elif len(files) < 2:
-                file = "{0}/{1}".format(self.file_id, files[0])
-                output = {
-                    "output_code": "success",
-                    "file_name": os.path.abspath(file),
-                    "file_title": self.date_id
-                }
+                return success_url("{0}/{1}".format(self.file_id, files[0]), self.date_id)
 
             # Mutiple items, zips temp folder and returns it
-            else:
-                shutil.make_archive(self.file_id, "zip", self.file_id)
-                output = {
-                    "output_code": "success",
-                    "file_name": os.path.abspath(self.file_id + ".zip"),
-                    "file_title": self.date_id
-                }
-
-            return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
+            shutil.make_archive(self.file_id, "zip", self.file_id)
+            return success_url(self.file_id + ".zip", self.date_id)
         except subprocess.CalledProcessError as ex:
             clean_stderr = ex.output.decode("utf-8").rstrip()
             raise Exception(clean_stderr)
@@ -200,15 +196,22 @@ class SW_DLT:
 
             shutil.make_archive(self.file_id, "zip", self.file_id)
             shutil.rmtree(self.file_id, True)
-            output = {
-                "output_code": "success",
-                "file_name": os.path.abspath(self.file_id + ".zip"),
-                "file_title": pl_title
-            }
-            return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
+            return success_url(self.file_id + ".zip", pl_title)
 
         except (yt_dlp.utils.DownloadError, OSError) as ex:
             raise Exception(ex.args[0])
+
+
+def success_url(file, title):
+    # app_name lets the shortcut pick the right Files folder: a-Shell's own "Get File" action
+    # fails on iOS/iPadOS 27.2, so the shortcut reads the file from On My iPhone/<app>/SW-DLT instead
+    output = {
+        "output_code": "success",
+        "file_name": os.path.abspath(file),
+        "file_title": title,
+        "app_name": os.environ.get("APPNAME", "")
+    }
+    return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
 
 
 def show_progress(data_stream, curr=0, total=0):
@@ -279,6 +282,8 @@ def main():
         subprocess.run("clear")
         print(header)
         print(info_msgs[sys.argv[2]])
+        if not sw_dlt_inst.use_cookies:
+            print(f'{Consts.CYELLOW}No browser cookies found, continuing without login{Consts.ENDL}')
         
         with open('SW_DLT_DL_metadata.json', 'w') as metadata:
             args = ' '.join(map(str, sys.argv[2:]))
