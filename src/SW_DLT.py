@@ -135,6 +135,7 @@ class SW_DLT:
             if file.startswith(self.file_id):
                 output = {
                     "output_code": "success",
+                    "app_name": os.environ.get("APPNAME", ""),
                     "file_name": os.path.abspath(file),
                     "file_title": vid_title
                 }
@@ -163,6 +164,7 @@ class SW_DLT:
                 file = "{0}/{1}".format(self.file_id, files[0])
                 output = {
                     "output_code": "success",
+                    "app_name": os.environ.get("APPNAME", ""),
                     "file_name": os.path.abspath(file),
                     "file_title": self.date_id
                 }
@@ -172,6 +174,7 @@ class SW_DLT:
                 shutil.make_archive(self.file_id, "zip", self.file_id)
                 output = {
                     "output_code": "success",
+                    "app_name": os.environ.get("APPNAME", ""),
                     "file_name": os.path.abspath(self.file_id + ".zip"),
                     "file_title": self.date_id
                 }
@@ -202,6 +205,7 @@ class SW_DLT:
             shutil.rmtree(self.file_id, True)
             output = {
                 "output_code": "success",
+                "app_name": os.environ.get("APPNAME", ""),
                 "file_name": os.path.abspath(self.file_id + ".zip"),
                 "file_title": pl_title
             }
