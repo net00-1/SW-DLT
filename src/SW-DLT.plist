@@ -2163,63 +2163,12 @@ GLOBAL SETTINGS INITIALIZATION</string>
 		</dict>
 		<dict>
 			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.comment</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>WFCommentActionText</key>
-				<string>a-Shell's "Get File" action fails on iOS/iPadOS 27.2, so the file is read from the app's own folder in Files (On My iPhone/&lt;app&gt;/SW-DLT). The script reports which app ran it in app_name.</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.getvalueforkey</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>CustomOutputName</key>
-				<string>appName</string>
-				<key>UUID</key>
-				<string>9F446E30-1134-4E9B-AF7B-BC475C49F23A</string>
-				<key>WFDictionaryKey</key>
-				<string>app_name</string>
-				<key>WFGetDictionaryValueType</key>
-				<string>Value</string>
-				<key>WFInput</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>Aggrandizements</key>
-						<array>
-							<dict>
-								<key>CoercionItemClass</key>
-								<string>WFDictionaryContentItem</string>
-								<key>Type</key>
-								<string>WFCoercionVariableAggrandizement</string>
-							</dict>
-						</array>
-						<key>OutputName</key>
-						<string>decodedOutput</string>
-						<key>OutputUUID</key>
-						<string>F35C50B2-BBE6-46B3-BC48-24DEF547161C</string>
-						<key>Type</key>
-						<string>ActionOutput</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.text.split</string>
+			<string>is.workflow.actions.text.replace</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>UUID</key>
 				<string>B15B0561-193A-4922-80E0-B3145742DEF8</string>
-				<key>WFTextCustomSeparator</key>
-				<string>/</string>
-				<key>WFTextSeparator</key>
-				<string>Custom</string>
-				<key>text</key>
+				<key>WFInput</key>
 				<dict>
 					<key>Value</key>
 					<dict>
@@ -2241,31 +2190,14 @@ GLOBAL SETTINGS INITIALIZATION</string>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenString</string>
 				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.getitemfromlist</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>UUID</key>
-				<string>AC6C48EB-A12A-4B4B-B974-153978283A5D</string>
-				<key>WFInput</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>OutputName</key>
-						<string>Split Text</string>
-						<key>OutputUUID</key>
-						<string>B15B0561-193A-4922-80E0-B3145742DEF8</string>
-						<key>Type</key>
-						<string>ActionOutput</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-				<key>WFItemSpecifier</key>
-				<string>Last Item</string>
+				<key>WFReplaceTextFind</key>
+				<string>^.*?/Documents/SW-DLT/</string>
+				<key>WFReplaceTextReplace</key>
+				<string></string>
+				<key>WFReplaceTextRegularExpression</key>
+				<true/>
+				<key>WFReplaceTextCaseSensitive</key>
+				<true/>
 			</dict>
 		</dict>
 		<dict>
@@ -2292,16 +2224,16 @@ GLOBAL SETTINGS INITIALIZATION</string>
 							<key>Aggrandizements</key>
 							<array>
 								<dict>
-									<key>CoercionItemClass</key>
-									<string>WFStringContentItem</string>
+									<key>DictionaryKey</key>
+									<string>app_name</string>
 									<key>Type</key>
-									<string>WFCoercionVariableAggrandizement</string>
+									<string>WFDictionaryValueVariableAggrandizement</string>
 								</dict>
 							</array>
 							<key>OutputName</key>
-							<string>appName</string>
+							<string>dOutDict</string>
 							<key>OutputUUID</key>
-							<string>9F446E30-1134-4E9B-AF7B-BC475C49F23A</string>
+							<string>FE07233D-926D-4AD2-AF72-C50EB998A6F6</string>
 							<key>Type</key>
 							<string>ActionOutput</string>
 						</dict>
@@ -2347,9 +2279,9 @@ GLOBAL SETTINGS INITIALIZATION</string>
 							<key>{0, 1}</key>
 							<dict>
 								<key>OutputName</key>
-								<string>Item from List</string>
+								<string>Updated Text</string>
 								<key>OutputUUID</key>
-								<string>AC6C48EB-A12A-4B4B-B974-153978283A5D</string>
+								<string>B15B0561-193A-4922-80E0-B3145742DEF8</string>
 								<key>Type</key>
 								<string>ActionOutput</string>
 							</dict>
@@ -2360,29 +2292,6 @@ GLOBAL SETTINGS INITIALIZATION</string>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenString</string>
 				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.setvariable</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>WFInput</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>OutputName</key>
-						<string>File</string>
-						<key>OutputUUID</key>
-						<string>98962673-4E34-41FF-AEBD-611145312D0E</string>
-						<key>Type</key>
-						<string>ActionOutput</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-				<key>WFVariableName</key>
-				<string>mediaFile</string>
 			</dict>
 		</dict>
 		<dict>
@@ -2432,9 +2341,9 @@ GLOBAL SETTINGS INITIALIZATION</string>
 							<key>{0, 1}</key>
 							<dict>
 								<key>OutputName</key>
-								<string>Item from List</string>
+								<string>Updated Text</string>
 								<key>OutputUUID</key>
-								<string>AC6C48EB-A12A-4B4B-B974-153978283A5D</string>
+								<string>B15B0561-193A-4922-80E0-B3145742DEF8</string>
 								<key>Type</key>
 								<string>ActionOutput</string>
 							</dict>
@@ -2449,36 +2358,13 @@ GLOBAL SETTINGS INITIALIZATION</string>
 		</dict>
 		<dict>
 			<key>WFWorkflowActionIdentifier</key>
-			<string>is.workflow.actions.setvariable</string>
-			<key>WFWorkflowActionParameters</key>
-			<dict>
-				<key>WFInput</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>OutputName</key>
-						<string>File</string>
-						<key>OutputUUID</key>
-						<string>C77DEAA2-DB2A-40E8-92EE-EFFDDA713F80</string>
-						<key>Type</key>
-						<string>ActionOutput</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenAttachment</string>
-				</dict>
-				<key>WFVariableName</key>
-				<string>mediaFile</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>WFWorkflowActionIdentifier</key>
 			<string>is.workflow.actions.conditional</string>
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>GroupingIdentifier</key>
 				<string>A3ACEEE5-6765-457C-8A80-7EDC20DD014A</string>
 				<key>UUID</key>
-				<string>231E4194-19E3-4232-99CF-7B855C7EAACB</string>
+				<string>4B12BAD9-0438-4485-9AE0-90B7C86F528C</string>
 				<key>WFControlFlowMode</key>
 				<integer>2</integer>
 			</dict>
@@ -2541,10 +2427,12 @@ GLOBAL SETTINGS INITIALIZATION</string>
 				<dict>
 					<key>Value</key>
 					<dict>
+						<key>OutputName</key>
+						<string>If Result</string>
+						<key>OutputUUID</key>
+						<string>4B12BAD9-0438-4485-9AE0-90B7C86F528C</string>
 						<key>Type</key>
-						<string>Variable</string>
-						<key>VariableName</key>
-						<string>mediaFile</string>
+						<string>ActionOutput</string>
 					</dict>
 					<key>WFSerializationType</key>
 					<string>WFTextTokenAttachment</string>

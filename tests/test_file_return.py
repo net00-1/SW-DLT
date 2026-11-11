@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import plistlib
+import re
 import tempfile
 import types
 import unittest
@@ -57,36 +58,32 @@ class FileReturnTests(unittest.TestCase):
                     finally:
                         os.chdir(previous)
 
-    def test_shortcut_routes_to_both_app_folders_and_preserves_the_file_output(self):
-        workflow = plistlib.loads((ROOT / 'src/SW-DLT.plist').read_bytes())
-        actions = workflow['WFWorkflowActions']
-        self.assertFalse(any(a['WFWorkflowActionIdentifier'].endswith('.GetFileIntent') for a in actions))
+    def test_native_file_routes_preserve_nested_paths_and_return_if_result(self):
+        actions = plistlib.loads((ROOT / 'src/SW-DLT.plist').read_bytes())['WFWorkflowActions']
         by_id = {a['WFWorkflowActionParameters']['UUID']: a for a in actions if 'UUID' in a['WFWorkflowActionParameters']}
-        native_files = [a['WFWorkflowActionParameters'] for a in actions if a['WFWorkflowActionIdentifier'] == 'is.workflow.actions.documentpicker.open']
-        self.assertEqual({a['WFFile']['fileLocation']['appContainerBundleIdentifier'] for a in native_files}, {'AsheKube.app.a-Shell', 'AsheKube.app.a-Shell-mini'})
-        for action in native_files:
-            folder = action['WFFile']['fileLocation']
-            self.assertEqual(folder['relativeSubpath'], 'SW-DLT')
-            self.assertNotIn('crossDeviceItemID', action['WFFile'])
-            reference = action['WFGetFilePath']['Value']['attachmentsByRange']['{0, 1}']
-            last = by_id[reference['OutputUUID']]['WFWorkflowActionParameters']
-            self.assertEqual(last['WFItemSpecifier'], 'Last Item')
-            split = by_id[last['WFInput']['Value']['OutputUUID']]['WFWorkflowActionParameters']
-            self.assertEqual(split['WFTextCustomSeparator'], '/')
-        selector = next(a['WFWorkflowActionParameters'] for a in actions if a['WFWorkflowActionIdentifier'] == 'is.workflow.actions.conditional' and a['WFWorkflowActionParameters'].get('WFConditionalActionString') == 'a-Shell')
-        app_source = by_id[selector['WFInput']['Variable']['Value']['OutputUUID']]['WFWorkflowActionParameters']
-        self.assertEqual(app_source['WFDictionaryKey'], 'app_name')
-        start = actions.index(next(a for a in actions if a['WFWorkflowActionParameters'] is selector))
-        group = [a for a in actions[start:] if a['WFWorkflowActionParameters'].get('GroupingIdentifier') == selector['GroupingIdentifier']]
-        otherwise, end = (actions.index(group[i]) for i in (1, 2))
-        for app, section in [('AsheKube.app.a-Shell', actions[start:otherwise]), ('AsheKube.app.a-Shell-mini', actions[otherwise:end])]:
-            file_action = next(a['WFWorkflowActionParameters'] for a in section if a['WFWorkflowActionIdentifier'] == 'is.workflow.actions.documentpicker.open')
-            self.assertEqual(file_action['WFFile']['fileLocation']['appContainerBundleIdentifier'], app)
-            assignment = next(a['WFWorkflowActionParameters'] for a in section if a['WFWorkflowActionIdentifier'] == 'is.workflow.actions.setvariable')
-            self.assertEqual(assignment['WFVariableName'], 'mediaFile')
-            self.assertEqual(assignment['WFInput']['Value']['OutputUUID'], file_action['UUID'])
+        self.assertFalse(any(a['WFWorkflowActionIdentifier'].endswith('.GetFileIntent') for a in actions))
+        selector = next(a['WFWorkflowActionParameters'] for a in actions if a['WFWorkflowActionParameters'].get('WFConditionalActionString') == 'a-Shell')
+        self.assertEqual(selector['WFInput']['Variable']['Value']['Aggrandizements'][0]['DictionaryKey'], 'app_name')
+        app_input = by_id[selector['WFInput']['Variable']['Value']['OutputUUID']]
+        self.assertEqual(app_input['WFWorkflowActionIdentifier'], 'is.workflow.actions.detect.dictionary')
+        start = next(i for i, a in enumerate(actions) if a['WFWorkflowActionParameters'] is selector)
+        group = [i for i in range(start, len(actions)) if actions[i]['WFWorkflowActionParameters'].get('GroupingIdentifier') == selector['GroupingIdentifier']]
+        otherwise, end = group[1:]
+        for app, branch in [('AsheKube.app.a-Shell', actions[start + 1:otherwise]), ('AsheKube.app.a-Shell-mini', actions[otherwise + 1:end])]:
+            self.assertEqual(len(branch), 1)  # The selected file is the branch output.
+            self.assertEqual(branch[0]['WFWorkflowActionIdentifier'], 'is.workflow.actions.documentpicker.open')
+            file = branch[0]['WFWorkflowActionParameters']
+            self.assertEqual(file['WFFile']['fileLocation']['appContainerBundleIdentifier'], app)
+            self.assertEqual(file['WFFile']['fileLocation']['relativeSubpath'], 'SW-DLT')
+            reference = file['WFGetFilePath']['Value']['attachmentsByRange']['{0, 1}']
+            transform = by_id[reference['OutputUUID']]['WFWorkflowActionParameters']
+            input_id = transform['WFInput']['Value']['attachmentsByRange']['{0, 1}']['OutputUUID']
+            self.assertEqual(by_id[input_id]['WFWorkflowActionParameters']['WFDictionaryKey'], 'file_name')
+            for relative in ('audio.m4a', 'playlist.zip', 'gallery/nested/ภาพ 1.jpg'):
+                absolute = '/private/var/mobile/Containers/Data/Application/ID/Documents/SW-DLT/' + relative
+                self.assertEqual(re.sub(transform['WFReplaceTextFind'], transform['WFReplaceTextReplace'], absolute), relative)
         rename = next(a['WFWorkflowActionParameters'] for a in actions if a['WFWorkflowActionIdentifier'] == 'is.workflow.actions.setitemname')
-        self.assertEqual(rename['WFInput']['Value'], {'Type': 'Variable', 'VariableName': 'mediaFile'})
+        self.assertEqual(rename['WFInput']['Value']['OutputUUID'], actions[end]['WFWorkflowActionParameters']['UUID'])
 
 
 if __name__ == '__main__':
