@@ -3,8 +3,9 @@
 
 import urllib.parse
 import subprocess
-import importlib
+import importlib.util
 import datetime
+import re
 import hashlib
 import shutil
 import base64
@@ -76,28 +77,31 @@ class SW_DLT:
         with open(f"{os.environ['HOME']}/Documents/SW-DLT/shortcut_update_ts.txt", 'r') as ts_file:
             last_check = int(ts_file.read())
     
-        if int(current_time.timestamp()) - last_check < 600:
+        # Update once a day (shortcut writes the timestamp), or install if yt-dlp is missing
+        if int(current_time.timestamp()) - last_check < 600 or importlib.util.find_spec("yt_dlp") is None:
             subprocess.run("pip install chardet requests certifi mutagen -q --disable-pip-version-check --upgrade")
-            subprocess.run("pip install yt-dlp yt-dlp-ejs yt-dlp-apple-webkit-jsi gallery-dl -q --disable-pip-version-check --upgrade")
-            #yt-dlp is reloaded here to avoid issues after updates
-            importlib.reload(yt_dlp)
-        
+            # --pre = yt-dlp nightly, which gets YouTube/Instagram fixes days before stable
+            subprocess.run("pip install yt-dlp yt-dlp-apple-webkit-jsi gallery-dl -q --pre --disable-pip-version-check --upgrade")
+            # yt-dlp rejects any yt-dlp-ejs whose version differs from the one it was built for,
+            # which disables the YouTube challenge solver (missing formats / HTTP 403).
+            # The [default]/[pin] extras would pin it but also pull C extensions a-Shell can't build.
+            subprocess.run(f"pip install yt-dlp-ejs=={ejs_version()} -q --disable-pip-version-check")
+
         show_progress("util", 2, 2)
 
     def single_video(self):
-        default_format = "best/bestvideo+bestaudio"
-        custom_format = ""\
-            "bestvideo[height={0}][fps<={1}]+bestaudio/"\
-            "best[height={0}][fps<={1}]/"\
-            "bestvideo[height<={0}][fps<={1}]+bestaudio/"\
-            "best[height<={0}][fps<={1}]"\
-            "best[height={0}]".format(self.video_res, self.video_fps)
-
+        res = "1080" if self.video_res == "-d" else self.video_res
+        # Quality is steered by format_sort ("closest available") instead of hard [height=]/[fps<=]
+        # filters, which fail on sites without fps/height info (Instagram) and the old default
+        # "best" capped YouTube at 360p. Up to 1080p prefer H.264, which iPhone Photos can save;
+        # Instagram's H.264 is a single progressive file, so "b" catches it before VP9 DASH.
+        # Above 1080p YouTube only has VP9/AV1, so take whatever exists.
         dl_options = {
-            "format": default_format if self.video_res == "-d" else custom_format,
+            "format": "bv*+ba/b" if int(res) > 1080 else "bv*[vcodec^=avc]+ba/b/bv*+ba",
+            "format_sort": [f"res:{res}"] + ([f"fps:{self.video_fps}"] if self.video_fps else []) + ["codec:avc:m4a", "ext:mp4:m4a"],
+            "merge_output_format": "mp4",
             "playlist_items": "1-1",
             "outtmpl": f'{self.file_id}.%(ext)s',
-            "format_sort": ["res", "ext:mp4:m4a", "codec:avc:m4a"],
             **self.ytdlp_globals
         }
 
@@ -140,7 +144,7 @@ class SW_DLT:
                 }
                 return f'shortcuts://run-shortcut?name=SW-DLT&input=text&text={urllib.parse.quote(json.dumps(output))}'
         # If for some reason the above doesn't find the downloaded file, we raise generic Exception
-        raise Exception(Consts.DERROR)
+        raise Exception(Consts.DERROR_EXC)
 
     def gallery_download(self):
         try:
@@ -185,10 +189,12 @@ class SW_DLT:
             
     def playlist_download(self):
         dl_options = {
-            "format": "best" if self.playlist_type == "-v" else "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
+            # Same 1080p H.264 default as single_video ("best" alone is 360p on YouTube)
+            "format": "bv*[vcodec^=avc]+ba/b/bv*+ba" if self.playlist_type == "-v" else "bestaudio[ext*=4]/bestaudio[ext=mp3]/best[ext=mp4]/best",
             "postprocessors": [] if self.playlist_type == "-v" else [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
             "outtmpl": f'{self.file_id}/%(title)s.%(ext)s',
-            "format_sort": ["+codec:avc:m4a"],
+            "format_sort": ["res:1080", "codec:avc:m4a", "ext:mp4:m4a"],
+            "merge_output_format": "mp4",
             **self.ytdlp_globals
         }
 
@@ -209,6 +215,13 @@ class SW_DLT:
 
         except (yt_dlp.utils.DownloadError, OSError) as ex:
             raise Exception(ex.args[0])
+
+
+def ejs_version():
+    # The yt-dlp-ejs version the installed yt-dlp expects, read from disk (the new copy after pip)
+    yt_dlp_dir = os.path.dirname(importlib.util.find_spec("yt_dlp").origin)
+    with open(os.path.join(yt_dlp_dir, "extractor", "youtube", "jsc", "_builtin", "vendor", "_info.py")) as info:
+        return re.search(r"VERSION = '([^']+)'", info.read()).group(1)
 
 
 def show_progress(data_stream, curr=0, total=0):
@@ -251,7 +264,6 @@ def main():
         "update_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Checking for Updates{Consts.ENDL}'
     }
     try:
-        globals()["yt_dlp"] = __import__("yt_dlp")
         # Hashes all arguments to generate unique ID
         file_id = "SW_DLT_DL_{}".format(hashlib.md5(
             str(sys.argv).encode("utf-8")).hexdigest()[0:20])
@@ -265,7 +277,9 @@ def main():
         print(header)
         print(info_msgs["update_check"])            
         sw_dlt_inst.update_check()
-        
+        # Imported after the update so a fresh install/upgrade is what gets loaded
+        globals()["yt_dlp"] = __import__("yt_dlp")
+
         # If the same partial file is not found, deletes all leftovers (important)
         for file in os.listdir():
             if file.startswith("SW_DLT_DL_") and not file.startswith(file_id):
