@@ -3,7 +3,6 @@
 
 import urllib.parse
 import subprocess
-import importlib
 import datetime
 import hashlib
 import shutil
@@ -17,6 +16,109 @@ class Consts:
     CYELLOW, CGREEN, CBLUE, SBOLD, ENDL = "\033[93m", "\033[92m", "\033[94m", "\033[1m", "\033[0m"
     DERROR_EXC = '{"output_code":"exception","exc_trace":"vars.downloadError"}'
     
+
+def fix_webkit_navigation():
+    """Apply the reviewed 0.1.1 fix before loading plugins; leave other releases alone.
+
+    See https://github.com/grqz/yt-dlp-apple-webkit-jsi/issues/5.
+    Keep the original backup; never rewrite an unknown provider source.
+    """
+    from importlib.metadata import PackageNotFoundError, distribution
+    from pathlib import Path
+    import tempfile
+
+    ORIGINAL_SHA = 'b719072669a9193397a7d2ac52457eb1ac8388b68a90f432921d1cc9fcd1fb22'
+    PREVIOUS_SHA = '319b9d118d7c0b06bcca37366ace27d5f54eee318f51b3e362e0f24bf3f037ee'
+    PATCHED_SHA = '92ed60b05f57d74d59251a44e3efda189b369eadb44f846f690b492d01199a11'
+    EDITS = (
+        ('        navi_cbdct: dict[int, Callable[[], None]] = {}\n',
+         """        navi_cbdct: dict[int, Callable[[], None]] = {}
+        pending_html_loads: dict[int, NotNull_VoidP] = {}
+"""),
+        ('            @staticmethod\n            def userContentController0_didReceiveScriptMessage1(',
+         """            @staticmethod
+            def webView0_decidePolicyForNavigationAction1_decisionHandler2(
+                this, sel, rp_webview, rp_action, rp_handler
+            ) -> None:
+                # Allow only the initial loadHTMLString action, not navigations
+                # initiated by scripts while that document is still loading.
+                allow = False
+                if expected_url := pending_html_loads.get(rp_webview):
+                    action = c_void_p(rp_action)
+                    frame = c_void_p(pa.send_message(action, b'targetFrame', restype=c_void_p))
+                    request = c_void_p(pa.send_message(action, b'request', restype=c_void_p))
+                    url = c_void_p(pa.send_message(request, b'URL', restype=c_void_p))
+                    allow = bool(pa.send_message(frame, b'isMainFrame', restype=c_bool)) and bool(
+                        pa.send_message(url, b'isEqual:', expected_url, restype=c_bool, argtypes=(c_void_p, )))
+                    if allow:
+                        pending_html_loads.pop(rp_webview)
+                if not allow:
+                    pa.logger.debug('Cancelled script-initiated WebKit navigation')
+                handler = cast(rp_handler, POINTER(ObjCBlock)).contents
+                handler.as_pycb(None, c_long)(int(allow))
+
+            @staticmethod
+            def userContentController0_didReceiveScriptMessage1("""),
+        ("                pa.sel_registerName(b'userContentController:didReceiveScriptMessage:'),\n",
+         """                pa.sel_registerName(b'webView:decidePolicyForNavigationAction:decisionHandler:'),
+                CFUNCTYPE(None, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p)(
+                    PFC_WVHandler.webView0_decidePolicyForNavigationAction1_decisionHandler2),
+                b'v@:@@@?',
+            ), (
+                pa.sel_registerName(b'userContentController:didReceiveScriptMessage:'),
+"""),
+        ('                        rp_navi = py_typecast(NotNull_VoidP, c_void_p(pa.send_message(\n',
+         """                        pending_html_loads[webview] = purl_base
+                        exsk.callback(pending_html_loads.pop, webview, None)
+                        rp_navi = py_typecast(NotNull_VoidP, c_void_p(pa.send_message(
+"""),
+    )
+
+    def digest(data):
+        return hashlib.sha256(data).hexdigest()
+
+    def require(condition, message):
+        if not condition:
+            raise RuntimeError(message)
+
+    try:
+        dist = distribution('yt-dlp-apple-webkit-jsi')
+    except PackageNotFoundError:
+        return
+    if dist.version != '0.1.1':
+        return
+    path = Path(dist.locate_file('yt_dlp_plugins/webkit_jsi/lib/api.py'))
+    backup = path.with_suffix('.py.sw-dlt-backup')
+    source = path.read_bytes()
+    current_sha = digest(source)
+    if current_sha == PATCHED_SHA:
+        return
+    else:
+        require(current_sha in (ORIGINAL_SHA, PREVIOUS_SHA), 'Provider differs; refusing to overwrite')
+        original = source if current_sha == ORIGINAL_SHA else backup.read_bytes()
+        require(digest(original) == ORIGINAL_SHA, 'Original source differs')
+        changed = original.decode()
+        for old, new in EDITS:
+            require(changed.count(old) == 1, 'Patch anchor differs')
+            changed = changed.replace(old, new)
+        compile(changed, str(path), 'exec')
+        require(digest(changed.encode()) == PATCHED_SHA, 'Patched source differs')
+        if backup.exists():
+            require(backup.read_bytes() == original, 'Existing backup differs')
+        else:
+            backup.write_bytes(original)
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as output:
+                temporary = Path(output.name)
+                output.write(changed.encode())
+            temporary.chmod(path.stat().st_mode)
+            temporary.replace(path)
+        finally:
+            if temporary is not None:
+                temporary.unlink(missing_ok=True)
+        print('Installed generic WebKit navigation fix; original backed up')
+
 
 class SW_DLT:
 
@@ -79,8 +181,6 @@ class SW_DLT:
         if int(current_time.timestamp()) - last_check < 600:
             subprocess.run("pip install chardet requests certifi mutagen -q --disable-pip-version-check --upgrade")
             subprocess.run("pip install yt-dlp yt-dlp-ejs yt-dlp-apple-webkit-jsi gallery-dl -q --disable-pip-version-check --upgrade")
-            #yt-dlp is reloaded here to avoid issues after updates
-            importlib.reload(yt_dlp)
         
         show_progress("util", 2, 2)
 
@@ -135,6 +235,7 @@ class SW_DLT:
             if file.startswith(self.file_id):
                 output = {
                     "output_code": "success",
+                    "app_name": os.environ.get("APPNAME", ""),
                     "file_name": os.path.abspath(file),
                     "file_title": vid_title
                 }
@@ -163,6 +264,7 @@ class SW_DLT:
                 file = "{0}/{1}".format(self.file_id, files[0])
                 output = {
                     "output_code": "success",
+                    "app_name": os.environ.get("APPNAME", ""),
                     "file_name": os.path.abspath(file),
                     "file_title": self.date_id
                 }
@@ -172,6 +274,7 @@ class SW_DLT:
                 shutil.make_archive(self.file_id, "zip", self.file_id)
                 output = {
                     "output_code": "success",
+                    "app_name": os.environ.get("APPNAME", ""),
                     "file_name": os.path.abspath(self.file_id + ".zip"),
                     "file_title": self.date_id
                 }
@@ -202,6 +305,7 @@ class SW_DLT:
             shutil.rmtree(self.file_id, True)
             output = {
                 "output_code": "success",
+                "app_name": os.environ.get("APPNAME", ""),
                 "file_name": os.path.abspath(self.file_id + ".zip"),
                 "file_title": pl_title
             }
@@ -251,7 +355,6 @@ def main():
         "update_check": f'{Consts.CBLUE}Preparing{Consts.ENDL}\n{Consts.CYELLOW}Checking for Updates{Consts.ENDL}'
     }
     try:
-        globals()["yt_dlp"] = __import__("yt_dlp")
         # Hashes all arguments to generate unique ID
         file_id = "SW_DLT_DL_{}".format(hashlib.md5(
             str(sys.argv).encode("utf-8")).hexdigest()[0:20])
@@ -265,6 +368,8 @@ def main():
         print(header)
         print(info_msgs["update_check"])            
         sw_dlt_inst.update_check()
+        fix_webkit_navigation()
+        globals()["yt_dlp"] = __import__("yt_dlp")
         
         # If the same partial file is not found, deletes all leftovers (important)
         for file in os.listdir():
