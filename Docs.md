@@ -68,6 +68,32 @@ Example: `1, 2-5, 7, 9-15`
 - Downloads the first item, followed by items 2 to 5, followed by item 7, followed by items 9 to 15
 - The first item is usually the newest item in a social media feed
 
+## YouTube app opens during a download
+
+With WebKit provider 0.1.1, solver JavaScript can navigate to a synthetic YouTube
+URL, opening the YouTube app and preventing a-Shell from returning to Shortcuts.
+SW-DLT applies a reviewed navigation fix after dependency updates and before
+importing yt-dlp. This is separate from the native Files fix for returning the
+completed download. See [provider issue 5](https://github.com/grqz/yt-dlp-apple-webkit-jsi/issues/5).
+
+The fix allows each explicit main-frame HTML load once and cancels other
+navigation requests, without matching any particular website or app name.
+It supports the original 0.1.1 source and the earlier local patch, verifies file
+hashes, and preserves `api.py.sw-dlt-backup` beside the provider's `api.py`.
+An unexpected source or backup stops with an error instead of being overwritten;
+other provider versions are left unchanged and are not covered by this workaround.
+A reinstall of the reviewed version is patched again on the next SW-DLT run.
+
+For PR testing, install the updated `src/SW_DLT.py` together with the signed
+Shortcut. The existing release download URL does not serve an unmerged PR.
+The WebKit change adds no further Shortcut actions.
+
+Run the callback and installer tests with:
+
+```sh
+uv run --with yt-dlp-apple-webkit-jsi==0.1.1 python -m unittest discover -s tests -v
+```
+
 ## Authentication
 
 `yt-dlp` and `gallery-dl` are automatically set to use cookies for authentication. This allows for downloading of media that is restricted behind a login page. Use the following steps per authenticated website:
